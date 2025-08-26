@@ -1,0 +1,9 @@
+@import './variables.css';
+@import './components.css';
+
+:root {
+  color: #FFFFFF;
+  background-color: #2A2A2A;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}

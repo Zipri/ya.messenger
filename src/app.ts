@@ -1,3 +1,6 @@
+import { LoginPage } from './pages/login/login';
+import './styles/style.css';
+
 class App {
     private rootElement: HTMLElement;
 
@@ -6,13 +9,8 @@ class App {
     }
 
     render() {
-        // Пока просто показываем заглушку
-        this.rootElement.innerHTML = `
-            <div class="app">
-                <h1>Messenger App</h1>
-                <p>Приложение мессенджера в разработке...</p>
-            </div>
-        `;
+        const loginPage = new LoginPage();
+        this.rootElement.innerHTML = loginPage.render();
     }
 }
 

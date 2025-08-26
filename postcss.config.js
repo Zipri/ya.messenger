@@ -1,3 +1,5 @@
 export default {
-  plugins: {},
-};
+  plugins: {
+    'postcss-extend-rule': {},
+  },
+}

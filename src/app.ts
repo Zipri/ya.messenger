@@ -1,5 +1,5 @@
 import { LoginPage } from './pages/login/login';
-import './styles/style.css';
+import './styles/style.scss';
 
 class App {
     private rootElement: HTMLElement;

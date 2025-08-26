@@ -1,3 +1,6 @@
+@use '@styles/variables' as *;
+@use '@styles/components' as *;
+
 .login-page {
     display: flex;
     justify-content: center;
@@ -26,6 +29,7 @@
 }
 
 .login-page__form {
+    @extend .wrapper;
     display: flex;
     flex-direction: column;
 }

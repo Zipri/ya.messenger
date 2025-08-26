@@ -1,4 +1,4 @@
-import './login.css';
+import './login.scss';
 import { compile } from 'handlebars';
 import loginTemplate from './login.hbs?raw';
 

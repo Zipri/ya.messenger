@@ -1,0 +1,30 @@
+@use '@styles/variables' as *;
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+  align-items: flex-start;
+  justify-content: center;
+
+  width: 100%;
+
+  &__label {
+    color: $color-info-text;
+    font-size: .8rem;
+    padding-left: .5rem;
+  }
+
+  &__input {
+    background-color: $color-background-gray;
+    border: 1px solid $color-background-gray;
+    color: #fff;
+    border-radius: $border-radius;
+    padding: .5rem;
+
+    &:focus {
+      outline: none;
+      border: 1px solid #fff;
+    }
+  }
+}

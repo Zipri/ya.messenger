@@ -1,0 +1,12 @@
+<div class="input-group">
+  <label for="{{id}}" class="input-group__label">{{label}}</label>
+  <input 
+    type="{{type}}" 
+    id="{{id}}" 
+    name="{{name}}" 
+    value="{{value}}" 
+    class="input-group__input"
+    {{#if placeholder}}placeholder="{{placeholder}}"{{/if}}
+    {{#if required}}required{{/if}}
+  >
+</div>

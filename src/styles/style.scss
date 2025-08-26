@@ -1,9 +1,9 @@
+@use '@styles/reset';  
 @use '@styles/variables';
 @use '@styles/components';
 
 :root {
   color: #FFFFFF;
   background-color: #2A2A2A;
-  box-sizing: border-box;
   font-family: 'Inter', sans-serif;
 }

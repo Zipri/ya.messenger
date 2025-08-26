@@ -1,20 +1,52 @@
 import { LoginPage, RegisterPage } from './pages';
 import './styles/style.scss';
 
+type PageType = 'login' | 'register';
+
 // FIXME SKV (!) сделать смену страниц через state
 class App {
     private rootElement: HTMLElement;
+    private currentPage: PageType = 'login';
 
     constructor() {
         this.rootElement = document.querySelector('#app')!;
+        this.initEventListeners();
+    }
+
+    private initEventListeners() {
+        // Слушаем клики по всему документу
+        document.addEventListener('click', (event) => {
+            const target = event.target as HTMLElement;
+
+            // Проверяем, что кликнули по ссылке с нужным атрибутом
+            if (target.tagName === 'A' && target.hasAttribute('data-page')) {
+                event.preventDefault();
+                const page = target.getAttribute('data-page') as PageType;
+                this.navigateTo(page);
+            }
+        });
+    }
+
+    navigateTo(page: PageType) {
+        this.currentPage = page;
+        this.render();
     }
 
     render() {
-        const loginPage = new LoginPage();
-        const registerPage = new RegisterPage();
+        let pageContent = '';
 
-        this.rootElement.innerHTML = loginPage.render();
-        // this.rootElement.innerHTML = registerPage.render();
+        switch (this.currentPage) {
+            case 'login':
+                const loginPage = new LoginPage();
+                pageContent = loginPage.render();
+                break;
+            case 'register':
+                const registerPage = new RegisterPage();
+                pageContent = registerPage.render();
+                break;
+        }
+
+        this.rootElement.innerHTML = pageContent;
     }
 }
 

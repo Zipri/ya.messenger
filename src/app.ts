@@ -1,6 +1,7 @@
-import { LoginPage } from './pages/login/login';
+import { LoginPage, RegisterPage } from './pages';
 import './styles/style.scss';
 
+// FIXME SKV (!) сделать смену страниц через state
 class App {
     private rootElement: HTMLElement;
 
@@ -10,7 +11,10 @@ class App {
 
     render() {
         const loginPage = new LoginPage();
+        const registerPage = new RegisterPage();
+
         this.rootElement.innerHTML = loginPage.render();
+        // this.rootElement.innerHTML = registerPage.render();
     }
 }
 

@@ -2,7 +2,16 @@
 @use '@styles/components' as *;
 
 .chat-list {
-   @extend .wrapper;
+   display: flex;
+   flex-direction: column;
+   gap: .5rem;
+   
    overflow: auto;
-   padding: 0;
+
+   &__items {
+      @extend .wrapper;
+      flex: 1;
+      overflow: auto;
+      padding: 0;
+   }
 }

@@ -5,7 +5,7 @@ import inputTemplate from './input.hbs?raw';
 interface InputProps {
     id: string;
     name: string;
-    label: string;
+    label?: string;
     type?: string;
     value?: string;
     placeholder?: string;

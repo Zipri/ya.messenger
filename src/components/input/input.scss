@@ -25,6 +25,10 @@
     width: 100%;
     box-sizing: border-box;
 
+    &::placeholder {
+      color: $color-info-text;
+    }
+
     &:focus {
       outline: none;
       border: 1px solid #fff;

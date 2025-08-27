@@ -1,0 +1,9 @@
+@use '@styles/variables' as *;
+@use '@styles/components' as *;
+
+.chat-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}

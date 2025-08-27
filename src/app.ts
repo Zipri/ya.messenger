@@ -1,9 +1,8 @@
-import { LoginPage, RegisterPage } from './pages';
+import { ChatPage, LoginPage, RegisterPage } from './pages';
 import './styles/style.scss';
 
-type PageType = 'login' | 'register';
+type PageType = 'login' | 'register' | 'chat';
 
-// FIXME SKV (!) сделать смену страниц через state
 class App {
     private rootElement: HTMLElement;
     private currentPage: PageType = 'login';
@@ -19,7 +18,10 @@ class App {
             const target = event.target as HTMLElement;
 
             // Проверяем, что кликнули по ссылке с нужным атрибутом
-            if (target.tagName === 'A' && target.hasAttribute('data-page')) {
+            if (
+                (target.tagName === 'A' || target.tagName === 'BUTTON') &&
+                target.hasAttribute('data-page')
+            ) {
                 event.preventDefault();
                 const page = target.getAttribute('data-page') as PageType;
                 this.navigateTo(page);
@@ -43,6 +45,10 @@ class App {
             case 'register':
                 const registerPage = new RegisterPage();
                 pageContent = registerPage.render();
+                break;
+            case 'chat':
+                const chatPage = new ChatPage();
+                pageContent = chatPage.render();
                 break;
         }
 

@@ -1,0 +1,8 @@
+@use '@styles/variables' as *;
+@use '@styles/components' as *;
+
+.chat-list {
+   @extend .wrapper;
+   overflow: auto;
+   padding: 0;
+}

@@ -10,4 +10,12 @@ export default defineConfig({
             '@styles': '/src/styles',
         },
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                quietDeps: true,
+                silenceDeprecations: ['color-functions'],
+            },
+        },
+    },
 });

@@ -1,7 +1,7 @@
-import { ChatPage, LoginPage, RegisterPage } from './pages';
+import { ChatPage, LoginPage, ProfilePage, RegisterPage } from './pages';
 import './styles/style.scss';
 
-type PageType = 'login' | 'register' | 'chat';
+type PageType = 'login' | 'register' | 'chat' | 'profile';
 
 class App {
     private rootElement: HTMLElement;
@@ -49,6 +49,10 @@ class App {
             case 'chat':
                 const chatPage = new ChatPage();
                 pageContent = chatPage.render();
+                break;
+            case 'profile':
+                const profilePage = new ProfilePage();
+                pageContent = profilePage.render();
                 break;
         }
 

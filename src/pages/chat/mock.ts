@@ -11,6 +11,7 @@ export function getMockChatItems(): TChatData[] {
         'cool_cat',
         'tech_guru',
         '111001011001001',
+        'PUPA_LUPA',
     ];
 
     const avatars = [

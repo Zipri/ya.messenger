@@ -55,7 +55,6 @@
 .button_dark {
     @extend .button;
     background-color: $color-background-main;
-    color: $color-background-gray;
+    color: lighten($color-background-gray, 20%);
     border: 1px solid $color-background-main;
-    font-weight: 700;
 }

@@ -1,12 +1,12 @@
 import './profile.scss';
 import { compile } from 'handlebars';
-import chatTemplate from './profile.hbs?raw';
+import profileTemplate from './profile.hbs?raw';
 import { ChatList } from '../../blocks/chatList/chatList';
 import { getMockChatItems } from './mock';
 import { ProfileInfo } from './profileInfo/profileInfo';
 
 export class ProfilePage {
-    private template = compile(chatTemplate);
+    private template = compile(profileTemplate);
     private chatList: ChatList;
     private profileInfo: ProfileInfo;
 

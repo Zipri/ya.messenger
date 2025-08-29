@@ -43,7 +43,7 @@ class App {
 
     render() {
         let pageContent = '';
-        let currentPageInstance: any = null; // Добавить переменную для хранения инстанса
+        let currentPageInstance: ChatPage | null = null;
 
         switch (this.currentPage) {
             case 'login':
@@ -57,7 +57,7 @@ class App {
             case 'chat':
                 const chatPage = new ChatPage();
                 pageContent = chatPage.render();
-                currentPageInstance = chatPage; // Сохранить инстанс
+                currentPageInstance = chatPage;
                 break;
             case 'profile':
                 const profilePage = new ProfilePage();

@@ -6,8 +6,33 @@ import { Input } from '../../../components/input/input';
 export class ProfileInfo {
     private template = compile(profileInfoTemplate);
     private input = new Input();
+    private profileState: 'view' | 'edit' | 'edit-password' = 'view';
 
-    constructor() {}
+    constructor() {
+        this.initEventListeners();
+    }
+
+    /** Простая реализация переключения состояния ProfileInfo */
+    private initEventListeners() {
+        // Слушаем клики по всему документу
+        document.addEventListener('click', (event) => {
+            const target = event.target as HTMLElement;
+
+            // Проверяем, что кликнули по кнопке с нужным атрибутом
+            if (
+                target.tagName === 'BUTTON' &&
+                target.hasAttribute('data-profile-info')
+            ) {
+                const profileState = target.getAttribute(
+                    'data-profile-info'
+                ) as 'view' | 'edit' | 'edit-password';
+                this.profileState = profileState;
+                // Уведомляем родительский компонент о необходимости перерисовки
+                const event = new CustomEvent('profileStateChanged');
+                document.dispatchEvent(event);
+            }
+        });
+    }
 
     render(): string {
         const emailInput = this.input.render({
@@ -15,7 +40,7 @@ export class ProfileInfo {
             name: 'email',
             label: 'Почта',
             value: 'ivanivanov@yandex.ru',
-            disabled: true,
+            disabled: this.profileState === 'view',
         });
 
         const loginInput = this.input.render({
@@ -23,7 +48,7 @@ export class ProfileInfo {
             name: 'login',
             label: 'Логин',
             value: 'ivanivanov',
-            disabled: true,
+            disabled: this.profileState === 'view',
         });
 
         const firstNameInput = this.input.render({
@@ -31,7 +56,7 @@ export class ProfileInfo {
             name: 'first_name',
             label: 'Имя',
             value: 'Иван',
-            disabled: true,
+            disabled: this.profileState === 'view',
         });
 
         const secondNameInput = this.input.render({
@@ -39,7 +64,7 @@ export class ProfileInfo {
             name: 'second_name',
             label: 'Фамилия',
             value: 'Иванов',
-            disabled: true,
+            disabled: this.profileState === 'view',
         });
 
         const phoneInput = this.input.render({
@@ -47,7 +72,23 @@ export class ProfileInfo {
             name: 'phone',
             label: 'Телефон',
             value: '+7 (999) 999-99-99',
-            disabled: true,
+            disabled: this.profileState === 'view',
+        });
+
+        const passwordInput = this.input.render({
+            id: 'password',
+            name: 'password',
+            label: 'Пароль',
+            type: 'password',
+            value: '••••••••••',
+        });
+
+        const repeatPasswordInput = this.input.render({
+            id: 'repeat_password',
+            name: 'repeat_password',
+            label: 'Пароль (ещё раз)',
+            type: 'password',
+            value: '••••••••••',
         });
 
         return this.template({
@@ -56,9 +97,16 @@ export class ProfileInfo {
             firstNameInput,
             secondNameInput,
             phoneInput,
+            passwordInput,
+            repeatPasswordInput,
+
             avatar: 'https://pic.rutubelist.ru/user/74/93/7493abf139502d19ca81b0457a2ef0cd.jpg',
             name: 'Seroshtan',
             email: 'seroshtan@gmail.com',
+
+            isView: this.profileState === 'view',
+            isEdit: this.profileState === 'edit',
+            isEditPassword: this.profileState === 'edit-password',
         });
     }
 }

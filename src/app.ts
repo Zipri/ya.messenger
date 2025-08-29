@@ -12,6 +12,7 @@ class App {
         this.initEventListeners();
     }
 
+    /** Простая реализация переключения страниц */
     private initEventListeners() {
         // Слушаем клики по всему документу
         document.addEventListener('click', (event) => {

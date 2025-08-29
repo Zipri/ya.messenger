@@ -1,0 +1,32 @@
+<main class="dialog">
+    <div class="dialog__header">
+        <div class="dialog__header__user">
+            <div class="dialog__header__user__avatar">
+                <img src="{{userAvatar}}" alt="avatar" class="dialog__header__user__avatar-img"/>
+            </div>
+            <div class="dialog__header__user__info">
+                <span class="dialog__header__user__info__name" title="{{userName}}">
+                    {{userName}}
+                </span>
+                <span class="dialog__header__user__info__email" title="{{userEmail}}">
+                    {{userEmail}}
+                </span>
+            </div>
+        </div>
+        <div class="dialog__header__button">
+            <img src="../../../../static/more.png" alt="close" />
+        </div>
+    </div>
+    <div class="dialog__messages">
+        123
+    </div>
+    <div class="dialog__input">
+        <div class="dialog__input__icon">
+            <img src="../../../../static/attachment.png" alt="attachment" />
+        </div>
+        {{{messageInput}}}
+        <div class="dialog__input__button">
+            <img src="../../../../static/paper-plane.png" alt="send" />
+        </div>
+    </div>
+</main>

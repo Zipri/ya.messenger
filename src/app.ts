@@ -1,7 +1,13 @@
-import { ChatPage, LoginPage, ProfilePage, RegisterPage } from './pages';
+import {
+    ChatPage,
+    ErrorPage,
+    LoginPage,
+    ProfilePage,
+    RegisterPage,
+} from './pages';
 import './styles/style.scss';
 
-type PageType = 'login' | 'register' | 'chat' | 'profile';
+type PageType = 'login' | 'register' | 'chat' | 'profile' | 'error';
 
 class App {
     private rootElement: HTMLElement;
@@ -54,6 +60,13 @@ class App {
             case 'profile':
                 const profilePage = new ProfilePage();
                 pageContent = profilePage.render();
+                break;
+            case 'error':
+                const errorPage = new ErrorPage();
+                pageContent = errorPage.render(
+                    'Error 404',
+                    'Oops! Страничка не найдена'
+                );
                 break;
         }
 

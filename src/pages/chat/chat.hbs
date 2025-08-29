@@ -2,10 +2,14 @@
     <div class="chat-page__sidebar">
         {{{chatList}}}
     </div>
-    {{{dialog}}}
-    {{!-- <div class="chat-page__main">
-        <div class="chat-page__main__placeholder">
-            Выберите чат, чтобы отправить сообщение
+    {{#if isDialog}}
+        {{{dialog}}}
+    {{/if}}
+    {{#if isEmpty}}
+        <div class="chat-page__main">
+            <div class="chat-page__main__placeholder">
+                Выберите чат, чтобы отправить сообщение
+            </div>
         </div>
-    </div> --}}
+    {{/if}}
 </main>

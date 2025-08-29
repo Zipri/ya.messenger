@@ -6,6 +6,7 @@
   color: #FFFFFF;
   background-color: #2A2A2A;
   font-family: 'Inter', sans-serif;
+  scroll-behavior: smooth; // Плавная прокрутка
 
   /* Стилизация скроллбара */
   &::-webkit-scrollbar {

@@ -1,0 +1,31 @@
+<div class="message">
+    {{#if isOwn}}
+        <div class="message__own">
+            {{#if text}}
+                <div class="message__text">
+                    {{text}}
+                </div>
+            {{/if}}
+            {{#if image}}
+                <div class="message__image">
+                    <img src="{{image}}" alt="image" />
+                </div>
+            {{/if}}
+            <time class="message__time_own">{{time}}</time>
+        </div>
+    {{else}}
+        <div class="message__other">
+            {{#if text}}
+                <div class="message__text">
+                    {{text}}
+                </div>
+            {{/if}}
+            {{#if image}}
+                <div class="message__image">
+                    <img src="{{image}}" alt="image" />
+                </div>
+            {{/if}}
+            <time class="message__time_other">{{time}}</time>
+        </div>
+    {{/if}}
+</div>

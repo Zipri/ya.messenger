@@ -13,6 +13,7 @@ export class ProfilePage {
     constructor() {
         this.chatList = new ChatList({
             chats: getMockChatItems(),
+            isSearchHidden: true,
             onChatClick: () => {},
         });
         this.profileInfo = new ProfileInfo();

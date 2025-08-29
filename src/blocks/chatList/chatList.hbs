@@ -1,5 +1,7 @@
 <div class="chat-list">
-    {{{searchChat}}}
+    {{#if isSearchShown}}
+        {{{searchChat}}}
+    {{/if}}
     <div class="chat-list__items">
         {{#each chats}}
             {{{this}}}

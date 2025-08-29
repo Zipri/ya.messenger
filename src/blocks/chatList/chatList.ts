@@ -7,6 +7,7 @@ import type { TChatData } from './chatItem/types';
 
 interface IChatListProps {
     chats: TChatData[];
+    isSearchHidden?: boolean;
     onChatClick?: (chatId: string) => void;
     onSearch?: (query: string) => void;
 }
@@ -31,6 +32,7 @@ export class ChatList {
         return this.template({
             searchChat: this.searchChat.render(),
             chats: renderedChats,
+            isSearchShown: !this.props.isSearchHidden,
         });
     }
 

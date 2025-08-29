@@ -14,40 +14,40 @@ export class ProfileInfo {
             id: 'email',
             name: 'email',
             label: 'Почта',
-            type: 'text',
             value: 'ivanivanov@yandex.ru',
+            disabled: true,
         });
 
         const loginInput = this.input.render({
             id: 'login',
             name: 'login',
             label: 'Логин',
-            type: 'text',
             value: 'ivanivanov',
+            disabled: true,
         });
 
         const firstNameInput = this.input.render({
             id: 'first_name',
             name: 'first_name',
             label: 'Имя',
-            type: 'text',
             value: 'Иван',
+            disabled: true,
         });
 
         const secondNameInput = this.input.render({
             id: 'second_name',
             name: 'second_name',
             label: 'Фамилия',
-            type: 'text',
             value: 'Иванов',
+            disabled: true,
         });
 
         const phoneInput = this.input.render({
             id: 'phone',
             name: 'phone',
             label: 'Телефон',
-            type: 'text',
             value: '+7 (999) 999-99-99',
+            disabled: true,
         });
 
         return this.template({

@@ -10,6 +10,7 @@ interface InputProps {
     value?: string;
     placeholder?: string;
     required?: boolean;
+    disabled?: boolean;
 }
 
 export class Input {

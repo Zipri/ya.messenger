@@ -33,5 +33,11 @@
       outline: none;
       border: 1px solid #fff;
     }
+
+    &:disabled {
+      background-color: $color-background-gray;
+      border: 1px solid $color-background-gray;
+      color: $color-info-text;
+    }
   }
 }

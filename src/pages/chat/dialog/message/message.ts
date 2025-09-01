@@ -1,5 +1,6 @@
 import './message.scss';
 import { compile } from 'handlebars';
+
 import messageTemplate from './message.hbs?raw';
 import type { TMessage } from './types';
 

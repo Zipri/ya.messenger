@@ -1,7 +1,9 @@
 import { compile } from 'handlebars';
+
 import './searchChat.scss';
-import searchChatTemplate from './searchChat.hbs?raw';
 import { Input } from '../../../components/input/input';
+
+import searchChatTemplate from './searchChat.hbs?raw';
 
 interface ISearchChatProps {
     searchQuery?: string;

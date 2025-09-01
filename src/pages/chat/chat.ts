@@ -1,9 +1,11 @@
 import './chat.scss';
 import { compile } from 'handlebars';
-import chatTemplate from './chat.hbs?raw';
+
 import { ChatList } from '../../blocks/chatList/chatList';
-import { getMockChatItems } from './mock';
+
+import chatTemplate from './chat.hbs?raw';
 import { Dialog } from './dialog/dialog';
+import { getMockChatItems } from './mock';
 
 export class ChatPage {
     private template = compile(chatTemplate);

@@ -1,7 +1,9 @@
 import './register.scss';
 import { compile } from 'handlebars';
-import registerTemplate from './register.hbs?raw';
+
 import { Input } from '../../components';
+
+import registerTemplate from './register.hbs?raw';
 
 export class RegisterPage {
     private template = compile(registerTemplate);

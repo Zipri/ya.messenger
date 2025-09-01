@@ -1,9 +1,10 @@
 import { compile } from 'handlebars';
+
 import './chatList.scss';
-import chatListTemplate from './chatList.hbs?raw';
 import { ChatItem } from './chatItem/chatItem';
-import { SearchChat } from './searchChat/searchChat';
 import type { TChatData } from './chatItem/types';
+import chatListTemplate from './chatList.hbs?raw';
+import { SearchChat } from './searchChat/searchChat';
 
 interface IChatListProps {
     chats: TChatData[];

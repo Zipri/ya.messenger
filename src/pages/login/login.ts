@@ -1,7 +1,9 @@
 import './login.scss';
 import { compile } from 'handlebars';
-import loginTemplate from './login.hbs?raw';
+
 import { Input } from '../../components';
+
+import loginTemplate from './login.hbs?raw';
 
 export class LoginPage {
     private template = compile(loginTemplate);

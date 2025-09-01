@@ -1,7 +1,9 @@
 import './profileInfo.scss';
 import { compile } from 'handlebars';
-import profileInfoTemplate from './profileInfo.hbs?raw';
+
 import { Input } from '../../../components/input/input';
+
+import profileInfoTemplate from './profileInfo.hbs?raw';
 
 export class ProfileInfo {
     private template = compile(profileInfoTemplate);

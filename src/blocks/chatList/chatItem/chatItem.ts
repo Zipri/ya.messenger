@@ -1,4 +1,5 @@
 import { compile } from 'handlebars';
+
 import './chatItem.scss';
 import chatItemTemplate from './chatItem.hbs?raw';
 import type { TChatData } from './types';

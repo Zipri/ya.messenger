@@ -1,8 +1,10 @@
 import './profile.scss';
 import { compile } from 'handlebars';
-import profileTemplate from './profile.hbs?raw';
+
 import { ChatList } from '../../blocks/chatList/chatList';
+
 import { getMockChatItems } from './mock';
+import profileTemplate from './profile.hbs?raw';
 import { ProfileInfo } from './profileInfo/profileInfo';
 
 export class ProfilePage {

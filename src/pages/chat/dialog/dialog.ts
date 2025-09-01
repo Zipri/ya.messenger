@@ -1,7 +1,9 @@
 import './dialog.scss';
 import { compile } from 'handlebars';
-import dialogTemplate from './dialog.hbs?raw';
+
 import { Input } from '../../../components';
+
+import dialogTemplate from './dialog.hbs?raw';
 import { Message } from './message/message';
 import { messages } from './mock';
 

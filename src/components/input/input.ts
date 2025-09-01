@@ -1,4 +1,5 @@
 import { compile } from 'handlebars';
+
 import './input.scss';
 import inputTemplate from './input.hbs?raw';
 

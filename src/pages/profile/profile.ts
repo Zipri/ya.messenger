@@ -8,36 +8,36 @@ import profileTemplate from './profile.hbs?raw';
 import { ProfileInfo } from './profileInfo/profileInfo';
 
 export class ProfilePage {
-    private template = compile(profileTemplate);
-    private chatList: ChatList;
-    private profileInfo: ProfileInfo;
+  private template = compile(profileTemplate);
+  private chatList: ChatList;
+  private profileInfo: ProfileInfo;
 
-    constructor() {
-        this.chatList = new ChatList({
-            chats: getMockChatItems(),
-            isSearchHidden: true,
-            onChatClick: () => {},
-        });
-        this.profileInfo = new ProfileInfo();
+  constructor() {
+    this.chatList = new ChatList({
+      chats: getMockChatItems(),
+      isSearchHidden: true,
+      onChatClick: () => {},
+    });
+    this.profileInfo = new ProfileInfo();
 
-        // Слушаем изменения состояния профиля
-        document.addEventListener('profileStateChanged', () => {
-            this.rerender();
-        });
+    // Слушаем изменения состояния профиля
+    document.addEventListener('profileStateChanged', () => {
+      this.rerender();
+    });
+  }
+
+  /** Простая реализация переключения состояния ProfileInfo */
+  private rerender(): void {
+    const rootElement = document.querySelector('#app');
+    if (rootElement) {
+      rootElement.innerHTML = this.render();
     }
+  }
 
-    /** Простая реализация переключения состояния ProfileInfo */
-    private rerender(): void {
-        const rootElement = document.querySelector('#app');
-        if (rootElement) {
-            rootElement.innerHTML = this.render();
-        }
-    }
-
-    render(): string {
-        return this.template({
-            chatList: this.chatList.render(),
-            profileInfo: this.profileInfo.render(),
-        });
-    }
+  render(): string {
+    return this.template({
+      chatList: this.chatList.render(),
+      profileInfo: this.profileInfo.render(),
+    });
+  }
 }

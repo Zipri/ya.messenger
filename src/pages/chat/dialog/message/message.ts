@@ -5,13 +5,13 @@ import messageTemplate from './message.hbs?raw';
 import type { TMessage } from './types';
 
 export class Message {
-    private template = compile(messageTemplate);
+  private template = compile(messageTemplate);
 
-    constructor() {}
+  constructor() {}
 
-    render(message: TMessage): string {
-        return this.template({
-            ...message,
-        });
-    }
+  render(message: TMessage): string {
+    return this.template({
+      ...message,
+    });
+  }
 }

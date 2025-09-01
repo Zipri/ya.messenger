@@ -1,7 +1,7 @@
 export type TMessage = {
-    id: string;
-    text?: string;
-    image?: string;
-    isOwn: boolean;
-    time: string;
+  id: string;
+  text?: string;
+  image?: string;
+  isOwn: boolean;
+  time: string;
 };

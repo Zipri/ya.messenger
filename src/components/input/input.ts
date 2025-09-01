@@ -4,23 +4,23 @@ import './input.scss';
 import inputTemplate from './input.hbs?raw';
 
 interface InputProps {
-    id: string;
-    name: string;
-    label?: string;
-    type?: string;
-    value?: string;
-    placeholder?: string;
-    required?: boolean;
-    disabled?: boolean;
+  id: string;
+  name: string;
+  label?: string;
+  type?: string;
+  value?: string;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
 }
 
 export class Input {
-    private template = compile(inputTemplate);
+  private template = compile(inputTemplate);
 
-    render(props: InputProps) {
-        return this.template({
-            type: 'text',
-            ...props,
-        });
-    }
+  render(props: InputProps) {
+    return this.template({
+      type: 'text',
+      ...props,
+    });
+  }
 }

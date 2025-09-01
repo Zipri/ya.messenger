@@ -2,61 +2,61 @@
 @use '@styles/components' as *;
 
 .search-chat {
-    @extend .wrapper;
+  @extend .wrapper;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: space-between;
+
+  height: 8.5rem;
+  padding: 0.5rem;
+
+  &__header {
     display: flex;
-    flex-direction: column;
-    gap: .5rem;
+    align-items: start;
     justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
 
-    height: 8.5rem;
-    padding: .5rem;
+    &__user {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
 
-    &__header {
+      &__avatar {
+        width: 3.5rem;
+        height: 3.5rem;
+
+        &-img {
+          width: 100%;
+          height: 100%;
+          border-radius: $border-radius;
+          object-fit: cover;
+        }
+      }
+
+      &__info {
         display: flex;
-        align-items: start;
+        flex-direction: column;
         justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
+        gap: 0.2rem;
 
-        &__user {
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-
-            &__avatar {
-                width: 3.5rem;
-                height: 3.5rem;
-                
-                &-img {
-                    width: 100%;
-                    height: 100%;
-                    border-radius: $border-radius;
-                    object-fit: cover;
-                }
-            }
-
-            &__info {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                gap: .2rem;
-
-                &__name {
-                    @extend .text-ellipsis;
-                    font-weight: $text-bold;
-                }
-
-                &__email {
-                    @extend .text-ellipsis;
-                    font-style: italic;
-                    font-size: .8rem;
-                }
-            }
+        &__name {
+          @extend .text-ellipsis;
+          font-weight: $text-bold;
         }
 
-        &__button {
-            @extend .button_dark;
-            width: 8rem;
+        &__email {
+          @extend .text-ellipsis;
+          font-style: italic;
+          font-size: 0.8rem;
         }
+      }
     }
+
+    &__button {
+      @extend .button_dark;
+      width: 8rem;
+    }
+  }
 }

@@ -1,0 +1,11 @@
+@use 'sass:color';
+
+// Функция для затемнения цвета
+@function darker($color, $amount) {
+  @return color.adjust($color, $lightness: -$amount);
+}
+
+// Функция для осветления цвета
+@function lighter($color, $amount) {
+  @return color.adjust($color, $lightness: $amount);
+}

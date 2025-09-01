@@ -1,5 +1,6 @@
 @use '@styles/variables' as *;
 @use '@styles/components' as *;
+@use '@styles/functions' as *; 
 
 .chat-item {
   display: flex;
@@ -16,7 +17,7 @@
   width: 100%;
 
   &:hover {
-    background-color: darken($color-background-blue, 45%);
+    background-color: darker($color-background-blue, 45%);
   }
 
   &:last-child {

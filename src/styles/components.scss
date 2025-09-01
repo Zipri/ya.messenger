@@ -1,4 +1,5 @@
 @use '@styles/variables' as *;
+@use '@styles/functions' as *; 
 
 .hidden-scrollbar {
   &::-webkit-scrollbar {
@@ -55,6 +56,6 @@
 .button_dark {
   @extend .button;
   background-color: $color-background-main;
-  color: lighten($color-background-gray, 20%);
+  color: lighter($color-background-gray, 20%);
   border: 1px solid $color-background-main;
 }

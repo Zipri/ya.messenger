@@ -7,10 +7,9 @@
     "node": "22.14.0"
   },
   "scripts": {
-    "dev": "vite",
+    "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "start": "npm run build && vite preview",
     "lint": "eslint src --ext .ts,.js --fix",
     "format": "prettier --write \"src/**/*.{ts,js,scss,css}\"",
     "fix-all": "npm run lint && npm run format"

@@ -1,0 +1,20 @@
+<div class="chat-item">
+    <div class="chat-item__avatar">
+        <img src="{{avatar}}" alt="{{name}}" class="chat-item__avatar-img">
+    </div>
+    <div class="chat-item__content">
+        <span class="chat-item__content__name">{{name}}</span>
+        <div class="chat-item__content__message">
+            {{#if isOwn}}
+                <span class="chat-item__content__message__sender">Вы: </span>
+            {{/if}}
+            <span class="chat-item__content__message__text" title="{{lastMessage}}">{{lastMessage}}</span>
+        </div>
+    </div>
+    <div class="chat-item__info">
+        <span class="chat-item__info__time">{{time}}</span>
+        {{#if unreadCount}}
+            <div class="chat-item__info__badge">{{unreadCount}}</div>
+        {{/if}}
+    </div>
+</div>

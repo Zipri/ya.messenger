@@ -1,37 +1,25 @@
 import './profile.scss';
-import { compile } from 'handlebars';
-
-import { ChatList } from '../../blocks/chatList/chatList';
-
-import { getMockChatItems } from './mock';
 import profileTemplate from './profile.hbs?raw';
+import { Block } from '../../core';
 import { ProfileInfoBlock } from './profileInfo/profileInfo';
+import { ChatList } from '../../blocks/chatList/chatList';
+import { getMockChatItems } from './mock';
 
-export class ProfilePage {
-  private template = compile(profileTemplate);
-  private chatList: ChatList;
-  private profileInfo: ProfileInfoBlock;
+type ProfilePageProps = Record<string, any>;
 
+export class ProfilePage extends Block<ProfilePageProps> {
   constructor() {
-    this.chatList = new ChatList({
-      chats: getMockChatItems(),
-      isSearchHidden: true,
-      onChatClick: () => {},
-    });
-    this.profileInfo = new ProfileInfoBlock();
-  }
-
-  render(): string {
-    return this.template({
-      chatList: this.chatList.render(),
+    super({
+      chatList: new ChatList({
+        chats: getMockChatItems(),
+        isSearchHidden: true,
+        onChatClick: () => {},
+      }).render(),
+      profileInfo: new ProfileInfoBlock(),
     });
   }
 
-  afterMount(): void {
-    const slot = document.querySelector('#profile-info-slot');
-    if (slot) {
-      slot.replaceWith(this.profileInfo.getContent());
-      this.profileInfo.dispatchComponentDidMount();
-    }
+  protected render(): string {
+    return profileTemplate;
   }
 }

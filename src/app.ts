@@ -61,9 +61,11 @@ class App {
         break;
       case 'profile':
         const profilePage = new ProfilePage();
-        pageContent = profilePage.render();
-        currentPageInstance = profilePage as unknown as ProfilePage;
-        break;
+        // Для Block-страницы: вставляем DOM-узел напрямую
+        this.rootElement.innerHTML = '';
+        this.rootElement.appendChild(profilePage.getContent());
+        profilePage.dispatchComponentDidMount();
+        return;
       case 'error':
         const errorPage = new ErrorPage();
         pageContent = errorPage.render(
@@ -77,9 +79,6 @@ class App {
 
     if (this.currentPage === 'chat' && currentPageInstance) {
       (currentPageInstance as ChatPage).afterMount();
-    }
-    if (this.currentPage === 'profile' && currentPageInstance) {
-      (currentPageInstance as ProfilePage).afterMount();
     }
   }
 }

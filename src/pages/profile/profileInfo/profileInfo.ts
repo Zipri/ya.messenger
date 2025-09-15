@@ -82,8 +82,6 @@ export class ProfileInfoBlock extends Block<
         value: '••••••••••',
       }),
     });
-
-    // события установим после монтирования, чтобы гарантированно навесить слушатели
   }
 
   protected render(): string {

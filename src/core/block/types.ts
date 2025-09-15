@@ -1,4 +1,6 @@
-export type TBlockProps = Record<string, any>;
+export type TBlockProps = {
+  [key: string]: any;
+};
 
 // FIXME SKV (!) переделать на enum
 export type TBlockEvents =

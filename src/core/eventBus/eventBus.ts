@@ -1,9 +1,7 @@
 import type { IEventBus, TEventName } from './types';
 
-/**
- * EventBus - система событий для связи между компонентами
- * Позволяет подписываться на события, генерировать их и отписываться
- */
+/** EventBus - система событий для связи между компонентами
+ * Позволяет подписываться на события, генерировать их и отписываться */
 class EventBus implements IEventBus {
   private listeners: Record<TEventName, Function[]> = {};
 
@@ -17,7 +15,7 @@ class EventBus implements IEventBus {
 
   unsubscribe(eventName: TEventName, callback: Function): void {
     if (!this.listeners[eventName]) {
-      return;
+      throw new Error(`No event: ${event}`);
     }
 
     this.listeners[eventName] = this.listeners[eventName].filter(
@@ -32,14 +30,13 @@ class EventBus implements IEventBus {
 
   emit(eventName: TEventName, ...args: any[]): void {
     if (!this.listeners[eventName]) {
-      console.warn(`Событие "${eventName}" не имеет слушателей`);
-      return;
+      throw new Error(`Событие "${eventName}" не имеет слушателей`);
     }
 
     // Проходим по всем слушателям и вызываем их
-    this.listeners[eventName].forEach((callback) => {
+    this.listeners[eventName].forEach((listenerCallback) => {
       try {
-        callback(...args);
+        listenerCallback(...args);
       } catch (error) {
         console.error(`Ошибка в обработчике события "${eventName}":`, error);
       }

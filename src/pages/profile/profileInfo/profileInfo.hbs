@@ -9,27 +9,27 @@
             <img src="{{avatar}}" alt="{{name}}" class="profileInfo__user__avatar-img">
         </div>
         <div class="profileInfo__user__input-group">
-            {{#if isView}}
+            {{#if (eq profileState 'view')}}
                 {{{emailInput}}}
                 {{{loginInput}}}
                 {{{firstNameInput}}}
                 {{{secondNameInput}}}
                 {{{phoneInput}}}
             {{/if}}
-            {{#if isEdit}}
+            {{#if (eq profileState 'edit')}}
                 {{{emailInput}}}
                 {{{loginInput}}}
                 {{{firstNameInput}}}
                 {{{secondNameInput}}}
                 {{{phoneInput}}}
             {{/if}}
-            {{#if isEditPassword}}
+            {{#if (eq profileState 'edit-password')}}
                 {{{passwordInput}}}
                 {{{repeatPasswordInput}}}
             {{/if}}
         </div>
     </div>
-    {{#if isView}}
+    {{#if (eq profileState 'view')}}
         <div class="profileInfo__button-group">
             <button class="button_dark" data-page="error">
                 Выйти
@@ -42,7 +42,7 @@
             </button>
         </div>
     {{/if}}
-    {{#if isEdit}}
+    {{#if (eq profileState 'edit')}}
         <div class="profileInfo__button-group">
             <button class="button_dark" data-profile-info="view">
                 Отмена
@@ -52,7 +52,7 @@
             </button>
         </div>
     {{/if}}
-    {{#if isEditPassword}}
+    {{#if (eq profileState 'edit-password')}}
         <div class="profileInfo__button-group">
             <button class="button_dark" data-profile-info="view">
                 Отмена

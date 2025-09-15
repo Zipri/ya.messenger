@@ -5,12 +5,12 @@ import { ChatList } from '../../blocks/chatList/chatList';
 
 import { getMockChatItems } from './mock';
 import profileTemplate from './profile.hbs?raw';
-import { ProfileInfo } from './profileInfo/profileInfo';
+import { ProfileInfoBlock } from './profileInfo/profileInfo';
 
 export class ProfilePage {
   private template = compile(profileTemplate);
   private chatList: ChatList;
-  private profileInfo: ProfileInfo;
+  private profileInfo: ProfileInfoBlock;
 
   constructor() {
     this.chatList = new ChatList({
@@ -18,26 +18,20 @@ export class ProfilePage {
       isSearchHidden: true,
       onChatClick: () => {},
     });
-    this.profileInfo = new ProfileInfo();
-
-    // Слушаем изменения состояния профиля
-    document.addEventListener('profileStateChanged', () => {
-      this.rerender();
-    });
-  }
-
-  /** Простая реализация переключения состояния ProfileInfo */
-  private rerender(): void {
-    const rootElement = document.querySelector('#app');
-    if (rootElement) {
-      rootElement.innerHTML = this.render();
-    }
+    this.profileInfo = new ProfileInfoBlock();
   }
 
   render(): string {
     return this.template({
       chatList: this.chatList.render(),
-      profileInfo: this.profileInfo.render(),
     });
+  }
+
+  afterMount(): void {
+    const slot = document.querySelector('#profile-info-slot');
+    if (slot) {
+      slot.replaceWith(this.profileInfo.getContent());
+      this.profileInfo.dispatchComponentDidMount();
+    }
   }
 }

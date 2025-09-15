@@ -43,7 +43,7 @@ class App {
 
   render() {
     let pageContent = '';
-    let currentPageInstance: ChatPage | null = null;
+    let currentPageInstance: ChatPage | ProfilePage | null = null;
 
     switch (this.currentPage) {
       case 'login':
@@ -62,6 +62,7 @@ class App {
       case 'profile':
         const profilePage = new ProfilePage();
         pageContent = profilePage.render();
+        currentPageInstance = profilePage as unknown as ProfilePage;
         break;
       case 'error':
         const errorPage = new ErrorPage();
@@ -75,7 +76,10 @@ class App {
     this.rootElement.innerHTML = pageContent;
 
     if (this.currentPage === 'chat' && currentPageInstance) {
-      currentPageInstance.afterMount();
+      (currentPageInstance as ChatPage).afterMount();
+    }
+    if (this.currentPage === 'profile' && currentPageInstance) {
+      (currentPageInstance as ProfilePage).afterMount();
     }
   }
 }

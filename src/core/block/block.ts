@@ -2,6 +2,7 @@ import { v4 } from 'uuid';
 import { EventBus } from '../eventBus';
 import type { IBlock, TBlockEvents, TBlockProps } from './types';
 import type { TID } from '../../types/types';
+import Handlebars from 'handlebars';
 
 /** Block - базовый класс для всех компонентов
  * Предоставляет жизненный цикл, управление состоянием и интеграцию с DOM */
@@ -37,6 +38,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
     this._registerEvents(eventBus);
     eventBus.emit(Block.EVENTS.INIT);
+    console.log('constructor'); // FIXME SKV (!)
   }
 
   get element(): HTMLElement | null {
@@ -109,7 +111,9 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   }
 
   /** Переопределяемый метод - вызывается после монтирования компонента в DOM */
-  protected componentDidMount(): void {}
+  protected componentDidMount(): void {
+    console.log('componentDidMount'); // FIXME SKV (!)
+  }
 
   /** Переопределяемый метод - проверяет нужно ли обновлять компонент */
   protected componentDidUpdate(oldProps: Partial<T>, newProps: T): boolean {

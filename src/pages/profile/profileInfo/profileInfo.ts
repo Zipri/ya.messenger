@@ -1,116 +1,128 @@
 import './profileInfo.scss';
-import { compile } from 'handlebars';
-
-import { Input } from '../../../components/input/input';
 
 import profileInfoTemplate from './profileInfo.hbs?raw';
+import { Block } from '../../../core';
+import { InputBlock } from '../../../components';
 
-export class ProfileInfo {
-  private template = compile(profileInfoTemplate);
-  private input = new Input();
-  private profileState: 'view' | 'edit' | 'edit-password' = 'view';
+type ProfileState = 'view' | 'edit' | 'edit-password';
 
-  constructor() {
-    this.initEventListeners();
-  }
+interface ProfileInfoProps {
+  profileState?: ProfileState;
+  avatar?: string;
+  name?: string;
+  email?: string;
+}
 
-  /** Простая реализация переключения состояния ProfileInfo */
-  private initEventListeners() {
-    // Слушаем клики по всему документу
-    document.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
-
-      // Проверяем, что кликнули по кнопке с нужным атрибутом
-      if (
-        target.tagName === 'BUTTON' &&
-        target.hasAttribute('data-profile-info')
-      ) {
-        const profileState = target.getAttribute('data-profile-info') as
-          | 'view'
-          | 'edit'
-          | 'edit-password';
-        this.profileState = profileState;
-        // Уведомляем родительский компонент о необходимости перерисовки
-        const event = new CustomEvent('profileStateChanged');
-        document.dispatchEvent(event);
-      }
-    });
-  }
-
-  render(): string {
-    const emailInput = this.input.render({
-      id: 'email',
-      name: 'email',
-      label: 'Почта',
-      value: 'ivanivanov@yandex.ru',
-      disabled: this.profileState === 'view',
-    });
-
-    const loginInput = this.input.render({
-      id: 'login',
-      name: 'login',
-      label: 'Логин',
-      value: 'ivanivanov',
-      disabled: this.profileState === 'view',
-    });
-
-    const firstNameInput = this.input.render({
-      id: 'first_name',
-      name: 'first_name',
-      label: 'Имя',
-      value: 'Иван',
-      disabled: this.profileState === 'view',
-    });
-
-    const secondNameInput = this.input.render({
-      id: 'second_name',
-      name: 'second_name',
-      label: 'Фамилия',
-      value: 'Иванов',
-      disabled: this.profileState === 'view',
-    });
-
-    const phoneInput = this.input.render({
-      id: 'phone',
-      name: 'phone',
-      label: 'Телефон',
-      value: '+7 (999) 999-99-99',
-      disabled: this.profileState === 'view',
-    });
-
-    const passwordInput = this.input.render({
-      id: 'password',
-      name: 'password',
-      label: 'Пароль',
-      type: 'password',
-      value: '••••••••••',
-    });
-
-    const repeatPasswordInput = this.input.render({
-      id: 'repeat_password',
-      name: 'repeat_password',
-      label: 'Пароль (ещё раз)',
-      type: 'password',
-      value: '••••••••••',
-    });
-
-    return this.template({
-      emailInput,
-      loginInput,
-      firstNameInput,
-      secondNameInput,
-      phoneInput,
-      passwordInput,
-      repeatPasswordInput,
-
+export class ProfileInfoBlock extends Block<
+  ProfileInfoProps & Record<string, any>
+> {
+  constructor(props: ProfileInfoProps = {}) {
+    super({
+      profileState: 'view',
       avatar:
         'https://pic.rutubelist.ru/user/74/93/7493abf139502d19ca81b0457a2ef0cd.jpg',
       name: 'Seroshtan',
       email: 'seroshtan@gmail.com',
+      ...props,
 
-      isView: this.profileState === 'view',
-      isEdit: this.profileState === 'edit',
-      isEditPassword: this.profileState === 'edit-password',
+      // Дочерние Input компоненты
+      emailInput: new InputBlock({
+        id: 'email',
+        name: 'email',
+        label: 'Почта',
+        value: 'ivanivanov@yandex.ru',
+        disabled: props.profileState === 'view',
+      }),
+
+      loginInput: new InputBlock({
+        id: 'login',
+        name: 'login',
+        label: 'Логин',
+        value: 'ivanivanov',
+        disabled: props.profileState === 'view',
+      }),
+
+      firstNameInput: new InputBlock({
+        id: 'first_name',
+        name: 'first_name',
+        label: 'Имя',
+        value: 'Иван',
+        disabled: props.profileState === 'view',
+      }),
+
+      secondNameInput: new InputBlock({
+        id: 'second_name',
+        name: 'second_name',
+        label: 'Фамилия',
+        value: 'Иванов',
+        disabled: props.profileState === 'view',
+      }),
+
+      phoneInput: new InputBlock({
+        id: 'phone',
+        name: 'phone',
+        label: 'Телефон',
+        value: '+7 (999) 999-99-99',
+        disabled: props.profileState === 'view',
+      }),
+
+      passwordInput: new InputBlock({
+        id: 'password',
+        name: 'password',
+        label: 'Пароль',
+        type: 'password',
+        value: '••••••••••',
+      }),
+
+      repeatPasswordInput: new InputBlock({
+        id: 'repeat_password',
+        name: 'repeat_password',
+        label: 'Пароль (ещё раз)',
+        type: 'password',
+        value: '••••••••••',
+      }),
+    });
+
+    // события установим после монтирования, чтобы гарантированно навесить слушатели
+  }
+
+  protected render(): string {
+    return profileInfoTemplate;
+  }
+
+  private _handleButtonClick = (event: Event): void => {
+    const target = event.target as HTMLElement;
+    console.log(this.props);
+
+    if (
+      target.tagName === 'BUTTON' &&
+      target.hasAttribute('data-profile-info')
+    ) {
+      const newState = target.getAttribute('data-profile-info') as ProfileState;
+
+      this.setProps({
+        profileState: newState,
+      });
+
+      this._updateInputsState(newState);
+    }
+  };
+
+  private _updateInputsState(state: ProfileState): void {
+    const disabled = state === 'view';
+
+    (this.children.emailInput as InputBlock).setProps({ disabled });
+    (this.children.loginInput as InputBlock).setProps({ disabled });
+    (this.children.firstNameInput as InputBlock).setProps({ disabled });
+    (this.children.secondNameInput as InputBlock).setProps({ disabled });
+    (this.children.phoneInput as InputBlock).setProps({ disabled });
+  }
+
+  protected componentDidMount(): void {
+    this.setProps({
+      events: {
+        click: this._handleButtonClick,
+      },
     });
   }
 }

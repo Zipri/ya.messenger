@@ -1,6 +1,6 @@
 export type TBlockProps = Record<string, any>;
 
-// FIXME SKV: попробовать через const
+// FIXME SKV (!) переделать на enum
 export type TBlockEvents =
   | 'init'
   | 'component-did-mount'
@@ -13,8 +13,4 @@ export interface IBlock<T extends TBlockProps = TBlockProps> {
   show(): void;
   hide(): void;
   remove(): void;
-}
-
-export interface IBlockConstructor<T extends TBlockProps = TBlockProps> {
-  new (props: T): IBlock<T>;
 }

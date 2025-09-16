@@ -1,23 +1,20 @@
-import { compile } from 'handlebars';
-
 import './chatItem.scss';
 import chatItemTemplate from './chatItem.hbs?raw';
 import type { TChatData } from './types';
+import { Block } from '../../../core';
 
-interface IChatItemProps {
-  data: TChatData;
-  onClick?: (chatId: string) => void;
+interface ChatItemProps extends TChatData {
+  events?: {
+    click: (event: Event) => void;
+  };
 }
 
-export class ChatItem {
-  private template = compile(chatItemTemplate);
-  private props: IChatItemProps;
-
-  constructor(props: IChatItemProps) {
-    this.props = props;
+export class ChatItem extends Block<ChatItemProps> {
+  constructor(props: ChatItemProps) {
+    super(props);
   }
 
-  render(): string {
-    return this.template(this.props.data);
+  protected render(): string {
+    return chatItemTemplate;
   }
 }

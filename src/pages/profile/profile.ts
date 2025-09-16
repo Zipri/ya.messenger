@@ -4,6 +4,7 @@ import { Block } from '../../core';
 import { ProfileInfoBlock } from './profileInfo/profileInfo';
 import { ChatList } from '../../blocks/chatList/chatList';
 
+// FIXME SKV (!) убрать все Record<string, any>
 type ProfilePageProps = Record<string, any>;
 
 export class ProfilePage extends Block<ProfilePageProps> {
@@ -11,7 +12,7 @@ export class ProfilePage extends Block<ProfilePageProps> {
     super({
       chatList: new ChatList({
         isSearchHidden: true,
-      }).render(),
+      }),
       profileInfo: new ProfileInfoBlock(),
     });
   }

@@ -43,7 +43,6 @@ class App {
 
   render() {
     let pageContent = '';
-    let currentPageInstance: ChatPage | ProfilePage | null = null;
 
     switch (this.currentPage) {
       case 'login':
@@ -56,9 +55,11 @@ class App {
         break;
       case 'chat':
         const chatPage = new ChatPage();
-        pageContent = chatPage.render();
-        currentPageInstance = chatPage;
-        break;
+        // Монтируем ChatPage как Block
+        this.rootElement.innerHTML = '';
+        this.rootElement.appendChild(chatPage.getContent());
+        chatPage.dispatchComponentDidMount();
+        return; // Выходим, чтобы не перезаписать DOM
       case 'profile':
         const profilePage = new ProfilePage();
         // Для Block-страницы: вставляем DOM-узел напрямую
@@ -76,10 +77,6 @@ class App {
     }
 
     this.rootElement.innerHTML = pageContent;
-
-    if (this.currentPage === 'chat' && currentPageInstance) {
-      (currentPageInstance as ChatPage).afterMount();
-    }
   }
 }
 

@@ -1,41 +1,36 @@
-import { compile } from 'handlebars';
-
 import './searchChat.scss';
-import { Input } from '../../../components/input/input';
 
 import searchChatTemplate from './searchChat.hbs?raw';
+import { Block } from '../../../core';
+import { InputBlock } from '../../../components';
 
-interface ISearchChatProps {
+interface SearchChatProps {
   searchQuery?: string;
-  onSearch?: (query: string) => void;
+  avatar?: string;
+  name?: string;
+  email?: string;
 }
 
-export class SearchChat {
-  private template = compile(searchChatTemplate);
-  private props: ISearchChatProps;
-  private input: Input;
-
-  constructor(props: ISearchChatProps = {}) {
-    this.props = props;
-    this.input = new Input();
-  }
-
-  render(): string {
-    const inputHtml = this.input.render({
-      id: 'search-chat-input',
-      name: 'search',
-      label: '',
-      type: 'text',
-      placeholder: 'Поиск чата',
-      value: this.props.searchQuery || '',
-    });
-
-    return this.template({
-      searchInput: inputHtml,
+export class SearchChat extends Block<SearchChatProps & Record<string, any>> {
+  constructor(props: SearchChatProps) {
+    super({
+      ...props,
       avatar:
         'https://pic.rutubelist.ru/user/74/93/7493abf139502d19ca81b0457a2ef0cd.jpg',
       name: 'Seroshtan',
       email: 'seroshtan@gmail.com',
+      // Компоненты
+      searchInput: new InputBlock({
+        id: 'search-chat-input',
+        name: 'search',
+        type: 'text',
+        placeholder: 'Поиск чата',
+        value: props.searchQuery || '',
+      }),
     });
+  }
+
+  protected render(): string {
+    return searchChatTemplate;
   }
 }

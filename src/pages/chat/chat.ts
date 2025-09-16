@@ -1,58 +1,33 @@
 import './chat.scss';
-import { compile } from 'handlebars';
-
-import { ChatList } from '../../blocks/chatList/chatList';
 
 import chatTemplate from './chat.hbs?raw';
 import { Dialog } from './dialog/dialog';
+import { Block } from '../../core';
+import { ChatList } from '../../blocks';
 
-export class ChatPage {
-  private template = compile(chatTemplate);
-  private chatList: ChatList;
-  private dialog: Dialog;
-  private chatState: 'dialog' | 'empty' = 'empty';
+type ChatState = 'dialog' | 'empty';
 
+interface ChatPageProps {
+  chatState?: ChatState;
+}
+
+export class ChatPage extends Block<ChatPageProps & Record<string, any>> {
   constructor() {
-    this.chatList = new ChatList({
-      isSearchHidden: false,
+    super({
+      chatState: 'empty',
+      // Компоненты
+      chatList: new ChatList({
+        isSearchHidden: false,
+        onChatClick: (chatId: string) => {
+          console.log(`Нажат чат с ID: ${chatId}`);
+          this.setProps({ chatState: 'dialog' });
+        },
+      }),
+      dialog: new Dialog().render(),
     });
-    this.dialog = new Dialog();
   }
 
   render(): string {
-    return this.template({
-      chatList: this.chatList.render(),
-      dialog: this.dialog.render(),
-      isEmpty: this.chatState === 'empty',
-      isDialog: this.chatState === 'dialog',
-    });
-  }
-
-  private handleChatClick = (event: Event): void => {
-    const target = event.target as HTMLElement;
-    const chatItem = target.closest('.chat-item');
-
-    if (chatItem) {
-      this.chatState = 'dialog';
-      this.rerenderPage();
-    }
-  };
-
-  private rerenderPage(): void {
-    const container = document.querySelector('.chat-page');
-    if (container && container.parentElement) {
-      container.parentElement.innerHTML = this.render();
-      this.afterMount();
-    }
-  }
-
-  afterMount(): void {
-    // Добавляем слушатель на весь документ для обработки кликов по chat-item
-    document.addEventListener('click', this.handleChatClick);
-
-    // Если открыт диалог, инициализируем его
-    if (this.chatState === 'dialog') {
-      this.dialog.afterMount();
-    }
+    return chatTemplate;
   }
 }

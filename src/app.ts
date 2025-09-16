@@ -23,8 +23,6 @@ class App {
   }
 
   render() {
-    let pageContent = '';
-
     switch (this.currentPage) {
       case 'login':
         const loginPage = new LoginPage({});
@@ -72,8 +70,6 @@ class App {
         this._renderBlock(errorPage);
         return;
     }
-
-    this.rootElement.innerHTML = pageContent;
   }
 
   private _renderBlock(block: Block) {

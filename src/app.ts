@@ -1,3 +1,4 @@
+import { ChatList } from './blocks';
 import {
   ChatPage,
   ErrorPage,
@@ -12,33 +13,12 @@ type PageType = 'login' | 'register' | 'chat' | 'profile' | 'error';
 class App {
   private rootElement: HTMLElement;
   private currentPage: PageType = 'login';
+  private chatListBlock: ChatList;
 
   constructor() {
     this.rootElement = document.querySelector('#app')!;
-    this.initEventListeners();
-  }
-
-  /** Простая реализация переключения страниц */
-  private initEventListeners() {
-    // Слушаем клики по всему документу
-    document.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
-
-      // Проверяем, что кликнули по ссылке с нужным атрибутом
-      if (
-        (target.tagName === 'A' || target.tagName === 'BUTTON') &&
-        target.hasAttribute('data-page')
-      ) {
-        event.preventDefault();
-        const page = target.getAttribute('data-page') as PageType;
-        this.navigateTo(page);
-      }
-    });
-  }
-
-  navigateTo(page: PageType) {
-    this.currentPage = page;
-    this.render();
+    this.chatListBlock = new ChatList({});
+    this._initEventListeners();
   }
 
   render() {
@@ -55,19 +35,36 @@ class App {
         pageContent = registerPage.render();
         break;
 
-      case 'chat':
-        const chatPage = new ChatPage();
-        // Монтируем ChatPage как Block
+      case 'chat': {
+        this.chatListBlock.setProps({
+          isSearchHidden: false,
+          onChatClick: (chatId: string) => {
+            console.log(`Из App.ts: нажат чат с ID: ${chatId}`);
+          },
+        });
+
+        const chatPage = new ChatPage({ chatList: this.chatListBlock });
+
         this.rootElement.innerHTML = '';
         this.rootElement.appendChild(chatPage.getContent());
+
         chatPage.dispatchComponentDidMount();
-        return; // Выходим, чтобы не перезаписать DOM
+        return;
+      }
 
       case 'profile':
-        const profilePage = new ProfilePage();
-        // Для Block-страницы: вставляем DOM-узел напрямую
+        this.chatListBlock.setProps({
+          isSearchHidden: true,
+          onChatClick: (chatId: string) => {
+            console.log(`Из App.ts: нажат чат с ID: ${chatId}`);
+          },
+        });
+
+        const profilePage = new ProfilePage({ chatList: this.chatListBlock });
+
         this.rootElement.innerHTML = '';
         this.rootElement.appendChild(profilePage.getContent());
+
         profilePage.dispatchComponentDidMount();
         return;
 
@@ -81,6 +78,29 @@ class App {
     }
 
     this.rootElement.innerHTML = pageContent;
+  }
+
+  /** Простая реализация переключения страниц */
+  private _initEventListeners() {
+    // Слушаем клики по всему документу
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+
+      // Проверяем, что кликнули по ссылке с нужным атрибутом
+      if (
+        (target.tagName === 'A' || target.tagName === 'BUTTON') &&
+        target.hasAttribute('data-page')
+      ) {
+        event.preventDefault();
+        const page = target.getAttribute('data-page') as PageType;
+        this._navigateTo(page);
+      }
+    });
+  }
+
+  private _navigateTo(page: PageType) {
+    this.currentPage = page;
+    this.render();
   }
 }
 

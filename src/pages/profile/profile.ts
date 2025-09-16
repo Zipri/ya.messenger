@@ -2,17 +2,14 @@ import './profile.scss';
 import profileTemplate from './profile.hbs?raw';
 import { Block } from '../../core';
 import { ProfileInfoBlock } from './profileInfo/profileInfo';
-import { ChatList } from '../../blocks/chatList/chatList';
 
 // FIXME SKV (!) убрать все Record<string, any>
 type ProfilePageProps = Record<string, any>;
 
 export class ProfilePage extends Block<ProfilePageProps> {
-  constructor() {
+  constructor(props: ProfilePageProps) {
     super({
-      chatList: new ChatList({
-        isSearchHidden: true,
-      }),
+      chatList: props.chatList,
       profileInfo: new ProfileInfoBlock(),
     });
   }

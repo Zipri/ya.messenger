@@ -49,10 +49,12 @@ class App {
         const loginPage = new LoginPage();
         pageContent = loginPage.render();
         break;
+
       case 'register':
         const registerPage = new RegisterPage();
         pageContent = registerPage.render();
         break;
+
       case 'chat':
         const chatPage = new ChatPage();
         // Монтируем ChatPage как Block
@@ -60,6 +62,7 @@ class App {
         this.rootElement.appendChild(chatPage.getContent());
         chatPage.dispatchComponentDidMount();
         return; // Выходим, чтобы не перезаписать DOM
+
       case 'profile':
         const profilePage = new ProfilePage();
         // Для Block-страницы: вставляем DOM-узел напрямую
@@ -67,6 +70,7 @@ class App {
         this.rootElement.appendChild(profilePage.getContent());
         profilePage.dispatchComponentDidMount();
         return;
+
       case 'error':
         const errorPage = new ErrorPage();
         pageContent = errorPage.render(

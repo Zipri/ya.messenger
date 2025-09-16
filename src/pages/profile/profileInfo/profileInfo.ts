@@ -88,9 +88,16 @@ export class ProfileInfoBlock extends Block<
     return profileInfoTemplate;
   }
 
+  protected componentDidMount(): void {
+    this.setProps({
+      events: {
+        click: this._handleButtonClick,
+      },
+    });
+  }
+
   private _handleButtonClick = (event: Event): void => {
     const target = event.target as HTMLElement;
-    console.log(this.props);
 
     if (
       target.tagName === 'BUTTON' &&
@@ -114,13 +121,5 @@ export class ProfileInfoBlock extends Block<
     (this.children.firstNameInput as InputBlock).setProps({ disabled });
     (this.children.secondNameInput as InputBlock).setProps({ disabled });
     (this.children.phoneInput as InputBlock).setProps({ disabled });
-  }
-
-  protected componentDidMount(): void {
-    this.setProps({
-      events: {
-        click: this._handleButtonClick,
-      },
-    });
   }
 }

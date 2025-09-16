@@ -1,12 +1,21 @@
 import './error.scss';
-import { compile } from 'handlebars';
 
 import errorTemplate from './error.hbs?raw';
+import { Block } from '../../core';
 
-export class ErrorPage {
-  private template = compile(errorTemplate);
+interface ErrorPageProps {
+  errorCode: string;
+  errorMessage: string;
+}
 
-  render(errorCode: string, errorMessage: string): string {
-    return this.template({ errorCode, errorMessage });
+export class ErrorPage extends Block<ErrorPageProps & Record<string, any>> {
+  constructor(props: ErrorPageProps) {
+    super({
+      ...props,
+    });
+  }
+
+  render(): string {
+    return errorTemplate;
   }
 }

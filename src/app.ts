@@ -1,4 +1,5 @@
 import { ChatList } from './blocks';
+import type { Block } from './core';
 import {
   ChatPage,
   ErrorPage,
@@ -45,10 +46,7 @@ class App {
 
         const chatPage = new ChatPage({ chatList: this.chatListBlock });
 
-        this.rootElement.innerHTML = '';
-        this.rootElement.appendChild(chatPage.getContent());
-
-        chatPage.dispatchComponentDidMount();
+        this._renderBlock(chatPage);
         return;
       }
 
@@ -62,22 +60,26 @@ class App {
 
         const profilePage = new ProfilePage({ chatList: this.chatListBlock });
 
-        this.rootElement.innerHTML = '';
-        this.rootElement.appendChild(profilePage.getContent());
-
-        profilePage.dispatchComponentDidMount();
+        this._renderBlock(profilePage);
         return;
 
       case 'error':
-        const errorPage = new ErrorPage();
-        pageContent = errorPage.render(
-          'Error 404',
-          'Oops! Страничка не найдена'
-        );
-        break;
+        const errorPage = new ErrorPage({
+          errorCode: 'Error 404',
+          errorMessage: 'Oops! Страничка не найдена',
+        });
+
+        this._renderBlock(errorPage);
+        return;
     }
 
     this.rootElement.innerHTML = pageContent;
+  }
+
+  private _renderBlock(block: Block) {
+    this.rootElement.innerHTML = '';
+    this.rootElement.appendChild(block.getContent());
+    block.dispatchComponentDidMount();
   }
 
   /** Простая реализация переключения страниц */

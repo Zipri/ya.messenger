@@ -1,72 +1,85 @@
 import './dialog.scss';
-import { compile } from 'handlebars';
 
-import { Input } from '../../../components';
+import { InputBlock } from '../../../components';
 
-import dialogTemplate from './dialog.hbs?raw';
 import { Message } from './message/message';
+import dialogTemplate from './dialog.hbs?raw';
 import { messages } from './mock';
+import { Block } from '../../../core';
 
-export class Dialog {
-  private template = compile(dialogTemplate);
-  private input = new Input();
-  private message = new Message();
+interface DialogProps {}
 
-  constructor() {}
-
-  render(): string {
-    const messageInput = this.input.render({
-      id: 'message',
-      name: 'message',
-      label: '',
-      placeholder: 'Введите сообщение...',
-      value: '',
-    });
-
-    const messagesHtml: string[] = messages.map((message) =>
-      this.message.render(message)
-    );
-
-    return this.template({
-      messageInput,
-      messagesHtml,
+export class Dialog extends Block<DialogProps & Record<string, any>> {
+  constructor(props: DialogProps) {
+    super({
+      ...props,
       userAvatar:
         'https://images.steamusercontent.com/ugc/2052004474097085207/12B44815F2A65699D34584DA2071A26BE23692F9/?imw=512&amp;imh=395&amp;ima=fit&amp;impolicy=Letterbox&amp;imcolor=%23000000&amp;letterbox=true',
       userName: 'John Doe',
       userEmail: 'john.doe@example.com',
+      // Компоненты
+      messageInput: new InputBlock({
+        id: 'message',
+        name: 'message',
+        label: '',
+        placeholder: 'Введите сообщение...',
+        value: '',
+      }),
+      messages: [],
     });
+
+    const messageItems = messages.map(
+      (message) =>
+        new Message({
+          message: message,
+        })
+    );
+
+    this.lists.messages = messageItems;
   }
 
-  scrollToBottom(): void {
-    const container = document.querySelector(
-      '.dialog__messages'
-    ) as HTMLElement | null;
-    if (!container) return;
-
-    const scroll = () => {
-      container.scrollTop = container.scrollHeight;
-    };
-
-    // После рендера и после следующего тика, когда браузер дорисует высоты
-    requestAnimationFrame(() => {
-      scroll();
-      requestAnimationFrame(scroll);
-    });
-
-    // Доскролл при догрузке изображений
-    const images = container.querySelectorAll('img');
-    images.forEach((img) => {
-      if (img.complete) return;
-      img.addEventListener('load', scroll, { once: true });
-      img.addEventListener('error', scroll, { once: true });
-    });
-
-    // Если контейнер растянется (перепоток/ресайз), доскроллим
-    const ro = new ResizeObserver(() => scroll());
-    ro.observe(container);
+  render(): string {
+    return dialogTemplate;
   }
 
-  afterMount(): void {
-    this.scrollToBottom();
+  componentDidMount(): void {
+    this._scrollToBottom();
+  }
+
+  // FIXME SKV (!) не работает
+  private _scrollToBottom(): void {
+    return;
+    // // 1. Получаем корневой элемент нашего компонента Dialog
+    // const dialogElement = this.getContent();
+    // if (!dialogElement) return;
+
+    // // 2. Ищем контейнер для сообщений ВНУТРИ нашего компонента
+    // const container = dialogElement.querySelector(
+    //   '.dialog__messages'
+    // ) as HTMLElement | null;
+
+    // if (!container) return; // Если не нашли, выходим
+
+    // const scroll = () => {
+    //   container.scrollTop = container.scrollHeight;
+    // };
+
+    // // После рендера и после следующего тика, когда браузер дорисует высоты
+    // requestAnimationFrame(() => {
+    //   scroll();
+    //   requestAnimationFrame(scroll);
+    // });
+
+    // // Доскролл при догрузке изображений
+    // const images = container.querySelectorAll('img');
+    // images.forEach((img) => {
+    //   if (img.complete) return;
+    //   img.addEventListener('load', scroll, { once: true });
+    //   img.addEventListener('error', scroll, { once: true });
+    // });
+
+    // // Если контейнер растянется (перепоток/ресайз), доскроллим
+    // const ro = new ResizeObserver(() => scroll());
+    // ro.observe(container);
   }
 }

@@ -1,17 +1,21 @@
 import './message.scss';
-import { compile } from 'handlebars';
 
 import messageTemplate from './message.hbs?raw';
 import type { TMessage } from './types';
+import { Block } from '../../../../core';
 
-export class Message {
-  private template = compile(messageTemplate);
+interface MessageProps {
+  message: TMessage;
+}
 
-  constructor() {}
-
-  render(message: TMessage): string {
-    return this.template({
-      ...message,
+export class Message extends Block<Record<string, any>> {
+  constructor(props: MessageProps) {
+    super({
+      ...props.message,
     });
+  }
+
+  render(): string {
+    return messageTemplate;
   }
 }

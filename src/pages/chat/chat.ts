@@ -18,7 +18,7 @@ export class ChatPage extends Block<ChatPageProps & Record<string, any>> {
       chatState: 'empty',
       // Компоненты
       chatList: props.chatList,
-      dialog: new Dialog().render(),
+      dialog: new Dialog({}),
     });
 
     props.chatList.setProps({

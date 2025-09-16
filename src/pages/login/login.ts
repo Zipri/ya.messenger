@@ -1,34 +1,35 @@
 import './login.scss';
-import { compile } from 'handlebars';
 
-import { Input } from '../../components';
+import { InputBlock } from '../../components';
 
 import loginTemplate from './login.hbs?raw';
+import { Block } from '../../core';
 
-export class LoginPage {
-  private template = compile(loginTemplate);
-  private input = new Input();
+type LoginPageProps = Record<string, any>;
+
+export class LoginPage extends Block<LoginPageProps> {
+  constructor(props: LoginPageProps) {
+    super({
+      ...props,
+      // Компоненты
+      loginInput: new InputBlock({
+        id: 'login',
+        name: 'login',
+        label: 'Логин',
+        type: 'text',
+        value: 'ivanivanov',
+      }),
+      passwordInput: new InputBlock({
+        id: 'password',
+        name: 'password',
+        label: 'Пароль',
+        type: 'password',
+        value: '••••••••••',
+      }),
+    });
+  }
 
   render() {
-    const loginInput = this.input.render({
-      id: 'login',
-      name: 'login',
-      label: 'Логин',
-      type: 'text',
-      value: 'ivanivanov',
-    });
-
-    const passwordInput = this.input.render({
-      id: 'password',
-      name: 'password',
-      label: 'Пароль',
-      type: 'password',
-      value: '••••••••••',
-    });
-
-    return this.template({
-      loginInput,
-      passwordInput,
-    });
+    return loginTemplate;
   }
 }

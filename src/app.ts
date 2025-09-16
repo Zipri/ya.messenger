@@ -27,14 +27,14 @@ class App {
 
     switch (this.currentPage) {
       case 'login':
-        const loginPage = new LoginPage();
-        pageContent = loginPage.render();
-        break;
+        const loginPage = new LoginPage({});
+        this._renderBlock(loginPage);
+        return;
 
       case 'register':
-        const registerPage = new RegisterPage();
-        pageContent = registerPage.render();
-        break;
+        const registerPage = new RegisterPage({});
+        this._renderBlock(registerPage);
+        return;
 
       case 'chat': {
         this.chatListBlock.setProps({

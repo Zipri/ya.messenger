@@ -5,7 +5,6 @@ import { ChatList } from '../../blocks/chatList/chatList';
 
 import chatTemplate from './chat.hbs?raw';
 import { Dialog } from './dialog/dialog';
-import { getMockChatItems } from './mock';
 
 export class ChatPage {
   private template = compile(chatTemplate);
@@ -15,8 +14,7 @@ export class ChatPage {
 
   constructor() {
     this.chatList = new ChatList({
-      chats: getMockChatItems(),
-      onChatClick: () => {},
+      isSearchHidden: false,
     });
     this.dialog = new Dialog();
   }

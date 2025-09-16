@@ -2,28 +2,28 @@ import { compile } from 'handlebars';
 
 import './chatList.scss';
 import { ChatItem } from './chatItem/chatItem';
-import type { TChatData } from './chatItem/types';
 import chatListTemplate from './chatList.hbs?raw';
 import { SearchChat } from './searchChat/searchChat';
+import type { TChatData } from './chatItem/types';
+import { getMockChatItems } from '../../pages/chat/mock';
 
 interface IChatListProps {
-  chats: TChatData[];
   isSearchHidden?: boolean;
-  onChatClick?: (chatId: string) => void;
-  onSearch?: (query: string) => void;
 }
 
 export class ChatList {
   private template = compile(chatListTemplate);
   private props: IChatListProps;
+  private chatsData: TChatData[] = [];
   private chatItems: ChatItem[] = [];
   private searchChat: SearchChat;
 
   constructor(props: IChatListProps) {
     this.props = props;
+    this.chatsData = getMockChatItems();
     this.createChatItems();
     this.searchChat = new SearchChat({
-      onSearch: this.props.onSearch,
+      onSearch: () => {},
     });
   }
 
@@ -38,11 +38,11 @@ export class ChatList {
   }
 
   private createChatItems(): void {
-    this.chatItems = this.props.chats.map(
+    this.chatItems = this.chatsData.map(
       (chatData) =>
         new ChatItem({
           data: chatData,
-          onClick: this.props.onChatClick,
+          onClick: () => {},
         })
     );
   }

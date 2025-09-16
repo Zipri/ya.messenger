@@ -11,6 +11,24 @@ import './styles/style.scss';
 
 type PageType = 'login' | 'register' | 'chat' | 'profile' | 'error';
 
+// FIXME SKV добавить
+/**   private currentPage?: Block; // Сохраняем текущую страницу
+
+  private _renderBlock(block: Block) {
+    // ВАЖНО: Удаляем предыдущую страницу правильно
+    if (this.currentPage) {
+      this.currentPage.remove(); // ✅ Вызываем remove() для очистки событий!
+    }
+
+    this.rootElement.innerHTML = '';
+    this.rootElement.appendChild(block.getContent());
+    block.dispatchComponentDidMount();
+    
+    this.currentPage = block; // Сохраняем новую страницу
+  }
+
+*/
+
 class App {
   private rootElement: HTMLElement;
   private currentPage: PageType = 'login';

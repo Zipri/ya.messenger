@@ -1,0 +1,21 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form__title {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.form__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form__submit {
+    align-self: flex-start;
+}

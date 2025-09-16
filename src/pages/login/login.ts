@@ -1,6 +1,6 @@
 import './login.scss';
 
-import { InputBlock } from '../../components';
+import { FormBlock, InputBlock } from '../../components';
 
 import loginTemplate from './login.hbs?raw';
 import { Block } from '../../core';
@@ -12,19 +12,26 @@ export class LoginPage extends Block<LoginPageProps> {
     super({
       ...props,
       // Компоненты
-      loginInput: new InputBlock({
-        id: 'login',
-        name: 'login',
-        label: 'Логин',
-        type: 'text',
-        value: 'ivanivanov',
-      }),
-      passwordInput: new InputBlock({
-        id: 'password',
-        name: 'password',
-        label: 'Пароль',
-        type: 'password',
-        value: '••••••••••',
+      loginForm: new FormBlock({
+        title: 'Вход',
+        submitText: 'Авторизоваться',
+        fields: [
+          new InputBlock({
+            id: 'login',
+            name: 'login',
+            label: 'Логин',
+            type: 'text',
+          }),
+          new InputBlock({
+            id: 'password',
+            name: 'password',
+            label: 'Пароль',
+            type: 'password',
+          }),
+        ],
+        onSubmit: (values) => {
+          console.log('Login form data:', values);
+        },
       }),
     });
   }

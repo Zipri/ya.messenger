@@ -21,14 +21,14 @@ export class LoginPage extends Block<LoginPageProps> {
             name: 'login',
             label: 'Логин',
             type: 'text',
-            validation: ['required', 'login'],
+            // validation: ['required', 'login'],
           }),
           new InputBlock({
             id: 'password',
             name: 'password',
             label: 'Пароль',
             type: 'password',
-            validation: ['required', 'password'],
+            // validation: ['required', 'password'],
           }),
         ],
         onSubmit: (values) => {

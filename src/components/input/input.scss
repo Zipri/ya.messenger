@@ -40,4 +40,10 @@
       color: $color-info-text;
     }
   }
+
+  &__error {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    padding-left: 0.5rem;
+  }
 }

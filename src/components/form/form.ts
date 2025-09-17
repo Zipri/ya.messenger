@@ -59,6 +59,19 @@ export class FormBlock extends Block<FormProps> {
     formEl.addEventListener('submit', (event) => {
       event.preventDefault();
 
+      const inputs = formEl.querySelectorAll<
+        HTMLInputElement | HTMLTextAreaElement
+      >('input, textarea');
+      inputs.forEach((el) =>
+        el.dispatchEvent(new Event('blur', { bubbles: true }))
+      );
+
+      const hasInvalid = Array.from(inputs).some(
+        (el) => el.dataset.valid === 'false'
+      );
+      // не отправляем, пока ошибки не исправлены
+      if (hasInvalid) return;
+
       const values: FormValues = {};
       const fields = formEl.querySelectorAll<
         HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement

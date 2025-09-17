@@ -21,16 +21,30 @@ export class LoginPage extends Block<LoginPageProps> {
             name: 'login',
             label: 'Логин',
             type: 'text',
+            validation: ['required', 'login'],
           }),
           new InputBlock({
             id: 'password',
             name: 'password',
             label: 'Пароль',
             type: 'password',
+            validation: ['required', 'password'],
           }),
         ],
         onSubmit: (values) => {
           console.log('Login form data:', values);
+
+          // Создаем временную невидимую кнопку для навигации
+          const tempButton = document.createElement('button');
+          tempButton.setAttribute('data-page', 'chat');
+          tempButton.style.position = 'absolute';
+          tempButton.style.left = '-9999px';
+          tempButton.style.opacity = '0';
+
+          // Добавляем в DOM, кликаем, удаляем
+          document.body.appendChild(tempButton);
+          tempButton.click();
+          document.body.removeChild(tempButton);
         },
       }),
     });

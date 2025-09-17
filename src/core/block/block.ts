@@ -201,8 +201,20 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   /** Внутренний метод componentDidMount */
   private _componentDidMount(): void {
     this.componentDidMount();
+    console.log(
+      'mount lists for',
+      this.constructor.name,
+      Object.keys(this.lists)
+    );
     Object.values(this.children).forEach((child) => {
       child.dispatchComponentDidMount();
+    });
+    Object.values(this.lists).forEach((list) => {
+      list.forEach((item) => {
+        if (item instanceof Block) {
+          item.dispatchComponentDidMount();
+        }
+      });
     });
   }
 
@@ -257,9 +269,17 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
     const newElement = fragment.content.firstElementChild as HTMLElement;
     if (this._element && newElement) {
-      this._element.replaceWith(newElement);
+      const parent = this._element.parentNode;
+      if (parent) {
+        this._element.replaceWith(newElement);
+      } else {
+        // если родителя уже нет (например, во время события), просто назначим новый элемент
+        this._element = newElement;
+      }
+    } else {
+      this._element = newElement;
     }
-    this._element = newElement;
+
     this._addEvents();
     this.addAttributes();
   }
@@ -282,7 +302,12 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
       if (value instanceof Block) {
         children[key] = value;
       } else if (Array.isArray(value)) {
-        lists[key] = value;
+        const isBlocksArray = (value as any[]).every((v) => v instanceof Block);
+        if (isBlocksArray) {
+          lists[key] = value as any[];
+        } else {
+          props[key] = value;
+        }
       } else {
         props[key] = value;
       }

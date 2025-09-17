@@ -70,6 +70,10 @@ export class InputBlock extends Block<InputProps> {
     const errorEl = root?.querySelector('[data-error]') as HTMLElement | null;
     if (!input || !errorEl) return false;
 
+    if (oldProps.disabled !== newProps.disabled) {
+      input.disabled = !!newProps.disabled;
+    }
+
     if (
       oldProps.value !== newProps.value &&
       typeof newProps.value === 'string'

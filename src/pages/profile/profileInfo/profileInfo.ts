@@ -2,7 +2,7 @@ import './profileInfo.scss';
 
 import profileInfoTemplate from './profileInfo.hbs?raw';
 import { Block } from '../../../core';
-import { InputBlock } from '../../../components';
+import { FormBlock, InputBlock } from '../../../components';
 
 type ProfileState = 'view' | 'edit' | 'edit-password';
 
@@ -17,6 +17,106 @@ export class ProfileInfoBlock extends Block<
   ProfileInfoProps & Record<string, any>
 > {
   constructor(props: ProfileInfoProps = {}) {
+    const emailInput = new InputBlock({
+      id: 'email',
+      name: 'email',
+      label: 'Почта',
+      value: 'ivanivanov@yandex.ru',
+      validation: ['required', 'email'],
+      disabled: true,
+    });
+
+    const loginInput = new InputBlock({
+      id: 'login',
+      name: 'login',
+      label: 'Логин',
+      value: 'ivanivanov',
+      validation: ['required', 'login'],
+      disabled: true,
+    });
+
+    const firstNameInput = new InputBlock({
+      id: 'first_name',
+      name: 'first_name',
+      label: 'Имя',
+      value: 'Иван',
+      validation: ['required', 'name'],
+      disabled: true,
+    });
+
+    const secondNameInput = new InputBlock({
+      id: 'second_name',
+      name: 'second_name',
+      label: 'Фамилия',
+      value: 'Иванов',
+      validation: ['required', 'name'],
+      disabled: true,
+    });
+
+    const phoneInput = new InputBlock({
+      id: 'phone',
+      name: 'phone',
+      label: 'Телефон',
+      value: '+79999999999',
+      validation: ['required', 'phone'],
+      disabled: true,
+    });
+
+    const passwordInput = new InputBlock({
+      id: 'password',
+      name: 'password',
+      label: 'Пароль',
+      type: 'password',
+      validation: ['required', 'password'],
+    });
+
+    const repeatPasswordInput = new InputBlock({
+      id: 'repeat_password',
+      name: 'repeat_password',
+      label: 'Пароль (ещё раз)',
+      type: 'password',
+      validation: ['required', 'password'],
+    });
+
+    const profileForm = new FormBlock({
+      // можно задать триггер кнопки, если он уже в DOM: '#profile-save'
+      submitTrigger: '#profile-save',
+      fields: [
+        emailInput,
+        loginInput,
+        firstNameInput,
+        secondNameInput,
+        phoneInput,
+      ],
+      onSubmit: (values) => {
+        console.log('Profile form data:', values);
+        this.setProps({
+          profileState: 'view',
+        });
+        this._updateInputsState('view');
+      },
+    });
+
+    const passwordForm = new FormBlock({
+      // можно задать триггер кнопки, если он уже в DOM: '#password-save'
+      submitTrigger: '#password-save',
+      fields: [passwordInput, repeatPasswordInput],
+      onSubmit: (values) => {
+        if (values.password !== values.repeat_password) {
+          (this.children.repeatPasswordInput as InputBlock).setProps({
+            error: 'Пароли не совпадают',
+          });
+          return;
+        }
+
+        console.log('Password form data:', values);
+        this.setProps({
+          profileState: 'view',
+        });
+        this._updateInputsState('view');
+      },
+    });
+
     super({
       profileState: 'view',
       avatar:
@@ -25,62 +125,18 @@ export class ProfileInfoBlock extends Block<
       email: 'seroshtan@gmail.com',
       ...props,
 
-      // Дочерние Input компоненты
-      emailInput: new InputBlock({
-        id: 'email',
-        name: 'email',
-        label: 'Почта',
-        value: 'ivanivanov@yandex.ru',
-        disabled: props.profileState === 'view',
-      }),
+      // инпуты
+      emailInput,
+      loginInput,
+      firstNameInput,
+      secondNameInput,
+      phoneInput,
+      passwordInput,
+      repeatPasswordInput,
 
-      loginInput: new InputBlock({
-        id: 'login',
-        name: 'login',
-        label: 'Логин',
-        value: 'ivanivanov',
-        disabled: props.profileState === 'view',
-      }),
-
-      firstNameInput: new InputBlock({
-        id: 'first_name',
-        name: 'first_name',
-        label: 'Имя',
-        value: 'Иван',
-        disabled: props.profileState === 'view',
-      }),
-
-      secondNameInput: new InputBlock({
-        id: 'second_name',
-        name: 'second_name',
-        label: 'Фамилия',
-        value: 'Иванов',
-        disabled: props.profileState === 'view',
-      }),
-
-      phoneInput: new InputBlock({
-        id: 'phone',
-        name: 'phone',
-        label: 'Телефон',
-        value: '+7 (999) 999-99-99',
-        disabled: props.profileState === 'view',
-      }),
-
-      passwordInput: new InputBlock({
-        id: 'password',
-        name: 'password',
-        label: 'Пароль',
-        type: 'password',
-        value: '••••••••••',
-      }),
-
-      repeatPasswordInput: new InputBlock({
-        id: 'repeat_password',
-        name: 'repeat_password',
-        label: 'Пароль (ещё раз)',
-        type: 'password',
-        value: '••••••••••',
-      }),
+      // формы
+      profileForm,
+      passwordForm,
     });
   }
 
@@ -94,6 +150,8 @@ export class ProfileInfoBlock extends Block<
         click: this._handleButtonClick,
       },
     });
+
+    this._bindSubmitTriggers();
   }
 
   private _handleButtonClick = (event: Event): void => {
@@ -110,6 +168,8 @@ export class ProfileInfoBlock extends Block<
       });
 
       this._updateInputsState(newState);
+      // при смене состояния разметка может меняться — перевяжем триггеры
+      queueMicrotask(() => this._bindSubmitTriggers());
     }
   };
 
@@ -121,5 +181,36 @@ export class ProfileInfoBlock extends Block<
     (this.children.firstNameInput as InputBlock).setProps({ disabled });
     (this.children.secondNameInput as InputBlock).setProps({ disabled });
     (this.children.phoneInput as InputBlock).setProps({ disabled });
+
+    // пароли активны только в режиме смены пароля
+    const pwdDisabled = state !== 'edit-password';
+    (this.children.passwordInput as InputBlock).setProps({
+      disabled: pwdDisabled,
+    });
+    (this.children.repeatPasswordInput as InputBlock).setProps({
+      disabled: pwdDisabled,
+    });
+  }
+
+  private _bindSubmitTriggers(): void {
+    const root = this.element;
+    if (!root) return;
+
+    const profileForm = this.children.profileForm as FormBlock | undefined;
+    const passwordForm = this.children.passwordForm as FormBlock | undefined;
+
+    const profileBtn = root.querySelector(
+      '#profile-save'
+    ) as HTMLElement | null;
+    const passwordBtn = root.querySelector(
+      '#password-save'
+    ) as HTMLElement | null;
+
+    if (profileForm && profileBtn) {
+      profileForm.setSubmitTrigger(profileBtn);
+    }
+    if (passwordForm && passwordBtn) {
+      passwordForm.setSubmitTrigger(passwordBtn);
+    }
   }
 }

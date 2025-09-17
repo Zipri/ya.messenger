@@ -10,22 +10,13 @@
         </div>
         <div class="profileInfo__user__input-group">
             {{#if (eq profileState 'view')}}
-                {{{emailInput}}}
-                {{{loginInput}}}
-                {{{firstNameInput}}}
-                {{{secondNameInput}}}
-                {{{phoneInput}}}
+                {{{profileForm}}}
             {{/if}}
             {{#if (eq profileState 'edit')}}
-                {{{emailInput}}}
-                {{{loginInput}}}
-                {{{firstNameInput}}}
-                {{{secondNameInput}}}
-                {{{phoneInput}}}
+                {{{profileForm}}}
             {{/if}}
             {{#if (eq profileState 'edit-password')}}
-                {{{passwordInput}}}
-                {{{repeatPasswordInput}}}
+                {{{passwordForm}}}
             {{/if}}
         </div>
     </div>
@@ -47,7 +38,7 @@
             <button class="button_dark" data-profile-info="view">
                 Отмена
             </button>
-            <button class="button_main" data-profile-info="view">
+            <button id="profile-save" class="button_main" type="button">
                 Сохранить
             </button>
         </div>
@@ -57,7 +48,7 @@
             <button class="button_dark" data-profile-info="view">
                 Отмена
             </button>
-            <button class="button_main" data-profile-info="view">
+            <button id="password-save" class="button_main" type="button">
                 Сохранить
             </button>
         </div>

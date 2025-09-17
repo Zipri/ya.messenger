@@ -38,7 +38,6 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
     this._registerEvents(eventBus);
     eventBus.emit(Block.EVENTS.INIT);
-    console.log('constructor'); // FIXME SKV (!)
   }
 
   get element(): HTMLElement | null {
@@ -111,9 +110,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   }
 
   /** Переопределяемый метод - вызывается после монтирования компонента в DOM */
-  protected componentDidMount(): void {
-    console.log('componentDidMount'); // FIXME SKV (!)
-  }
+  protected componentDidMount(): void {}
 
   /** Переопределяемый метод - проверяет нужно ли обновлять компонент */
   protected componentDidUpdate(oldProps: Partial<T>, newProps: T): boolean {
@@ -201,11 +198,6 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   /** Внутренний метод componentDidMount */
   private _componentDidMount(): void {
     this.componentDidMount();
-    console.log(
-      'mount lists for',
-      this.constructor.name,
-      Object.keys(this.lists)
-    );
     Object.values(this.children).forEach((child) => {
       child.dispatchComponentDidMount();
     });

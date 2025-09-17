@@ -52,6 +52,30 @@ export class FormBlock extends Block<FormProps> {
     }
   }
 
+  public setSubmitTrigger(trigger: string | HTMLElement) {
+    // Сначала отвязываем старый обработчик, если он был
+    if (this._externalEl && this._externalHandler) {
+      this._externalEl.removeEventListener('click', this._externalHandler);
+    }
+
+    const submitElement =
+      typeof trigger === 'string'
+        ? (document.querySelector(trigger) as HTMLElement | null)
+        : trigger;
+
+    if (submitElement) {
+      const handler = (e: Event) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.submit();
+      };
+
+      submitElement.addEventListener('click', handler);
+      this._externalEl = submitElement;
+      this._externalHandler = handler;
+    }
+  }
+
   protected componentDidMount(): void {
     const formEl = this.element as HTMLFormElement | null;
     if (!formEl) return;
@@ -87,23 +111,7 @@ export class FormBlock extends Block<FormProps> {
     // Привязка внешней кнопки
     const trigger = this.props.submitTrigger;
     if (trigger) {
-      // Ищем кнопку по селектору или передаем сам элемент
-      const submitElement =
-        typeof trigger === 'string'
-          ? (document.querySelector(trigger) as HTMLElement | null)
-          : trigger;
-
-      if (submitElement) {
-        const handler = (e: Event) => {
-          e.preventDefault();
-          e.stopPropagation();
-          this.submit();
-        };
-
-        submitElement.addEventListener('click', handler);
-        this._externalEl = submitElement;
-        this._externalHandler = handler;
-      }
+      this.setSubmitTrigger(trigger);
     }
   }
 

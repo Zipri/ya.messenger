@@ -18,7 +18,6 @@ interface InputProps {
 
 export class InputBlock extends Block<InputProps> {
   constructor(props: InputProps) {
-    console.log('props', props);
     super(props);
   }
 

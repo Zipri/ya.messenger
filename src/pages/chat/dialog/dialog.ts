@@ -1,6 +1,6 @@
 import './dialog.scss';
 
-import { InputBlock } from '../../../components';
+import { FormBlock, InputBlock } from '../../../components';
 
 import { Message } from './message/message';
 import dialogTemplate from './dialog.hbs?raw';
@@ -18,12 +18,19 @@ export class Dialog extends Block<DialogProps & Record<string, any>> {
       userName: 'John Doe',
       userEmail: 'john.doe@example.com',
       // Компоненты
-      messageInput: new InputBlock({
-        id: 'message',
-        name: 'message',
-        label: '',
-        placeholder: 'Введите сообщение...',
-        value: '',
+      messageForm: new FormBlock({
+        fields: [
+          new InputBlock({
+            id: 'message',
+            name: 'message',
+            placeholder: 'Введите сообщение...',
+            type: 'text',
+            validation: ['message'],
+          }),
+        ],
+        onSubmit: (values) => {
+          console.log('Message form data:', values);
+        },
       }),
       messages: [],
     });
@@ -42,8 +49,17 @@ export class Dialog extends Block<DialogProps & Record<string, any>> {
     return dialogTemplate;
   }
 
+  // FIXME SKV (!) почему работает?
   componentDidMount(): void {
     this._scrollToBottom();
+    const messageForm = this.children.messageForm as FormBlock | undefined;
+    const submitButton = this.element?.querySelector(
+      '#message-submit'
+    ) as HTMLElement | null;
+
+    if (messageForm && submitButton) {
+      messageForm.setSubmitTrigger(submitButton);
+    }
   }
 
   // FIXME SKV (!) не работает

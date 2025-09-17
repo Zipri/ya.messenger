@@ -16,10 +16,12 @@
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": false,
-    "erasableSyntaxOnly": false,
+    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "strictNullChecks": true
   },
   "include": ["src"]
 }

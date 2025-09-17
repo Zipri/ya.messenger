@@ -73,7 +73,7 @@ class App {
   }
 
   private _renderBlock(block: Block) {
-    this.rootElement.innerHTML = '';
+    this.rootElement.replaceChildren();
     this.rootElement.appendChild(block.getContent());
     block.dispatchComponentDidMount();
   }

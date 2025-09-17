@@ -14,7 +14,6 @@ export class RegisterPage extends Block<RegisterPageProps> {
       ...props,
       // Компоненты
       registerForm: new FormBlock({
-        title: 'Регистрация',
         submitTrigger: '#register-submit',
         fields: [
           new InputBlock({

@@ -14,7 +14,6 @@ export class LoginPage extends Block<LoginPageProps> {
       ...props,
       // Компоненты
       loginForm: new FormBlock({
-        title: 'Вход',
         submitTrigger: '#login-submit',
         fields: [
           new InputBlock({

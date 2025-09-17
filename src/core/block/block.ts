@@ -267,19 +267,24 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
       }
     });
 
+    // FIXME SKV доработать реализацию
+    // const newElement = fragment.content.firstElementChild as HTMLElement;
+    // if (this._element && newElement) {
+    //   const parent = this._element.parentNode;
+    //   if (parent) {
+    //     this._element.replaceWith(newElement);
+    //   } else {
+    //     // если родителя уже нет (например, во время события), просто назначим новый элемент
+    //     this._element = newElement;
+    //   }
+    // } else {
+    //   this._element = newElement;
+    // }
     const newElement = fragment.content.firstElementChild as HTMLElement;
     if (this._element && newElement) {
-      const parent = this._element.parentNode;
-      if (parent) {
-        this._element.replaceWith(newElement);
-      } else {
-        // если родителя уже нет (например, во время события), просто назначим новый элемент
-        this._element = newElement;
-      }
-    } else {
-      this._element = newElement;
+      this._element.replaceWith(newElement);
     }
-
+    this._element = newElement;
     this._addEvents();
     this.addAttributes();
   }

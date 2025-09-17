@@ -1,9 +1,10 @@
 import './register.scss';
 
-import { InputBlock } from '../../components';
+import { FormBlock, InputBlock } from '../../components';
 
 import registerTemplate from './register.hbs?raw';
 import { Block } from '../../core';
+import { fakeNavigate } from '../../utils';
 
 type RegisterPageProps = Record<string, any>;
 
@@ -12,54 +13,68 @@ export class RegisterPage extends Block<RegisterPageProps> {
     super({
       ...props,
       // Компоненты
-      emailInput: new InputBlock({
-        id: 'email',
-        name: 'email',
-        label: 'Почта',
-        type: 'text',
-        value: 'ivanivanov@yandex.ru',
-      }),
-      loginInput: new InputBlock({
-        id: 'login',
-        name: 'login',
-        label: 'Логин',
-        type: 'text',
-        value: 'ivanivanov',
-      }),
-      firstNameInput: new InputBlock({
-        id: 'first_name',
-        name: 'first_name',
-        label: 'Имя',
-        type: 'text',
-        value: 'Иван',
-      }),
-      secondNameInput: new InputBlock({
-        id: 'second_name',
-        name: 'second_name',
-        label: 'Фамилия',
-        type: 'text',
-        value: 'Иванов',
-      }),
-      phoneInput: new InputBlock({
-        id: 'phone',
-        name: 'phone',
-        label: 'Телефон',
-        type: 'text',
-        value: '+7 (999) 999-99-99',
-      }),
-      passwordInput: new InputBlock({
-        id: 'password',
-        name: 'password',
-        label: 'Пароль',
-        type: 'password',
-        value: '••••••••••',
-      }),
-      repeatPasswordInput: new InputBlock({
-        id: 'repeat_password',
-        name: 'repeat_password',
-        label: 'Пароль (ещё раз)',
-        type: 'password',
-        value: '••••••••••',
+      registerForm: new FormBlock({
+        title: 'Регистрация',
+        submitTrigger: '#register-submit',
+        fields: [
+          new InputBlock({
+            id: 'email',
+            name: 'email',
+            label: 'Почта',
+            type: 'text',
+            validation: ['required', 'email'],
+          }),
+          new InputBlock({
+            id: 'login',
+            name: 'login',
+            label: 'Логин',
+            type: 'text',
+            validation: ['required', 'login'],
+          }),
+          new InputBlock({
+            id: 'first_name',
+            name: 'first_name',
+            label: 'Имя',
+            type: 'text',
+            validation: ['required', 'name'],
+          }),
+          new InputBlock({
+            id: 'second_name',
+            name: 'second_name',
+            label: 'Фамилия',
+            type: 'text',
+            validation: ['required', 'name'],
+          }),
+          new InputBlock({
+            id: 'phone',
+            name: 'phone',
+            label: 'Телефон',
+            type: 'text',
+            validation: ['required', 'phone'],
+          }),
+          new InputBlock({
+            id: 'password',
+            name: 'password',
+            label: 'Пароль',
+            type: 'password',
+            validation: ['required', 'password'],
+          }),
+          new InputBlock({
+            id: 'repeat_password',
+            name: 'repeat_password',
+            label: 'Пароль (ещё раз)',
+            type: 'password',
+            validation: ['required', 'password'],
+          }),
+        ],
+        onSubmit: (values) => {
+          console.log('Register form data:', values);
+          if (values.password !== values.repeat_password) {
+            alert('Пароли не совпадают');
+          } else {
+            fakeNavigate('chat');
+          }
+        },
       }),
     });
   }

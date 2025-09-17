@@ -3,7 +3,7 @@ import './register.scss';
 import { FormBlock, InputBlock } from '../../components';
 
 import registerTemplate from './register.hbs?raw';
-import { Block } from '../../../core';
+import { Block } from '../../../controllers';
 import { fakeNavigate } from '../../../utils';
 
 type RegisterPageProps = Record<string, any>;

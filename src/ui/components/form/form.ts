@@ -1,7 +1,7 @@
 // src/components/form/form.ts
 import './form.scss';
 import template from './form.hbs?raw';
-import { Block } from '../../../core';
+import { Block } from '../../../controllers';
 
 type FormValues = Record<string, string>;
 

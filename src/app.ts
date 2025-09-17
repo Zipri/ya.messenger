@@ -1,4 +1,4 @@
-import type { Block } from './core';
+import type { Block } from './controllers';
 import {
   ChatPage,
   ErrorPage,

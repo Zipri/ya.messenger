@@ -3,7 +3,7 @@ import { ChatItem } from './chatItem/chatItem';
 import chatListTemplate from './chatList.hbs?raw';
 import { SearchChat } from './searchChat/searchChat';
 import type { TChatData } from './chatItem/types';
-import { Block } from '../../../core';
+import { Block } from '../../../controllers';
 import { getMockChatItems } from '../../pages/chat/mock';
 
 interface ChatListProps {

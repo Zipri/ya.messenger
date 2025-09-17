@@ -2,7 +2,7 @@ import './chat.scss';
 
 import chatTemplate from './chat.hbs?raw';
 import { Dialog } from './dialog/dialog';
-import { Block } from '../../../core';
+import { Block } from '../../../controllers';
 import type { ChatList } from '../../blocks';
 
 type ChatState = 'dialog' | 'empty';

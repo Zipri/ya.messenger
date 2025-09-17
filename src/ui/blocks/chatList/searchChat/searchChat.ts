@@ -1,7 +1,7 @@
 import './searchChat.scss';
 
 import searchChatTemplate from './searchChat.hbs?raw';
-import { Block } from '../../../../core';
+import { Block } from '../../../../controllers';
 import { InputBlock } from '../../../components';
 
 interface SearchChatProps {

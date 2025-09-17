@@ -2,7 +2,7 @@ import './profileInfo.scss';
 
 import profileInfoTemplate from './profileInfo.hbs?raw';
 import { FormBlock, InputBlock } from '../../../components';
-import { Block } from '../../../../core';
+import { Block } from '../../../../controllers';
 
 type ProfileState = 'view' | 'edit' | 'edit-password';
 

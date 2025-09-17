@@ -1,6 +1,6 @@
 import './input.scss';
 import inputTemplate from './input.hbs?raw';
-import { Block } from '../../../core';
+import { Block } from '../../../controllers';
 import { validateValue, type RuleName } from '../../../utils';
 
 interface InputProps {

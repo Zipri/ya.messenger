@@ -2,7 +2,7 @@ import './login.scss';
 
 import loginTemplate from './login.hbs?raw';
 import { fakeNavigate } from '../../../utils';
-import { Block } from '../../../core';
+import { Block } from '../../../controllers';
 import { FormBlock } from '../../components/form/form';
 import { InputBlock } from '../../components';
 

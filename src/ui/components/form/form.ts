@@ -10,7 +10,7 @@ type FormSubmitHandler = (values: FormValues, event: SubmitEvent) => void;
 interface FormProps {
   title?: string;
   submitText?: string;
-  fields?: any[]; // массив дочерних блоков (например, InputBlock)
+  fields?: any[];
   /** Селектор или сам элемент */
   submitTrigger?: string | HTMLElement;
   onSubmit?: FormSubmitHandler;
@@ -38,15 +38,11 @@ export class FormBlock extends Block<FormProps> {
     const formEl = this.element as HTMLFormElement | null;
     if (!formEl) return;
 
-    // Проверяем поддержку современного API
     const canRequestSubmit = typeof formEl.requestSubmit === 'function';
 
-    // FIXME SKV Может просто вызывать formEl.requestSubmit()?
     if (canRequestSubmit) {
-      // Современный способ: вызывает событие submit с валидацией
       formEl.requestSubmit();
     } else {
-      // Старый способ: создаем событие submit
       const evt = new Event('submit', { bubbles: true, cancelable: true });
       formEl.dispatchEvent(evt);
     }

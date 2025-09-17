@@ -62,7 +62,6 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
       return;
     }
 
-    // FIXME SKV (!) что делает эта строка?
     Object.assign(this.props, nextProps);
   };
 
@@ -181,11 +180,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
       set: (target, prop, value) => {
         const oldValue = { ...target };
         target[prop as keyof T] = value;
-        // FIXME SKV (!) почему не используется oldValue
-        // if (oldValue !== value) {
-        // this.eventBus.emit(Block.EVENTS.FLOW_CDU, { [prop]: value }, target);
         this.eventBus.emit(Block.EVENTS.FLOW_CDU, oldValue, target);
-        // }
         return true;
       },
 
@@ -216,8 +211,6 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
     if (shouldUpdate) {
       this._render();
-      // FIXME SKV (!) почему не используется eventBus.emit(Block.EVENTS.FLOW_RENDER);
-      // this.eventBus.emit(Block.EVENTS.FLOW_RENDER);
     }
   }
 
@@ -259,23 +252,11 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
       }
     });
 
-    // FIXME SKV доработать реализацию
-    // const newElement = fragment.content.firstElementChild as HTMLElement;
-    // if (this._element && newElement) {
-    //   const parent = this._element.parentNode;
-    //   if (parent) {
-    //     this._element.replaceWith(newElement);
-    //   } else {
-    //     // если родителя уже нет (например, во время события), просто назначим новый элемент
-    //     this._element = newElement;
-    //   }
-    // } else {
-    //   this._element = newElement;
-    // }
     const newElement = fragment.content.firstElementChild as HTMLElement;
     if (this._element && newElement) {
       this._element.replaceWith(newElement);
     }
+
     this._element = newElement;
     this._addEvents();
     this.addAttributes();

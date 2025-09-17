@@ -2,7 +2,6 @@ export type TBlockProps = {
   [key: string]: any;
 };
 
-// FIXME SKV (!) переделать на enum
 export type TBlockEvents =
   | 'init'
   | 'component-did-mount'

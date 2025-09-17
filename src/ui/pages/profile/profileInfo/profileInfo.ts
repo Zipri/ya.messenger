@@ -3,6 +3,7 @@ import './profileInfo.scss';
 import profileInfoTemplate from './profileInfo.hbs?raw';
 import { FormBlock, InputBlock } from '../../../components';
 import { Block } from '../../../../controllers';
+import type { TBlockProps } from '../../../../controllers/block/types';
 
 type ProfileState = 'view' | 'edit' | 'edit-password';
 
@@ -13,9 +14,7 @@ interface ProfileInfoProps {
   email?: string;
 }
 
-export class ProfileInfoBlock extends Block<
-  ProfileInfoProps & Record<string, any>
-> {
+export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
   constructor(props: ProfileInfoProps = {}) {
     const emailInput = new InputBlock({
       id: 'email',

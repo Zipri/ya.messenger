@@ -5,13 +5,14 @@ import { SearchChat } from './searchChat/searchChat';
 import type { TChatData } from './chatItem/types';
 import { Block } from '../../../controllers';
 import { getMockChatItems } from '../../pages/chat/mock';
+import type { TBlockProps } from '../../../controllers/block/types';
 
 interface ChatListProps {
   isSearchHidden?: boolean;
   onChatClick?: (chatId: string) => void;
 }
 
-export class ChatList extends Block<ChatListProps & Record<string, any>> {
+export class ChatList extends Block<ChatListProps & TBlockProps> {
   constructor(props: ChatListProps) {
     // 1. Сначала инициализируем Block с пустым списком чатов.
     // Это позволяет нам получить доступ к `this` в конструкторе.

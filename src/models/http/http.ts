@@ -1,3 +1,4 @@
+import type { TBlockProps } from '../../controllers/block/types';
 import {
   ApiMethodEnum,
   type IHttpTransport,
@@ -94,10 +95,7 @@ class HTTPTransport implements IHttpTransport {
   }
 
   /** Построение URL с query параметрами */
-  private _buildUrlWithParams(
-    url: string,
-    params: Record<string, any>
-  ): string {
+  private _buildUrlWithParams(url: string, params: TBlockProps): string {
     if (!params || Object.keys(params).length === 0) {
       return url;
     }

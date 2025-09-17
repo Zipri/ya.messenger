@@ -3,6 +3,7 @@ import './searchChat.scss';
 import searchChatTemplate from './searchChat.hbs?raw';
 import { Block } from '../../../../controllers';
 import { InputBlock } from '../../../components';
+import type { TBlockProps } from '../../../../controllers/block/types';
 
 interface SearchChatProps {
   searchQuery?: string;
@@ -11,7 +12,7 @@ interface SearchChatProps {
   email?: string;
 }
 
-export class SearchChat extends Block<SearchChatProps & Record<string, any>> {
+export class SearchChat extends Block<SearchChatProps & TBlockProps> {
   constructor(props: SearchChatProps) {
     super({
       ...props,

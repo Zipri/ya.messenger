@@ -5,8 +5,9 @@ import { FormBlock, InputBlock } from '../../components';
 import registerTemplate from './register.hbs?raw';
 import { Block } from '../../../controllers';
 import { fakeNavigate } from '../../../utils';
+import type { TBlockProps } from '../../../controllers/block/types';
 
-type RegisterPageProps = Record<string, any>;
+type RegisterPageProps = TBlockProps;
 
 export class RegisterPage extends Block<RegisterPageProps> {
   constructor(props: RegisterPageProps) {

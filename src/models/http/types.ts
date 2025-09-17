@@ -8,6 +8,7 @@ export enum ApiMethodEnum {
 
 export type TRequestOptions = {
   method?: ApiMethodEnum;
+  /** Данные для запроса (пока не понятно какие) */
   data?: Record<string, any>;
   headers?: Record<string, string>;
   timeout?: number;

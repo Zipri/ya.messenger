@@ -5,8 +5,9 @@ import { fakeNavigate } from '../../../utils';
 import { Block } from '../../../controllers';
 import { FormBlock } from '../../components/form/form';
 import { InputBlock } from '../../components';
+import type { TBlockProps } from '../../../controllers/block/types';
 
-type LoginPageProps = Record<string, any>;
+type LoginPageProps = TBlockProps;
 
 export class LoginPage extends Block<LoginPageProps> {
   constructor(props: LoginPageProps) {

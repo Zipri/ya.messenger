@@ -1,3 +1,4 @@
+/** Пропсы для компонентов внутри компонента */
 export type TBlockProps = {
   [key: string]: any;
 };

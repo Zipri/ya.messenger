@@ -4,6 +4,7 @@ import chatTemplate from './chat.hbs?raw';
 import { Dialog } from './dialog/dialog';
 import { Block } from '../../../controllers';
 import type { ChatList } from '../../blocks';
+import type { TBlockProps } from '../../../controllers/block/types';
 
 type ChatState = 'dialog' | 'empty';
 
@@ -12,7 +13,7 @@ interface ChatPageProps {
   chatState?: ChatState;
 }
 
-export class ChatPage extends Block<ChatPageProps & Record<string, any>> {
+export class ChatPage extends Block<ChatPageProps & TBlockProps> {
   constructor(props: ChatPageProps) {
     super({
       chatState: 'empty',

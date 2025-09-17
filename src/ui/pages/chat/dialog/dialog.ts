@@ -5,10 +5,11 @@ import dialogTemplate from './dialog.hbs?raw';
 import { messages } from './mock';
 import { Block } from '../../../../controllers';
 import { FormBlock, InputBlock } from '../../../components';
+import type { TBlockProps } from '../../../../controllers/block/types';
 
 interface DialogProps {}
 
-export class Dialog extends Block<DialogProps & Record<string, any>> {
+export class Dialog extends Block<DialogProps & TBlockProps> {
   constructor(props: DialogProps) {
     super({
       ...props,

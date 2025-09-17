@@ -1,4 +1,3 @@
-import { ChatList } from './blocks';
 import type { Block } from './core';
 import {
   ChatPage,
@@ -6,8 +5,9 @@ import {
   LoginPage,
   ProfilePage,
   RegisterPage,
-} from './pages';
-import './styles/style.scss';
+} from './ui/pages';
+import './ui/styles/style.scss';
+import { ChatList } from './ui/blocks';
 
 type PageType = 'login' | 'register' | 'chat' | 'profile' | 'error';
 

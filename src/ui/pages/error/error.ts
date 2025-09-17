@@ -1,7 +1,7 @@
 import './error.scss';
 
 import errorTemplate from './error.hbs?raw';
-import { Block } from '../../core';
+import { Block } from '../../../core';
 
 interface ErrorPageProps {
   errorCode: string;

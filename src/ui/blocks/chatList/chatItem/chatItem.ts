@@ -1,7 +1,7 @@
 import './chatItem.scss';
 import chatItemTemplate from './chatItem.hbs?raw';
 import type { TChatData } from './types';
-import { Block } from '../../../core';
+import { Block } from '../../../../core';
 
 interface ChatItemProps extends TChatData {
   events?: {

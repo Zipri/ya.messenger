@@ -2,8 +2,8 @@ import './chat.scss';
 
 import chatTemplate from './chat.hbs?raw';
 import { Dialog } from './dialog/dialog';
-import { Block } from '../../core';
-import { ChatList } from '../../blocks';
+import { Block } from '../../../core';
+import type { ChatList } from '../../blocks';
 
 type ChatState = 'dialog' | 'empty';
 

@@ -1,10 +1,10 @@
 import './login.scss';
 
-import { FormBlock, InputBlock } from '../../components';
-
 import loginTemplate from './login.hbs?raw';
-import { Block } from '../../core';
-import { fakeNavigate } from '../../utils';
+import { fakeNavigate } from '../../../utils';
+import { Block } from '../../../core';
+import { FormBlock } from '../../components/form/form';
+import { InputBlock } from '../../components';
 
 type LoginPageProps = Record<string, any>;
 

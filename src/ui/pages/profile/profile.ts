@@ -1,7 +1,7 @@
 import './profile.scss';
 import profileTemplate from './profile.hbs?raw';
-import { Block } from '../../core';
 import { ProfileInfoBlock } from './profileInfo/profileInfo';
+import { Block } from '../../../core';
 
 // FIXME SKV (!) убрать все Record<string, any>
 type ProfilePageProps = Record<string, any>;

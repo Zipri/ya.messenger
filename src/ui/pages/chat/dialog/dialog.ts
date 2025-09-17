@@ -1,11 +1,10 @@
 import './dialog.scss';
 
-import { FormBlock, InputBlock } from '../../../components';
-
 import { Message } from './message/message';
 import dialogTemplate from './dialog.hbs?raw';
 import { messages } from './mock';
-import { Block } from '../../../core';
+import { Block } from '../../../../core';
+import { FormBlock, InputBlock } from '../../../components';
 
 interface DialogProps {}
 

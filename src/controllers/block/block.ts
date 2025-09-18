@@ -89,7 +89,9 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
   /** Удалить компонент из DOM */
   remove(): void {
+    console.log('remove', this._element);
     if (this._element) {
+      this._removeEvents();
       this._element.remove();
       this._element = null;
     }
@@ -215,6 +217,18 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
     }
   }
 
+  /** Удаление событий */
+  private _removeEvents(): void {
+    console.log('_removeEvents', this._element);
+    const { events = {} } = this.props;
+    Object.keys(events).forEach((eventName) => {
+      const handler = events[eventName];
+      if (handler && this._element) {
+        this._element.removeEventListener(eventName, handler);
+      }
+    });
+  }
+
   /** Внутренний метод рендера */
   private _render(): void {
     const propsAndStubs: TBlockProps = { ...this.props };
@@ -255,6 +269,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
     const newElement = fragment.content.firstElementChild as HTMLElement;
     if (this._element && newElement) {
+      this._removeEvents();
       this._element.replaceWith(newElement);
     }
 

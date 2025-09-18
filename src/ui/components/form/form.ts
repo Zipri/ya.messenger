@@ -21,6 +21,7 @@ interface FormProps {
 export class FormBlock extends Block<FormProps> {
   private _externalEl?: HTMLElement;
   private _externalHandler?: (e: Event) => void;
+  private _onSubmitHandler?: (event: Event) => void;
 
   get externalEl(): HTMLElement | null {
     return this._externalEl ?? null;
@@ -76,12 +77,13 @@ export class FormBlock extends Block<FormProps> {
     const formEl = this.element as HTMLFormElement | null;
     if (!formEl) return;
 
-    formEl.addEventListener('submit', (event) => {
+    const handler = (event: Event) => {
       event.preventDefault();
 
       const inputs = formEl.querySelectorAll<
         HTMLInputElement | HTMLTextAreaElement
       >('input, textarea');
+
       inputs.forEach((el) =>
         el.dispatchEvent(new Event('blur', { bubbles: true }))
       );
@@ -89,10 +91,9 @@ export class FormBlock extends Block<FormProps> {
       const hasInvalid = Array.from(inputs).some(
         (el) => el.dataset.valid === 'false'
       );
-      // не отправляем, пока ошибки не исправлены
       if (hasInvalid) return;
 
-      const values: FormValues = {};
+      const values: Record<string, string> = {};
       const fields = formEl.querySelectorAll<
         HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
       >('input, textarea, select');
@@ -102,9 +103,11 @@ export class FormBlock extends Block<FormProps> {
       });
 
       this.props.onSubmit?.(values, event as SubmitEvent);
-    });
+    };
 
-    // Привязка внешней кнопки
+    this._onSubmitHandler = handler;
+    formEl.addEventListener('submit', handler);
+
     const trigger = this.props.submitTrigger;
     if (trigger) {
       this.setSubmitTrigger(trigger);
@@ -112,14 +115,21 @@ export class FormBlock extends Block<FormProps> {
   }
 
   public remove(): void {
-    // Очищаем внешний обработчик
+    console.log('remove', 'FormBlock');
+    // снять внешний клик-триггер
     if (this._externalEl && this._externalHandler) {
       this._externalEl.removeEventListener('click', this._externalHandler);
       this._externalEl = undefined;
       this._externalHandler = undefined;
     }
 
-    // Вызываем родительский метод для очистки остального
+    // снять submit-слушатель формы
+    const formEl = this.element as HTMLFormElement | null;
+    if (formEl && this._onSubmitHandler) {
+      formEl.removeEventListener('submit', this._onSubmitHandler);
+      this._onSubmitHandler = undefined;
+    }
+
     super.remove();
   }
 

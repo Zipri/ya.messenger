@@ -1,0 +1,139 @@
+// src/components/form/form.ts
+import './form.scss';
+import template from './form.hbs?raw';
+import { Block } from '../../../controllers';
+
+type FormValues = Record<string, string>;
+
+type FormSubmitHandler = (values: FormValues, event: SubmitEvent) => void;
+
+interface FormProps {
+  title?: string;
+  submitText?: string;
+  fields?: any[];
+  /** Селектор или сам элемент */
+  submitTrigger?: string | HTMLElement;
+  onSubmit?: FormSubmitHandler;
+  attr?: Record<string, string>;
+  events?: Record<string, (e: Event) => void>;
+}
+
+export class FormBlock extends Block<FormProps> {
+  private _externalEl?: HTMLElement;
+  private _externalHandler?: (e: Event) => void;
+  private _onSubmitHandler?: (event: Event) => void;
+
+  get externalEl(): HTMLElement | null {
+    return this._externalEl ?? null;
+  }
+
+  get externalHandler(): ((e: Event) => void) | null {
+    return this._externalHandler ?? null;
+  }
+
+  constructor(props: FormProps) {
+    super(props);
+  }
+
+  public submit(): void {
+    const formEl = this.element as HTMLFormElement | null;
+    if (!formEl) return;
+
+    const canRequestSubmit = typeof formEl.requestSubmit === 'function';
+
+    if (canRequestSubmit) {
+      formEl.requestSubmit();
+    } else {
+      const evt = new Event('submit', { bubbles: true, cancelable: true });
+      formEl.dispatchEvent(evt);
+    }
+  }
+
+  public setSubmitTrigger(trigger: string | HTMLElement) {
+    // Сначала отвязываем старый обработчик, если он был
+    if (this._externalEl && this._externalHandler) {
+      this._externalEl.removeEventListener('click', this._externalHandler);
+    }
+
+    const submitElement =
+      typeof trigger === 'string'
+        ? (document.querySelector(trigger) as HTMLElement | null)
+        : trigger;
+
+    if (submitElement) {
+      const handler = (e: Event) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.submit();
+      };
+
+      submitElement.addEventListener('click', handler);
+      this._externalEl = submitElement;
+      this._externalHandler = handler;
+    }
+  }
+
+  protected componentDidMount(): void {
+    const formEl = this.element as HTMLFormElement | null;
+    if (!formEl) return;
+
+    const handler = (event: Event) => {
+      event.preventDefault();
+
+      const inputs = formEl.querySelectorAll<
+        HTMLInputElement | HTMLTextAreaElement
+      >('input, textarea');
+
+      inputs.forEach((el) =>
+        el.dispatchEvent(new Event('blur', { bubbles: true }))
+      );
+
+      const hasInvalid = Array.from(inputs).some(
+        (el) => el.dataset.valid === 'false'
+      );
+      if (hasInvalid) return;
+
+      const values: Record<string, string> = {};
+      const fields = formEl.querySelectorAll<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >('input, textarea, select');
+
+      fields.forEach((field) => {
+        if (field.name) values[field.name] = field.value ?? '';
+      });
+
+      this.props.onSubmit?.(values, event as SubmitEvent);
+    };
+
+    this._onSubmitHandler = handler;
+    formEl.addEventListener('submit', handler);
+
+    const trigger = this.props.submitTrigger;
+    if (trigger) {
+      this.setSubmitTrigger(trigger);
+    }
+  }
+
+  public remove(): void {
+    console.log('remove', 'FormBlock');
+    // снять внешний клик-триггер
+    if (this._externalEl && this._externalHandler) {
+      this._externalEl.removeEventListener('click', this._externalHandler);
+      this._externalEl = undefined;
+      this._externalHandler = undefined;
+    }
+
+    // снять submit-слушатель формы
+    const formEl = this.element as HTMLFormElement | null;
+    if (formEl && this._onSubmitHandler) {
+      formEl.removeEventListener('submit', this._onSubmitHandler);
+      this._onSubmitHandler = undefined;
+    }
+
+    super.remove();
+  }
+
+  protected render(): string {
+    return template;
+  }
+}

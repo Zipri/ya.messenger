@@ -3,9 +3,8 @@ import './dialog.scss';
 import { Message } from './message/message';
 import dialogTemplate from './dialog.hbs?raw';
 import { messages } from './mock';
-import { Block } from '../../../../controllers';
-import { FormBlock, InputBlock } from '../../../components';
-import type { TBlockProps } from '../../../../controllers/block/types';
+import { Block, type TBlockProps } from '@controllers';
+import { FormBlock, InputBlock } from '@ui-components';
 
 interface DialogProps {}
 

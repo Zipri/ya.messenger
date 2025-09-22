@@ -3,9 +3,8 @@ import './register.scss';
 import { FormBlock, InputBlock } from '../../components';
 
 import registerTemplate from './register.hbs?raw';
-import { Block } from '../../../controllers';
-import { fakeNavigate } from '../../../utils';
-import type { TBlockProps } from '../../../controllers/block/types';
+import { Block, type TBlockProps } from '@controllers';
+import { fakeNavigate } from '@utils';
 
 type RegisterPageProps = TBlockProps;
 

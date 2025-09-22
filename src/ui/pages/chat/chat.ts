@@ -2,9 +2,8 @@ import './chat.scss';
 
 import chatTemplate from './chat.hbs?raw';
 import { Dialog } from './dialog/dialog';
-import { Block } from '../../../controllers';
-import type { ChatList } from '../../blocks';
-import type { TBlockProps } from '../../../controllers/block/types';
+import { ChatList } from '@ui-blocks';
+import { Block, type TBlockProps } from '@controllers';
 
 type ChatState = 'dialog' | 'empty';
 

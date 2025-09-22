@@ -1,11 +1,9 @@
 import './login.scss';
 
 import loginTemplate from './login.hbs?raw';
-import { fakeNavigate } from '../../../utils';
-import { Block } from '../../../controllers';
-import { FormBlock } from '../../components/form/form';
-import { InputBlock } from '../../components';
-import type { TBlockProps } from '../../../controllers/block/types';
+import { Block, type TBlockProps } from '@controllers';
+import { FormBlock, InputBlock } from '@ui-components';
+import { fakeNavigate } from '@utils';
 
 type LoginPageProps = TBlockProps;
 

@@ -2,10 +2,9 @@ import './chatList.scss';
 import { ChatItem } from './chatItem/chatItem';
 import chatListTemplate from './chatList.hbs?raw';
 import { SearchChat } from './searchChat/searchChat';
+import { Block, type TBlockProps } from '@controllers';
+import { getMockChatItems } from 'ui/pages/chat/mock';
 import type { TChatData } from './chatItem/types';
-import { Block } from '../../../controllers';
-import { getMockChatItems } from '../../pages/chat/mock';
-import type { TBlockProps } from '../../../controllers/block/types';
 
 interface ChatListProps {
   isSearchHidden?: boolean;

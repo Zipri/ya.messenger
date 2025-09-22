@@ -2,8 +2,7 @@ import './message.scss';
 
 import messageTemplate from './message.hbs?raw';
 import type { TMessage } from './types';
-import { Block } from '../../../../../controllers';
-import type { TBlockProps } from '../../../../../controllers/block/types';
+import { Block, type TBlockProps } from '@controllers';
 
 interface MessageProps {
   message: TMessage;

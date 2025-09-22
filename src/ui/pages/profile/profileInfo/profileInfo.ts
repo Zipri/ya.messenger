@@ -1,9 +1,8 @@
 import './profileInfo.scss';
 
 import profileInfoTemplate from './profileInfo.hbs?raw';
-import { FormBlock, InputBlock } from '../../../components';
-import { Block } from '../../../../controllers';
-import type { TBlockProps } from '../../../../controllers/block/types';
+import { FormBlock, InputBlock } from '@ui-components';
+import { Block, type TBlockProps } from '@controllers';
 
 type ProfileState = 'view' | 'edit' | 'edit-password';
 

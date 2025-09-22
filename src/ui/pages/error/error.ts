@@ -1,8 +1,7 @@
 import './error.scss';
 
 import errorTemplate from './error.hbs?raw';
-import { Block } from '../../../controllers';
-import type { TBlockProps } from '../../../controllers/block/types';
+import { Block, type TBlockProps } from '@controllers';
 
 interface ErrorPageProps {
   errorCode: string;

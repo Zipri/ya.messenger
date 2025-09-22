@@ -1,25 +1,85 @@
+import type { Block } from './controllers';
 import {
   ChatPage,
   ErrorPage,
   LoginPage,
   ProfilePage,
   RegisterPage,
-} from './pages';
-import './styles/style.scss';
+} from './ui/pages';
+import './ui/styles/style.scss';
+import { ChatList } from './ui/blocks';
 
 type PageType = 'login' | 'register' | 'chat' | 'profile' | 'error';
 
 class App {
   private rootElement: HTMLElement;
   private currentPage: PageType = 'login';
+  private chatListBlock: ChatList;
 
   constructor() {
     this.rootElement = document.querySelector('#app')!;
-    this.initEventListeners();
+    this.chatListBlock = new ChatList({});
+    this._initEventListeners();
+  }
+
+  render() {
+    switch (this.currentPage) {
+      case 'login':
+        const loginPage = new LoginPage({});
+        this._renderBlock(loginPage);
+        return;
+
+      case 'register':
+        const registerPage = new RegisterPage({});
+        this._renderBlock(registerPage);
+        return;
+
+      case 'chat': {
+        this.chatListBlock.setProps({
+          isSearchHidden: false,
+          onChatClick: (chatId: string) => {
+            console.log(`Из App.ts: нажат чат с ID: ${chatId}`);
+          },
+        });
+
+        const chatPage = new ChatPage({ chatList: this.chatListBlock });
+
+        this._renderBlock(chatPage);
+        return;
+      }
+
+      case 'profile':
+        this.chatListBlock.setProps({
+          isSearchHidden: true,
+          onChatClick: (chatId: string) => {
+            console.log(`Из App.ts: нажат чат с ID: ${chatId}`);
+          },
+        });
+
+        const profilePage = new ProfilePage({ chatList: this.chatListBlock });
+
+        this._renderBlock(profilePage);
+        return;
+
+      case 'error':
+        const errorPage = new ErrorPage({
+          errorCode: 'Error 404',
+          errorMessage: 'Oops! Страничка не найдена',
+        });
+
+        this._renderBlock(errorPage);
+        return;
+    }
+  }
+
+  private _renderBlock(block: Block) {
+    this.rootElement.replaceChildren();
+    this.rootElement.appendChild(block.getContent());
+    block.dispatchComponentDidMount();
   }
 
   /** Простая реализация переключения страниц */
-  private initEventListeners() {
+  private _initEventListeners() {
     // Слушаем клики по всему документу
     document.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
@@ -31,52 +91,14 @@ class App {
       ) {
         event.preventDefault();
         const page = target.getAttribute('data-page') as PageType;
-        this.navigateTo(page);
+        this._navigateTo(page);
       }
     });
   }
 
-  navigateTo(page: PageType) {
+  private _navigateTo(page: PageType) {
     this.currentPage = page;
     this.render();
-  }
-
-  render() {
-    let pageContent = '';
-    let currentPageInstance: ChatPage | null = null;
-
-    switch (this.currentPage) {
-      case 'login':
-        const loginPage = new LoginPage();
-        pageContent = loginPage.render();
-        break;
-      case 'register':
-        const registerPage = new RegisterPage();
-        pageContent = registerPage.render();
-        break;
-      case 'chat':
-        const chatPage = new ChatPage();
-        pageContent = chatPage.render();
-        currentPageInstance = chatPage;
-        break;
-      case 'profile':
-        const profilePage = new ProfilePage();
-        pageContent = profilePage.render();
-        break;
-      case 'error':
-        const errorPage = new ErrorPage();
-        pageContent = errorPage.render(
-          'Error 404',
-          'Oops! Страничка не найдена'
-        );
-        break;
-    }
-
-    this.rootElement.innerHTML = pageContent;
-
-    if (this.currentPage === 'chat' && currentPageInstance) {
-      currentPageInstance.afterMount();
-    }
   }
 }
 

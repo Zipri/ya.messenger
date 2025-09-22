@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': '/src',
-      '@styles': '/src/styles',
+      '@styles': '/src/ui/styles',
     },
   },
   css: {

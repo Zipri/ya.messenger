@@ -1,0 +1,13 @@
+<form class="form" novalidate>
+  {{#if title}}
+    <h2 class="form__title">{{title}}</h2>
+  {{/if}}
+
+  <div class="form__fields">
+    {{{fields}}}
+  </div>
+
+  {{#if submitText}}
+    <button type="submit" class="form__submit">{{submitText}}</button>
+  {{/if}}
+</form>

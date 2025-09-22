@@ -1,0 +1,56 @@
+<main class="profileInfo">
+    <div class="profileInfo__header">
+        <button class="profileInfo__header__button" data-page="chat">
+            < Назад
+        </button>
+    </div>
+    <div class="profileInfo__user">
+        <div class="profileInfo__user__avatar">
+            <img src="{{avatar}}" alt="{{name}}" class="profileInfo__user__avatar-img">
+        </div>
+        <div class="profileInfo__user__input-group">
+            {{#if (eq profileState 'view')}}
+                {{{profileForm}}}
+            {{/if}}
+            {{#if (eq profileState 'edit')}}
+                {{{profileForm}}}
+            {{/if}}
+            {{#if (eq profileState 'edit-password')}}
+                {{{passwordForm}}}
+            {{/if}}
+        </div>
+    </div>
+    {{#if (eq profileState 'view')}}
+        <div class="profileInfo__button-group">
+            <button class="button_dark" data-page="error">
+                Выйти
+            </button>
+            <button class="button_main" data-profile-info="edit">
+                Изменить данные
+            </button>
+            <button class="button_main" data-profile-info="edit-password">
+                Изменить пароль
+            </button>
+        </div>
+    {{/if}}
+    {{#if (eq profileState 'edit')}}
+        <div class="profileInfo__button-group">
+            <button class="button_dark" data-profile-info="view">
+                Отмена
+            </button>
+            <button id="profile-save" class="button_main" type="button">
+                Сохранить
+            </button>
+        </div>
+    {{/if}}
+    {{#if (eq profileState 'edit-password')}}
+        <div class="profileInfo__button-group">
+            <button class="button_dark" data-profile-info="view">
+                Отмена
+            </button>
+            <button id="password-save" class="button_main" type="button">
+                Сохранить
+            </button>
+        </div>
+    {{/if}}
+</main>

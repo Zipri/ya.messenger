@@ -24,9 +24,10 @@ class App {
     router
       .use('/login', LoginPage)
       .use('/register', RegisterPage)
-      .use('/chat', ChatPage, { chatList: chatList })
+      .use('/chat', ChatPage, { chatList: chatList }) // Для страницы со списком чатов
+      .use('/chat/:id', ChatPage, { chatList: chatList }) // Для страницы с конкретным диалогом
       .use('/profile', ProfilePage, { chatList: chatList })
-      .use('*', ErrorPage, {
+      .use('/error', ErrorPage, {
         errorCode: 'Error 404',
         errorMessage: 'Oops! Страничка не найдена',
       });

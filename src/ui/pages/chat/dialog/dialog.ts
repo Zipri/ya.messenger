@@ -6,7 +6,9 @@ import { messages } from './mock';
 import { Block, type TBlockProps } from '@controllers';
 import { FormBlock, InputBlock } from '@ui-components';
 
-interface DialogProps {}
+interface DialogProps {
+  chatId?: string;
+}
 
 export class Dialog extends Block<DialogProps & TBlockProps> {
   constructor(props: DialogProps) {
@@ -33,6 +35,8 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
       }),
       messages: [],
     });
+
+    console.log('Dialog component received chatId:', props.chatId);
 
     const messageItems = messages.map(
       (message) =>

@@ -35,7 +35,7 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
               if (this.props.onChatClick) {
                 this.props.onChatClick(chatData.id);
                 // router.go(`/dialog/${chatData.id}`);
-                router.go(`/chat`);
+                router.go(`/chat/${chatData.id}`);
                 this.props.isSearchShown = true;
               }
             },

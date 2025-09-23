@@ -13,6 +13,7 @@ class Route {
   private _block: Block | null;
   private _rootQuery: string;
   private _props?: Record<string, any>;
+  private _params: Record<string, string> = {};
 
   constructor(props: RouteProps) {
     const { pathname, view, rootQuery, props: routeProps } = props;
@@ -41,12 +42,31 @@ class Route {
   }
 
   match(pathname: string) {
-    return pathname === this._pathname;
+    const paramNames: string[] = [];
+    const regexPath = this._pathname.replace(/:(\w+)/g, (_match, paramName) => {
+      paramNames.push(paramName);
+      return '([^\\/]+)';
+    });
+
+    const match = pathname.match(new RegExp(`^${regexPath}$`));
+
+    if (match) {
+      this._params = paramNames.reduce(
+        (acc, name, index) => {
+          acc[name] = match[index + 1];
+          return acc;
+        },
+        {} as Record<string, string>
+      );
+      return true;
+    }
+
+    return false;
   }
 
   render() {
     if (!this._block) {
-      this._block = new this._blockClass(this._props || {});
+      this._block = new this._blockClass({ ...this._props, ...this._params });
       this._renderBlock(this._block);
     }
   }

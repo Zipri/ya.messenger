@@ -55,15 +55,17 @@ class Router {
   private _onRoute(pathname: string) {
     const route = this._getRoute(pathname);
 
-    if (this._currentRoute && this._currentRoute !== route) {
+    if (!route) {
+      this.go('/error');
+      return;
+    }
+
+    if (this._currentRoute) {
       this._currentRoute.delete();
     }
 
     this._currentRoute = route;
-
-    if (route) {
-      route.render();
-    }
+    route.render();
   }
 
   private _getRoute(pathname: string) {

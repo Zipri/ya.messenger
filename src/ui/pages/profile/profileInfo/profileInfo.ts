@@ -1,8 +1,9 @@
 import './profileInfo.scss';
 
 import profileInfoTemplate from './profileInfo.hbs?raw';
-import { FormBlock, InputBlock } from '@ui-components';
+import { Button, FormBlock, InputBlock } from '@ui-components';
 import { Block, type TBlockProps } from '@controllers';
+import router from '@controllers/router/router';
 
 type ProfileState = 'view' | 'edit' | 'edit-password';
 
@@ -123,6 +124,15 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
       email: 'seroshtan@gmail.com',
       ...props,
 
+      // компоненты
+      backButton: new Button({
+        id: 'back-button',
+        text: 'Назад',
+        styleClasses: 'profileInfo__header__button',
+        onClick: () => {
+          router.go('/chat');
+        },
+      }),
       // инпуты
       emailInput,
       loginInput,

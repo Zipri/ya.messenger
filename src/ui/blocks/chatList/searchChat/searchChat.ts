@@ -2,13 +2,14 @@ import './searchChat.scss';
 
 import searchChatTemplate from './searchChat.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
-import { InputBlock } from '@ui-components';
+import { Button, InputBlock } from '@ui-components';
 
 interface SearchChatProps {
   searchQuery?: string;
   avatar?: string;
   name?: string;
   email?: string;
+  onClickProfile?: () => void;
 }
 
 export class SearchChat extends Block<SearchChatProps & TBlockProps> {
@@ -26,6 +27,12 @@ export class SearchChat extends Block<SearchChatProps & TBlockProps> {
         type: 'text',
         placeholder: 'Поиск чата',
         value: props.searchQuery || '',
+      }),
+      profileButton: new Button({
+        id: 'profile-button',
+        text: 'Профиль',
+        styleClasses: 'search-chat__header__button',
+        onClick: props.onClickProfile,
       }),
     });
   }

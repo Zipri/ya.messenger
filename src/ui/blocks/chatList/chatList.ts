@@ -13,17 +13,18 @@ interface ChatListProps {
 
 export class ChatList extends Block<ChatListProps & TBlockProps> {
   constructor(props: ChatListProps) {
-    // 1. Сначала инициализируем Block с пустым списком чатов.
-    // Это позволяет нам получить доступ к `this` в конструкторе.
     super({
       ...props,
       isSearchShown: true,
-      searchChat: new SearchChat({}),
+      searchChat: new SearchChat({
+        onClickProfile: () => {
+          router.go('/profile');
+          this.props.isSearchShown = false;
+        },
+      }),
       chats: [], // Передаем пустой массив
     });
 
-    // 2. Теперь, когда `this` доступен, мы можем создать ChatItem'ы.
-    // Их обработчики будут ссылаться на `this.props`, который всегда актуален.
     const chatsData: TChatData[] = getMockChatItems();
     const chatItems = chatsData.map(
       (chatData) =>
@@ -31,20 +32,17 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
           ...chatData,
           events: {
             click: () => {
-              // 3. Используем `this.props`, а не `props` из аргументов конструктора.
               if (this.props.onChatClick) {
                 this.props.onChatClick(chatData.id);
-                this.props.isSearchShown = true;
                 // router.go(`/dialog/${chatData.id}`);
                 router.go(`/chat`);
+                this.props.isSearchShown = true;
               }
             },
           },
         })
     );
 
-    // 4. Обновляем `lists` нашего компонента. Proxy в `Block` отследит это
-    // изменение и вызовет перерисовку с новым списком чатов.
     this.lists.chats = chatItems;
   }
 

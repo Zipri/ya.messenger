@@ -3,7 +3,7 @@ import './login.scss';
 import loginTemplate from './login.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
 import { FormBlock, InputBlock } from '@ui-components';
-import { fakeNavigate } from '@utils';
+import router from '@controllers/router/router';
 
 type LoginPageProps = TBlockProps;
 
@@ -31,8 +31,8 @@ export class LoginPage extends Block<LoginPageProps> {
           }),
         ],
         onSubmit: (values) => {
-          console.log('Login form data:', values);
-          fakeNavigate('chat');
+          console.info('Login form data:', values);
+          router.go('/chat');
         },
       }),
     });

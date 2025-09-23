@@ -14,9 +14,14 @@ class Router {
     this._rootQuery = rootQuery;
   }
 
-  use(pathname: string, block: typeof Block, props?: Record<string, any>) {
+  use(
+    pathname: string,
+    block: new (props?: any) => Block,
+    props?: Record<string, any>
+  ) {
     const route = new Route({
       pathname,
+      // @ts-ignore
       view: block,
       rootQuery: this._rootQuery,
       props,
@@ -51,7 +56,7 @@ class Router {
     const route = this._getRoute(pathname);
 
     if (this._currentRoute && this._currentRoute !== route) {
-      this._currentRoute.leave();
+      this._currentRoute.delete();
     }
 
     this._currentRoute = route;

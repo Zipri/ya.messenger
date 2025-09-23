@@ -67,7 +67,7 @@ export class RegisterPage extends Block<RegisterPageProps> {
           }),
         ],
         onSubmit: (values) => {
-          console.log('Register form data:', values);
+          console.info('Register form data:', values);
           if (values.password !== values.repeat_password) {
             alert('Пароли не совпадают');
           } else {

@@ -115,7 +115,6 @@ export class FormBlock extends Block<FormProps> {
   }
 
   public remove(): void {
-    console.log('remove', 'FormBlock');
     // снять внешний клик-триггер
     if (this._externalEl && this._externalHandler) {
       this._externalEl.removeEventListener('click', this._externalHandler);

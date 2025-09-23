@@ -89,7 +89,6 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
   /** Удалить компонент из DOM */
   remove(): void {
-    console.log('remove', this._element);
     if (this._element) {
       this._removeEvents();
       this._element.remove();
@@ -114,8 +113,8 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   protected componentDidMount(): void {}
 
   /** Переопределяемый метод - проверяет нужно ли обновлять компонент */
+  // @ts-ignore
   protected componentDidUpdate(oldProps: Partial<T>, newProps: T): boolean {
-    console.log('componentDidUpdate', oldProps, newProps);
     return true;
   }
 
@@ -219,7 +218,6 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
   /** Удаление событий */
   private _removeEvents(): void {
-    console.log('_removeEvents', this._element);
     const { events = {} } = this.props;
     Object.keys(events).forEach((eventName) => {
       const handler = events[eventName];

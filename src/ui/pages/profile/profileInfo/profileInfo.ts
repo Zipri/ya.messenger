@@ -87,7 +87,7 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
         phoneInput,
       ],
       onSubmit: (values) => {
-        console.log('Profile form data:', values);
+        console.info('Profile form data:', values);
         this.setProps({
           profileState: 'view',
         });
@@ -107,7 +107,7 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
           return;
         }
 
-        console.log('Password form data:', values);
+        console.info('Password form data:', values);
         this.setProps({
           profileState: 'view',
         });

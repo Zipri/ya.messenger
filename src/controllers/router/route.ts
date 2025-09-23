@@ -24,17 +24,19 @@ class Route {
     this._props = routeProps;
   }
 
-  navigate(pathname: string) {
-    // урл соответствует урлу блока
-    if (this.match(pathname)) {
-      this._pathname = pathname;
-      this.render();
-    }
-  }
+  // FIXME SKV (!)
+  // navigate(pathname: string) {
+  //   // урл соответствует урлу блока
+  //   if (this.match(pathname)) {
+  //     this._pathname = pathname;
+  //     this.render();
+  //   }
+  // }
 
-  leave() {
+  delete() {
     if (this._block) {
-      this._block.hide();
+      this._block.remove();
+      this._block = null;
     }
   }
 
@@ -46,10 +48,7 @@ class Route {
     if (!this._block) {
       this._block = new this._blockClass(this._props || {});
       this._renderBlock(this._block);
-      return;
     }
-
-    this._block.show();
   }
 
   private _renderBlock(block: Block) {

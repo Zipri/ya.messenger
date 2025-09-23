@@ -1,104 +1,53 @@
-import type { Block } from './controllers';
+import router from '@controllers/router/router';
+import './ui/styles/style.scss';
+import { ChatList } from '@ui-blocks';
 import {
   ChatPage,
   ErrorPage,
   LoginPage,
   ProfilePage,
   RegisterPage,
-} from './ui/pages';
-import './ui/styles/style.scss';
-import { ChatList } from './ui/blocks';
-
-type PageType = 'login' | 'register' | 'chat' | 'profile' | 'error';
+} from '@ui-pages';
 
 class App {
-  private rootElement: HTMLElement;
-  private currentPage: PageType = 'login';
-  private chatListBlock: ChatList;
-
   constructor() {
-    this.rootElement = document.querySelector('#app')!;
-    this.chatListBlock = new ChatList({});
-    this._initEventListeners();
+    this._bindLinkNavigation();
   }
 
-  render() {
-    switch (this.currentPage) {
-      case 'login':
-        const loginPage = new LoginPage({});
-        this._renderBlock(loginPage);
-        return;
+  start() {
+    const chatList = new ChatList({
+      onChatClick: (chatId: string) => {
+        console.log(`Из App.ts: нажат чат с ID: ${chatId}`);
+      },
+    });
 
-      case 'register':
-        const registerPage = new RegisterPage({});
-        this._renderBlock(registerPage);
-        return;
+    router
+      .use('/login', LoginPage)
+      .use('/register', RegisterPage)
+      .use('/chat', ChatPage, { chatList: chatList })
+      .use('/profile', ProfilePage, { chatList: chatList })
+      .use('/error', ErrorPage, {
+        errorCode: 'Error 404',
+        errorMessage: 'Oops! Страничка не найдена',
+      });
 
-      case 'chat': {
-        this.chatListBlock.setProps({
-          isSearchHidden: false,
-          onChatClick: (chatId: string) => {
-            console.log(`Из App.ts: нажат чат с ID: ${chatId}`);
-          },
-        });
+    router.start();
 
-        const chatPage = new ChatPage({ chatList: this.chatListBlock });
-
-        this._renderBlock(chatPage);
-        return;
-      }
-
-      case 'profile':
-        this.chatListBlock.setProps({
-          isSearchHidden: true,
-          onChatClick: (chatId: string) => {
-            console.log(`Из App.ts: нажат чат с ID: ${chatId}`);
-          },
-        });
-
-        const profilePage = new ProfilePage({ chatList: this.chatListBlock });
-
-        this._renderBlock(profilePage);
-        return;
-
-      case 'error':
-        const errorPage = new ErrorPage({
-          errorCode: 'Error 404',
-          errorMessage: 'Oops! Страничка не найдена',
-        });
-
-        this._renderBlock(errorPage);
-        return;
+    if (window.location.pathname === '/') {
+      router.go('/login');
     }
   }
 
-  private _renderBlock(block: Block) {
-    this.rootElement.replaceChildren();
-    this.rootElement.appendChild(block.getContent());
-    block.dispatchComponentDidMount();
-  }
-
-  /** Простая реализация переключения страниц */
-  private _initEventListeners() {
-    // Слушаем клики по всему документу
+  private _bindLinkNavigation() {
     document.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
-
-      // Проверяем, что кликнули по ссылке с нужным атрибутом
-      if (
-        (target.tagName === 'A' || target.tagName === 'BUTTON') &&
-        target.hasAttribute('data-page')
-      ) {
-        event.preventDefault();
-        const page = target.getAttribute('data-page') as PageType;
-        this._navigateTo(page);
-      }
+      const target = (event.target as HTMLElement).closest(
+        '[data-page]'
+      ) as HTMLAnchorElement | null;
+      if (!target) return;
+      event.preventDefault();
+      const href = target.getAttribute('data-page');
+      if (href) router.go(`/${href}`);
     });
-  }
-
-  private _navigateTo(page: PageType) {
-    this.currentPage = page;
-    this.render();
   }
 }
 

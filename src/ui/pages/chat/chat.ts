@@ -21,6 +21,7 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
       dialog: new Dialog({}),
     });
 
+    // FIXME SKV (!) вынести в app.tsx
     props.chatList.setProps({
       onChatClick: (chatId: string) => {
         console.log(`Нажат чат с ID: ${chatId}`);

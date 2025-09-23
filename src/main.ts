@@ -6,4 +6,4 @@ Handlebars.registerHelper('eq', (a: any, b: any) => {
 });
 
 const app = new App();
-app.render();
+app.start();

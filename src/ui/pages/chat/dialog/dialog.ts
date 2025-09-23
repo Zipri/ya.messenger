@@ -28,7 +28,7 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
           }),
         ],
         onSubmit: (values) => {
-          console.log('Message form data:', values);
+          console.info('Message form data:', values);
         },
       }),
       messages: [],

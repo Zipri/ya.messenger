@@ -5,28 +5,16 @@ import { Dialog } from './dialog/dialog';
 import { ChatList } from '@ui-blocks';
 import { Block, type TBlockProps } from '@controllers';
 
-type ChatState = 'dialog' | 'empty';
-
 interface ChatPageProps {
   chatList: ChatList;
-  chatState?: ChatState;
 }
 
 export class ChatPage extends Block<ChatPageProps & TBlockProps> {
   constructor(props: ChatPageProps) {
     super({
-      chatState: 'empty',
       // Компоненты
       chatList: props.chatList,
       dialog: new Dialog({}),
-    });
-
-    // FIXME SKV (!) вынести в app.tsx
-    props.chatList.setProps({
-      onChatClick: (chatId: string) => {
-        console.log(`Нажат чат с ID: ${chatId}`);
-        this.setProps({ chatState: 'dialog' });
-      },
     });
   }
 

@@ -5,9 +5,9 @@ import { SearchChat } from './searchChat/searchChat';
 import { Block, type TBlockProps } from '@controllers';
 import { getMockChatItems } from 'ui/pages/chat/mock';
 import type { TChatData } from './chatItem/types';
+import router from '@controllers/router/router';
 
 interface ChatListProps {
-  isSearchHidden?: boolean;
   onChatClick?: (chatId: string) => void;
 }
 
@@ -17,9 +17,9 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
     // Это позволяет нам получить доступ к `this` в конструкторе.
     super({
       ...props,
+      isSearchShown: true,
       searchChat: new SearchChat({}),
       chats: [], // Передаем пустой массив
-      isSearchShown: !props.isSearchHidden,
     });
 
     // 2. Теперь, когда `this` доступен, мы можем создать ChatItem'ы.
@@ -34,6 +34,9 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
               // 3. Используем `this.props`, а не `props` из аргументов конструктора.
               if (this.props.onChatClick) {
                 this.props.onChatClick(chatData.id);
+                this.props.isSearchShown = true;
+                // router.go(`/dialog/${chatData.id}`);
+                router.go(`/chat`);
               }
             },
           },

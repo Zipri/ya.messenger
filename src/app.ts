@@ -26,7 +26,7 @@ class App {
       .use('/register', RegisterPage)
       .use('/chat', ChatPage, { chatList: chatList })
       .use('/profile', ProfilePage, { chatList: chatList })
-      .use('/error', ErrorPage, {
+      .use('*', ErrorPage, {
         errorCode: 'Error 404',
         errorMessage: 'Oops! Страничка не найдена',
       });

@@ -12,8 +12,6 @@ abstract class BaseApi {
 
   init(instance: IHttpTransport) {
     this.http = instance;
-
-    console.info('API сервисы инициализированы.');
   }
 }
 

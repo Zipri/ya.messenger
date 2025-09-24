@@ -13,8 +13,8 @@ class ProfileService {
     return this.authApi.login(login, password);
   }
 
-  getUsers() {
-    return this.baseApi.search();
+  getUsers(login?: string) {
+    return this.baseApi.search(login);
   }
 }
 

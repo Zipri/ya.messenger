@@ -11,6 +11,8 @@ class ApiClient {
 
     this.userApi = new UserApi(http);
     this.authApi = new AuthApi(http);
+
+    console.info('API сервисы инициализированы.');
   }
 }
 

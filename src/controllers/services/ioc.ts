@@ -1,7 +1,7 @@
 import { ApiClient } from '@models';
 import ProfileService from './profile/profile';
 
-function iocServices() {
+function iocServicesInit() {
   const apiClient = new ApiClient();
 
   const services = {
@@ -17,4 +17,4 @@ function iocServices() {
   console.info('Общие сервисы инициализированы.');
 }
 
-export default iocServices;
+export default iocServicesInit;

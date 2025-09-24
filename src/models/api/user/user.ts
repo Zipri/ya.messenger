@@ -4,8 +4,12 @@ import BaseApi from '../baseApi';
 class UserApi extends BaseApi {
   baseUrl: TUrl = '/user';
 
-  search() {
-    return this.http.post(`${this.baseUrl}/search`, undefined);
+  search(login?: string) {
+    return this.http.post(`${this.baseUrl}/search`, {
+      data: {
+        login,
+      },
+    });
   }
 }
 

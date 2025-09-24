@@ -5,6 +5,8 @@ import {
   type TRequestOptions,
 } from './types';
 
+const BASE_API_URL = 'https://ya-praktikum.tech/api/v2';
+
 class HTTPTransport implements IHttpTransport {
   private static readonly TIMEOUT = 5000;
 
@@ -43,8 +45,8 @@ class HTTPTransport implements IHttpTransport {
       // Для GET запросов добавляем query параметры к URL
       const requestUrl =
         method === ApiMethodEnum.GET
-          ? this._buildUrlWithParams(url, data)
-          : url;
+          ? this._buildUrlWithParams(`${BASE_API_URL}${url}`, data)
+          : `${BASE_API_URL}${url}`;
 
       const xhr = new XMLHttpRequest();
 

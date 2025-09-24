@@ -5,6 +5,7 @@
             "@controllers": ["controllers"],
             "@controllers/*": ["controllers/*"],
             "@models": ["models"],
+            "@models/*": ["models/*"],
             "@ui": ["ui"],
             "@ui-blocks": ["ui/blocks"],
             "@ui-components": ["ui/components"],

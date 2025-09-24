@@ -8,10 +8,13 @@ import {
   ProfilePage,
   RegisterPage,
 } from '@ui-pages';
+import { iocServices } from '@controllers';
 
 class App {
   constructor() {
+    iocServices();
     this._bindLinkNavigation();
+    window.APP.services?.profileService.login('Zipri_dev', 'string1QQ');
   }
 
   start() {

@@ -1,8 +1,15 @@
-import type { TUrl } from 'models/types';
+import type { TRegistrationProps, TUrl, TUser } from 'models/types';
 import BaseApi from '../baseApi';
+import type { TApiResponse } from '@models/http/types';
 
 class AuthApi extends BaseApi {
   baseUrl: TUrl = '/auth';
+
+  registration(props: TRegistrationProps) {
+    return this.http.post(`${this.baseUrl}/signup`, {
+      data: props,
+    });
+  }
 
   login(login: string, password: string) {
     return this.http.post(`${this.baseUrl}/signin`, {
@@ -13,7 +20,11 @@ class AuthApi extends BaseApi {
     });
   }
 
-  getCurrentUser() {
+  logout() {
+    return this.http.post(`${this.baseUrl}/logout`);
+  }
+
+  getCurrentUser(): Promise<TApiResponse<TUser>> {
     return this.http.get(`${this.baseUrl}/user`);
   }
 }

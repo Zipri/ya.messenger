@@ -1,14 +1,41 @@
-import type { TUrl } from 'models/types';
+import type {
+  TEditPasswordProps,
+  TEditProfileProps,
+  TUrl,
+  TUser,
+} from 'models/types';
 import BaseApi from '../baseApi';
+import type { TApiResponse } from '@models/http/types';
 
 class UserApi extends BaseApi {
   baseUrl: TUrl = '/user';
 
-  search(login?: string) {
+  search(login?: string): Promise<TApiResponse<TUser[]>> {
     return this.http.post(`${this.baseUrl}/search`, {
       data: {
         login,
       },
+    });
+  }
+
+  editProfile(props: TEditProfileProps): Promise<TApiResponse<TUser>> {
+    return this.http.put(`${this.baseUrl}/profile`, {
+      data: props,
+    });
+  }
+
+  editAvatar(file: File): Promise<TApiResponse<TUser>> {
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    return this.http.put(`${this.baseUrl}/avatar`, {
+      data: formData,
+    });
+  }
+
+  editPassword(props: TEditPasswordProps): Promise<TApiResponse<TUser>> {
+    return this.http.put(`${this.baseUrl}/password`, {
+      data: props,
     });
   }
 }

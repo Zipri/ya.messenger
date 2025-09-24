@@ -16,13 +16,30 @@ declare global {
 }
 //#endregion BaseTypes
 
+//#region Auth
+export type TRegistrationProps = Omit<TUser, 'id'> & {
+  password: string;
+};
+//#endregion Auth
+
 //#region User
 export type TUser = {
   id: TID;
   first_name: string;
   second_name: string;
+  display_name: string;
+  /** string === path */
+  avatar: string;
   login: string;
   email: string;
   phone: string;
 };
+
+export type TEditProfileProps = Omit<TUser, 'id'>;
+
+export type TEditPasswordProps = {
+  oldPassword: string;
+  newPassword: string;
+};
+
 //#endregion User

@@ -52,6 +52,10 @@ class Router {
     this.history.forward();
   }
 
+  getCurrentRoute() {
+    return this._currentRoute?.getPathname() || '';
+  }
+
   private _onRoute(pathname: string) {
     const route = this._getRoute(pathname);
 

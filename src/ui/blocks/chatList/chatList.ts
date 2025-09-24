@@ -37,7 +37,6 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
             click: () => {
               if (this.props.onChatClick) {
                 this.props.onChatClick(chatData.id);
-                // router.go(`/dialog/${chatData.id}`);
                 router.go(`/chat/${chatData.id}`);
                 this.props.isSearchShown = true;
               }
@@ -47,6 +46,12 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
     );
 
     this.lists.chats = chatItems;
+  }
+
+  protected componentDidMount(): void {
+    if (router.getCurrentRoute() === '/chat') {
+      this.props.isSearchShown = true;
+    }
   }
 
   protected render(): string {

@@ -34,6 +34,10 @@ class Route {
   //   }
   // }
 
+  getPathname() {
+    return this._pathname;
+  }
+
   delete() {
     if (this._block) {
       this._block.remove();

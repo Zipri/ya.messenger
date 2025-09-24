@@ -27,7 +27,10 @@ declare global {
 //#endregion BaseTypes
 
 //#region Auth
-export type TRegistrationProps = Omit<TUser, 'id'> & {
+export type TRegistrationProps = Omit<
+  TUser,
+  'id' | 'display_name' | 'avatar'
+> & {
   password: string;
 };
 //#endregion Auth

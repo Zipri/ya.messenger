@@ -1,4 +1,4 @@
-import type { TUser } from '@models/types';
+import type { TRegistrationProps, TUser } from '@models/types';
 
 export class AppStore {
   user = {
@@ -48,6 +48,26 @@ export class AppStore {
           JSON.stringify({ login, password })
         );
         loginCallback();
+      }
+    },
+
+    register: async (
+      credentials: TRegistrationProps,
+      registerCallback: () => void
+    ) => {
+      await window.APP.services?.profileService.registration(credentials);
+
+      const userData: TUser | undefined =
+        await window.APP.services?.profileService.getCurrentUser();
+
+      if (userData) {
+        const { login, password } = credentials;
+        this.user.currentUser = userData;
+        window.localStorage.setItem(
+          'userCredentials',
+          JSON.stringify({ login, password })
+        );
+        registerCallback();
       }
     },
 

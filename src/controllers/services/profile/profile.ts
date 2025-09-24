@@ -1,4 +1,5 @@
 import type { AuthApi, UserApi } from '@models';
+import type { TRegistrationProps } from '@models/types';
 
 class ProfileService {
   private baseApi!: UserApi;
@@ -15,6 +16,14 @@ class ProfileService {
       return data;
     } catch (error) {
       console.error('Error logging in', error);
+    }
+  }
+
+  async registration(credentials: TRegistrationProps) {
+    try {
+      await this.authApi.registration(credentials);
+    } catch (error) {
+      console.error('Error registering', error);
     }
   }
 

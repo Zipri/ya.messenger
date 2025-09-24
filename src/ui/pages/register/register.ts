@@ -5,6 +5,7 @@ import { FormBlock, InputBlock } from '../../components';
 import registerTemplate from './register.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
 import { fakeNavigate } from '@utils';
+import router from '@controllers/router/router';
 
 type RegisterPageProps = TBlockProps;
 
@@ -67,11 +68,22 @@ export class RegisterPage extends Block<RegisterPageProps> {
           }),
         ],
         onSubmit: (values) => {
-          console.info('Register form data:', values);
           if (values.password !== values.repeat_password) {
             alert('Пароли не совпадают');
           } else {
-            fakeNavigate('chat');
+            window.APP.store?.user.register(
+              {
+                login: values.login,
+                password: values.password,
+                email: values.email,
+                phone: values.phone,
+                first_name: values.first_name,
+                second_name: values.second_name,
+              },
+              () => {
+                router.go('/chat');
+              }
+            );
           }
         },
       }),

@@ -10,26 +10,38 @@ class ProfileService {
   }
 
   async login(login: string, password: string) {
-    const { data } = await this.authApi.login(login, password);
-    return data;
+    try {
+      const { data } = await this.authApi.login(login, password);
+      return data;
+    } catch (error) {
+      console.error('Error logging in', error);
+    }
   }
 
-  async authorize(login: string, password: string) {
-    // 1. Авторизуемся (получаем cookies)
-    await this.login(login, password);
-    // 2. Получаем данные пользователя
-    const { data } = await this.authApi.getCurrentUser();
-    return data;
+  async logout() {
+    try {
+      await this.authApi.logout();
+    } catch (error) {
+      console.error('Error logging out', error);
+    }
   }
 
   async getCurrentUser() {
-    const { data } = await this.authApi.getCurrentUser();
-    return data;
+    try {
+      const { data } = await this.authApi.getCurrentUser();
+      return data;
+    } catch (error) {
+      console.error('Error getting current user', error);
+    }
   }
 
   async getUsers(login?: string) {
-    const { data } = await this.baseApi.search(login);
-    return data;
+    try {
+      const { data } = await this.baseApi.search(login);
+      return data;
+    } catch (error) {
+      console.error('Error getting users', error);
+    }
   }
 }
 

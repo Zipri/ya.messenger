@@ -31,8 +31,12 @@ export class LoginPage extends Block<LoginPageProps> {
           }),
         ],
         onSubmit: (values) => {
-          console.info('Login form data:', values);
-          router.go('/chat');
+          window.APP.store?.user.login(
+            { login: values.login, password: values.password },
+            () => {
+              router.go('/chat');
+            }
+          );
         },
       }),
     });
@@ -40,5 +44,12 @@ export class LoginPage extends Block<LoginPageProps> {
 
   render() {
     return loginTemplate;
+  }
+
+  protected componentDidMount(): void {
+    const isUserLoggedIn = !!window.APP.store?.user.currentUser;
+    if (isUserLoggedIn) {
+      router.go('/chat');
+    }
   }
 }

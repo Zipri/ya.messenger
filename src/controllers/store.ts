@@ -4,7 +4,63 @@ export class AppStore {
   user = {
     currentUser: null as TUser | null,
 
-    getCurrentUser() {},
+    authorize: async (logoutCallback: () => void) => {
+      const userData: TUser | undefined =
+        await window.APP.services?.profileService.getCurrentUser();
+
+      if (userData) {
+        this.user.currentUser = userData;
+      } else {
+        const userCredentials = window.localStorage.getItem('userCredentials');
+        if (userCredentials) {
+          const { login, password } = JSON.parse(userCredentials);
+          await window.APP.services?.profileService.login(login, password);
+          this.user.currentUser =
+            (await window.APP.services?.profileService.getCurrentUser()) ||
+            null;
+        } else {
+          logoutCallback();
+          console.error('Авторизация не прошла, пожалуйста, авторизуйтесь');
+          return;
+        }
+      }
+
+      console.info(
+        'Авторизация прошла успешно, добро пожаловать,',
+        userData?.login
+      );
+    },
+
+    login: async (
+      credentials: { login: string; password: string },
+      loginCallback: () => void
+    ) => {
+      const { login, password } = credentials;
+
+      await window.APP.services?.profileService.login(login, password);
+      const userData: TUser | undefined =
+        await window.APP.services?.profileService.getCurrentUser();
+
+      if (userData) {
+        this.user.currentUser = userData;
+        window.localStorage.setItem(
+          'userCredentials',
+          JSON.stringify({ login, password })
+        );
+        loginCallback();
+      }
+    },
+
+    logout: async (logoutCallback: () => void) => {
+      try {
+        await window.APP.services?.profileService.logout();
+        this.user.currentUser = null;
+        window.localStorage.removeItem('userCredentials');
+        logoutCallback();
+      } catch (error) {
+        console.error('Error logging out', error);
+      }
+    },
   };
 }
 

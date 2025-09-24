@@ -15,12 +15,6 @@ class App {
     iocServicesInit();
     appStoreInit();
     this._bindLinkNavigation();
-    window.APP.services?.profileService
-      .getCurrentUser()
-      // .authorize('Zipri_dev', 'string1QQ')
-      .then((response) => {
-        console.log(response);
-      });
   }
 
   start() {
@@ -42,6 +36,10 @@ class App {
       });
 
     router.start();
+
+    window.APP.store?.user.authorize(() => {
+      router.go('/login');
+    });
 
     if (window.location.pathname === '/') {
       router.go('/login');

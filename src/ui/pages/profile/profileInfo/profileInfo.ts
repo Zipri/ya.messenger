@@ -133,6 +133,16 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
           router.go('/chat');
         },
       }),
+      logoutButton: new Button({
+        id: 'logout-button',
+        text: 'Выйти',
+        styleClasses: 'button_dark',
+        onClick: () => {
+          window.APP.store?.user.logout(() => {
+            router.go('/login');
+          });
+        },
+      }),
       // инпуты
       emailInput,
       loginInput,

@@ -5,5 +5,9 @@ Handlebars.registerHelper('eq', (a: any, b: any) => {
   return a === b;
 });
 
-const app = new App();
-app.start();
+const runApp = async () => {
+  const app = new App();
+  await app.start();
+};
+
+runApp();

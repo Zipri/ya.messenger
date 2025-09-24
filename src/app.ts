@@ -17,7 +17,7 @@ class App {
     this._bindLinkNavigation();
   }
 
-  start() {
+  async start() {
     const chatList = new ChatList({
       onChatClick: (chatId: string) => {
         console.log(`Из App.ts: нажат чат с ID: ${chatId}`);
@@ -35,11 +35,11 @@ class App {
         errorMessage: 'Oops! Страничка не найдена',
       });
 
-    router.start();
-
-    window.APP.store?.user.authorize(() => {
+    await window.APP.store?.user.authorize(() => {
       router.go('/login');
     });
+
+    router.start();
 
     if (window.location.pathname === '/') {
       router.go('/login');

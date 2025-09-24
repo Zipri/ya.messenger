@@ -5,10 +5,6 @@ import { Block, type TBlockProps } from '@controllers';
 import { Button, InputBlock } from '@ui-components';
 
 interface SearchChatProps {
-  searchQuery?: string;
-  avatar?: string;
-  name?: string;
-  email?: string;
   onClickProfile?: () => void;
 }
 
@@ -26,7 +22,7 @@ export class SearchChat extends Block<SearchChatProps & TBlockProps> {
         name: 'search',
         type: 'text',
         placeholder: 'Поиск чата',
-        value: props.searchQuery || '',
+        value: '',
       }),
       profileButton: new Button({
         id: 'profile-button',
@@ -35,6 +31,15 @@ export class SearchChat extends Block<SearchChatProps & TBlockProps> {
         onClick: props.onClickProfile,
       }),
     });
+  }
+
+  protected componentDidMount(): void {
+    const user = window.APP.store?.user.currentUser;
+    if (user) {
+      console.log(user);
+      this.props.name = user.first_name + ' ' + user.second_name;
+      this.props.email = user.email;
+    }
   }
 
   protected render(): string {

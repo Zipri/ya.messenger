@@ -3,6 +3,16 @@ import type { AppStore, ProfileService } from '@controllers';
 //#region BaseTypes
 export type TID = string;
 export type TUrl = `/${string}`;
+export type TPagination<T> = {
+  page: number;
+  count: number;
+  result: T[];
+};
+
+export type TPaginationProps = {
+  limit: number;
+  offset: number;
+};
 
 declare global {
   interface Window {
@@ -43,3 +53,22 @@ export type TEditPasswordProps = {
 };
 
 //#endregion User
+
+//#region Chats
+export type TChat = {
+  id: TID;
+  title: string;
+  avatar: string;
+  unread_count: number;
+  created_by: number;
+  last_message: {
+    user: TUser;
+    time: string;
+    content: string;
+  };
+};
+
+export type TGetChatsProps = TPaginationProps & {
+  title: string;
+};
+//#endregion Chats

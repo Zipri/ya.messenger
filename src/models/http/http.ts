@@ -3,6 +3,7 @@ import {
   ApiMethodEnum,
   type IHttpTransport,
   type TRequestOptions,
+  type TApiResponse,
 } from './types';
 
 const BASE_API_URL = 'https://ya-praktikum.tech/api/v2';
@@ -10,30 +11,30 @@ const BASE_API_URL = 'https://ya-praktikum.tech/api/v2';
 class HTTPTransport implements IHttpTransport {
   private static readonly TIMEOUT = 5000;
 
-  get(url: string, options: TRequestOptions = {}): Promise<XMLHttpRequest> {
+  get(url: string, options: TRequestOptions = {}): Promise<TApiResponse> {
     return this.request(url, { ...options, method: ApiMethodEnum.GET });
   }
 
-  post(url: string, options: TRequestOptions = {}): Promise<XMLHttpRequest> {
+  post(url: string, options: TRequestOptions = {}): Promise<TApiResponse> {
     return this.request(url, { ...options, method: ApiMethodEnum.POST });
   }
 
-  put(url: string, options: TRequestOptions = {}): Promise<XMLHttpRequest> {
+  put(url: string, options: TRequestOptions = {}): Promise<TApiResponse> {
     return this.request(url, { ...options, method: ApiMethodEnum.PUT });
   }
 
-  patch(url: string, options: TRequestOptions = {}): Promise<XMLHttpRequest> {
+  patch(url: string, options: TRequestOptions = {}): Promise<TApiResponse> {
     return this.request(url, { ...options, method: ApiMethodEnum.PATCH });
   }
 
-  delete(url: string, options: TRequestOptions = {}): Promise<XMLHttpRequest> {
+  delete(url: string, options: TRequestOptions = {}): Promise<TApiResponse> {
     return this.request(url, { ...options, method: ApiMethodEnum.DELETE });
   }
 
   private request(
     url: string,
     options: TRequestOptions = {}
-  ): Promise<XMLHttpRequest> {
+  ): Promise<TApiResponse> {
     const {
       method = ApiMethodEnum.GET,
       data = {},
@@ -52,6 +53,7 @@ class HTTPTransport implements IHttpTransport {
 
       // Настройка запроса
       xhr.open(method, requestUrl);
+      xhr.withCredentials = true;
 
       // Установка заголовков
       Object.keys(headers).forEach((key) => {
@@ -69,9 +71,22 @@ class HTTPTransport implements IHttpTransport {
       // Обработчики событий
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-          resolve(xhr);
+          // Парсим JSON response если он есть
+          let data: any;
+
+          try {
+            data = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+          } catch (error) {
+            data = xhr.responseText; // Если не JSON, возвращаем как строку
+          }
+
+          resolve({
+            data,
+            status: xhr.status,
+            statusText: xhr.statusText,
+          });
         } else {
-          reject(new Error(`HTTP Error: ${xhr.status} ${xhr.statusText}`));
+          reject(new Error(`HTTP Ошибочка: ${xhr.status} ${xhr.statusText}`));
         }
       };
 

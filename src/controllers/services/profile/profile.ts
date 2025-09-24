@@ -9,12 +9,27 @@ class ProfileService {
     this.authApi = authApi;
   }
 
-  login(login: string, password: string) {
-    return this.authApi.login(login, password);
+  async login(login: string, password: string) {
+    const { data } = await this.authApi.login(login, password);
+    return data;
   }
 
-  getUsers(login?: string) {
-    return this.baseApi.search(login);
+  async authorize(login: string, password: string) {
+    // 1. Авторизуемся (получаем cookies)
+    await this.login(login, password);
+    // 2. Получаем данные пользователя
+    const { data } = await this.authApi.getCurrentUser();
+    return data;
+  }
+
+  async getCurrentUser() {
+    const { data } = await this.authApi.getCurrentUser();
+    return data;
+  }
+
+  async getUsers(login?: string) {
+    const { data } = await this.baseApi.search(login);
+    return data;
   }
 }
 

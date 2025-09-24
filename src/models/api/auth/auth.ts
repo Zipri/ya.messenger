@@ -12,6 +12,10 @@ class AuthApi extends BaseApi {
       },
     });
   }
+
+  getCurrentUser() {
+    return this.http.get(`${this.baseUrl}/user`);
+  }
 }
 
 export default AuthApi;

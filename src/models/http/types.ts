@@ -14,6 +14,12 @@ export type TRequestOptions = {
   timeout?: number;
 };
 
+export type TApiResponse<T = any> = {
+  data: T;
+  status: number;
+  statusText: string;
+};
+
 export type TQueryParams = Record<string, string | number | boolean>;
 
 export type THttpTransportRequestOptions = Omit<TRequestOptions, 'method'>;
@@ -22,21 +28,21 @@ export interface IHttpTransport {
   get(
     url: string,
     options?: THttpTransportRequestOptions
-  ): Promise<XMLHttpRequest>;
+  ): Promise<TApiResponse>;
   post(
     url: string,
     options?: THttpTransportRequestOptions
-  ): Promise<XMLHttpRequest>;
+  ): Promise<TApiResponse>;
   put(
     url: string,
     options?: THttpTransportRequestOptions
-  ): Promise<XMLHttpRequest>;
+  ): Promise<TApiResponse>;
   patch(
     url: string,
     options?: THttpTransportRequestOptions
-  ): Promise<XMLHttpRequest>;
+  ): Promise<TApiResponse>;
   delete(
     url: string,
     options?: THttpTransportRequestOptions
-  ): Promise<XMLHttpRequest>;
+  ): Promise<TApiResponse>;
 }

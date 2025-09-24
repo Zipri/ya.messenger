@@ -20,6 +20,9 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
         onClickProfile: () => {
           router.go('/profile');
           this.props.isSearchShown = false;
+          window.APP.services?.profileService.getUsers('z').then((response) => {
+            console.log(response);
+          });
         },
       }),
       chats: [], // Передаем пустой массив

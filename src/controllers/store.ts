@@ -4,11 +4,7 @@ export class AppStore {
   user = {
     currentUser: null as TUser | null,
 
-    getCurrentUser() {
-      const response =
-        window.APP.services?.profileService.getUsers('Zipri_dev');
-      console.log(response);
-    },
+    getCurrentUser() {},
   };
 }
 

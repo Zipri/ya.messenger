@@ -6,6 +6,7 @@ import { Block, type TBlockProps } from '@controllers';
 import router from '@controllers/router/router';
 import type { TEditProfileProps } from '@models/types';
 
+export const BASE_RESOURCES_URL = 'https://ya-praktikum.tech/api/v2/resources';
 type ProfileState = 'view' | 'edit' | 'edit-password';
 
 interface ProfileInfoProps {
@@ -169,6 +170,7 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
             const isSuccess = await window.APP.store?.user.editAvatar(file);
             if (isSuccess) {
               this._setProfileState('view');
+              this._setUserInputsState();
             }
           }
         },
@@ -230,6 +232,11 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
     const user = window.APP.store?.user.currentUser;
 
     if (user) {
+      if (user.avatar) {
+        this.setProps({
+          avatar: `${BASE_RESOURCES_URL}${user.avatar}`,
+        });
+      }
       // Сначала очищаем значения, чтобы гарантировать срабатывание componentDidUpdate
       this.children.emailInput.setProps({ value: '' });
       this.children.loginInput.setProps({ value: '' });

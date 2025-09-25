@@ -1,5 +1,9 @@
 import type { AuthApi, UserApi } from '@models';
-import type { TRegistrationProps } from '@models/types';
+import type {
+  TEditPasswordProps,
+  TEditProfileProps,
+  TRegistrationProps,
+} from '@models/types';
 
 class ProfileService {
   private baseApi!: UserApi;
@@ -44,12 +48,21 @@ class ProfileService {
     }
   }
 
-  async getUsers(login?: string) {
+  async editProfile(props: TEditProfileProps) {
     try {
-      const { data } = await this.baseApi.search(login);
+      const { data } = await this.baseApi.editProfile(props);
       return data;
     } catch (error) {
-      console.error('Error getting users', error);
+      console.error('Error editing profile', error);
+    }
+  }
+
+  async editPassword(props: TEditPasswordProps) {
+    try {
+      const { data } = await this.baseApi.editPassword(props);
+      return data;
+    } catch (error) {
+      console.error('Error editing password', error);
     }
   }
 }

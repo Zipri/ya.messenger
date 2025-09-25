@@ -31,9 +31,7 @@
     {{/if}}
     {{#if (eq profileState 'edit')}}
         <div class="profileInfo__button-group">
-            <button class="button_dark" data-profile-info="view">
-                Отмена
-            </button>
+            {{{cancelButton}}}
             <button id="profile-save" class="button_main" type="button">
                 Сохранить
             </button>
@@ -41,9 +39,7 @@
     {{/if}}
     {{#if (eq profileState 'edit-password')}}
         <div class="profileInfo__button-group">
-            <button class="button_dark" data-profile-info="view">
-                Отмена
-            </button>
+            {{{cancelButton}}}
             <button id="password-save" class="button_main" type="button">
                 Сохранить
             </button>

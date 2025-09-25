@@ -1,4 +1,9 @@
-import type { TRegistrationProps, TUser } from '@models/types';
+import type {
+  TEditPasswordProps,
+  TEditProfileProps,
+  TRegistrationProps,
+  TUser,
+} from '@models/types';
 
 export class AppStore {
   user = {
@@ -79,6 +84,37 @@ export class AppStore {
         logoutCallback();
       } catch (error) {
         console.error('Error logging out', error);
+      }
+    },
+
+    editProfile: async (props: TEditProfileProps) => {
+      try {
+        const userData =
+          await window.APP.services?.profileService.editProfile(props);
+        this.user.currentUser = userData || null;
+        return true;
+      } catch (error) {
+        console.error('Error editing profile', error);
+        return false;
+      }
+    },
+
+    editPassword: async (props: {
+      old_password: string;
+      password: string;
+      repeat_password: string;
+    }) => {
+      const { old_password, password } = props;
+      try {
+        await window.APP.services?.profileService.editPassword({
+          newPassword: password,
+          oldPassword: old_password,
+        });
+
+        return true;
+      } catch (error) {
+        console.error('Error editing password', error);
+        return false;
       }
     },
   };

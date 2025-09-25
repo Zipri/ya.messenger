@@ -48,7 +48,7 @@ export type TUser = {
   phone: string;
 };
 
-export type TEditProfileProps = Omit<TUser, 'id'>;
+export type TEditProfileProps = Omit<TUser, 'id' | 'avatar' | 'display_name'>;
 
 export type TEditPasswordProps = {
   oldPassword: string;

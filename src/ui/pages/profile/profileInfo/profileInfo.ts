@@ -4,6 +4,7 @@ import profileInfoTemplate from './profileInfo.hbs?raw';
 import { Button, FormBlock, InputBlock } from '@ui-components';
 import { Block, type TBlockProps } from '@controllers';
 import router from '@controllers/router/router';
+import type { TEditProfileProps } from '@models/types';
 
 type ProfileState = 'view' | 'edit' | 'edit-password';
 
@@ -20,7 +21,6 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
       id: 'email',
       name: 'email',
       label: 'Почта',
-      value: 'ivanivanov@yandex.ru',
       validation: ['required', 'email'],
       disabled: true,
     });
@@ -29,7 +29,6 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
       id: 'login',
       name: 'login',
       label: 'Логин',
-      value: 'ivanivanov',
       validation: ['required', 'login'],
       disabled: true,
     });
@@ -38,7 +37,6 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
       id: 'first_name',
       name: 'first_name',
       label: 'Имя',
-      value: 'Иван',
       validation: ['required', 'name'],
       disabled: true,
     });
@@ -47,7 +45,6 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
       id: 'second_name',
       name: 'second_name',
       label: 'Фамилия',
-      value: 'Иванов',
       validation: ['required', 'name'],
       disabled: true,
     });
@@ -56,9 +53,16 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
       id: 'phone',
       name: 'phone',
       label: 'Телефон',
-      value: '+79999999999',
       validation: ['required', 'phone'],
       disabled: true,
+    });
+
+    const oldPasswordInput = new InputBlock({
+      id: 'old_password',
+      name: 'old_password',
+      label: 'Старый пароль',
+      type: 'password',
+      validation: ['required', 'password'],
     });
 
     const passwordInput = new InputBlock({
@@ -88,31 +92,38 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
         phoneInput,
       ],
       onSubmit: (values) => {
-        console.info('Profile form data:', values);
-        this.setProps({
-          profileState: 'view',
-        });
-        this._updateInputsState('view');
+        const isSuccess = window.APP.store?.user.editProfile(
+          values as TEditProfileProps
+        );
+        if (isSuccess) {
+          this._setProfileState('view');
+        }
       },
     });
 
     const passwordForm = new FormBlock({
       // можно задать триггер кнопки, если он уже в DOM: '#password-save'
       submitTrigger: '#password-save',
-      fields: [passwordInput, repeatPasswordInput],
-      onSubmit: (values) => {
+      fields: [oldPasswordInput, passwordInput, repeatPasswordInput],
+      onSubmit: (_values) => {
+        const values = _values as {
+          old_password: string;
+          password: string;
+          repeat_password: string;
+        };
+
         if (values.password !== values.repeat_password) {
-          (this.children.repeatPasswordInput as InputBlock).setProps({
+          this.children.repeatPasswordInput.setProps({
             error: 'Пароли не совпадают',
           });
           return;
         }
 
-        console.info('Password form data:', values);
-        this.setProps({
-          profileState: 'view',
-        });
-        this._updateInputsState('view');
+        const isSuccess = window.APP.store?.user.editPassword(values);
+        if (isSuccess) {
+          this._resetPasswordInputs();
+          this._setProfileState('view');
+        }
       },
     });
 
@@ -120,10 +131,7 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
       profileState: 'view',
       avatar:
         'https://pic.rutubelist.ru/user/74/93/7493abf139502d19ca81b0457a2ef0cd.jpg',
-      name: 'Seroshtan',
-      email: 'seroshtan@gmail.com',
       ...props,
-
       // компоненты
       backButton: new Button({
         id: 'back-button',
@@ -131,6 +139,16 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
         styleClasses: 'profileInfo__header__button',
         onClick: () => {
           router.go('/chat');
+        },
+      }),
+      cancelButton: new Button({
+        id: 'cancel-button',
+        text: 'Отмена',
+        styleClasses: 'button_dark',
+        onClick: () => {
+          this._setProfileState('view');
+          this._setUserInputsState();
+          this._resetPasswordInputs();
         },
       }),
       logoutButton: new Button({
@@ -151,6 +169,7 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
       phoneInput,
       passwordInput,
       repeatPasswordInput,
+      oldPasswordInput,
 
       // формы
       profileForm,
@@ -163,6 +182,7 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
   }
 
   protected componentDidMount(): void {
+    this._setUserInputsState();
     this.setProps({
       events: {
         click: this._handleButtonClick,
@@ -181,31 +201,64 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
     ) {
       const newState = target.getAttribute('data-profile-info') as ProfileState;
 
-      this.setProps({
-        profileState: newState,
-      });
-
-      this._updateInputsState(newState);
+      this._setProfileState(newState);
       // при смене состояния разметка может меняться — перевяжем триггеры
       queueMicrotask(() => this._bindSubmitTriggers());
     }
   };
 
-  private _updateInputsState(state: ProfileState): void {
+  private _setProfileState(state: ProfileState): void {
+    this.setProps({
+      profileState: state,
+    });
+    this._disableInputs(state);
+  }
+
+  private _setUserInputsState(): void {
+    const user = window.APP.store?.user.currentUser;
+
+    if (user) {
+      // Сначала очищаем значения, чтобы гарантировать срабатывание componentDidUpdate
+      this.children.emailInput.setProps({ value: '' });
+      this.children.loginInput.setProps({ value: '' });
+      this.children.firstNameInput.setProps({ value: '' });
+      this.children.secondNameInput.setProps({ value: '' });
+      this.children.phoneInput.setProps({ value: '' });
+
+      // Затем устанавливаем правильные значения
+      queueMicrotask(() => {
+        this.children.emailInput.setProps({ value: user.email });
+        this.children.loginInput.setProps({ value: user.login });
+        this.children.firstNameInput.setProps({ value: user.first_name });
+        this.children.secondNameInput.setProps({ value: user.second_name });
+        this.children.phoneInput.setProps({ value: user.phone });
+      });
+    }
+  }
+
+  private _resetPasswordInputs(): void {
+    queueMicrotask(() => {
+      this.children.oldPasswordInput.setProps({ value: '', error: '' });
+      this.children.passwordInput.setProps({ value: '', error: '' });
+      this.children.repeatPasswordInput.setProps({ value: '', error: '' });
+    });
+  }
+
+  private _disableInputs(state: ProfileState): void {
     const disabled = state === 'view';
 
-    (this.children.emailInput as InputBlock).setProps({ disabled });
-    (this.children.loginInput as InputBlock).setProps({ disabled });
-    (this.children.firstNameInput as InputBlock).setProps({ disabled });
-    (this.children.secondNameInput as InputBlock).setProps({ disabled });
-    (this.children.phoneInput as InputBlock).setProps({ disabled });
+    this.children.emailInput.setProps({ disabled });
+    this.children.loginInput.setProps({ disabled });
+    this.children.firstNameInput.setProps({ disabled });
+    this.children.secondNameInput.setProps({ disabled });
+    this.children.phoneInput.setProps({ disabled });
 
     // пароли активны только в режиме смены пароля
     const pwdDisabled = state !== 'edit-password';
-    (this.children.passwordInput as InputBlock).setProps({
+    this.children.passwordInput.setProps({
       disabled: pwdDisabled,
     });
-    (this.children.repeatPasswordInput as InputBlock).setProps({
+    this.children.repeatPasswordInput.setProps({
       disabled: pwdDisabled,
     });
   }

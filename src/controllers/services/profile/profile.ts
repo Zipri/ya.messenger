@@ -57,6 +57,15 @@ class ProfileService {
     }
   }
 
+  async editAvatar(file: FormData) {
+    try {
+      const { data } = await this.baseApi.editAvatar(file);
+      return data;
+    } catch (error) {
+      console.error('Error editing avatar', error);
+    }
+  }
+
   async editPassword(props: TEditPasswordProps) {
     try {
       const { data } = await this.baseApi.editPassword(props);

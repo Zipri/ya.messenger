@@ -24,12 +24,9 @@ class UserApi extends BaseApi {
     });
   }
 
-  editAvatar(file: File): Promise<TApiResponse<TUser>> {
-    const formData = new FormData();
-    formData.append('avatar', file);
-
-    return this.http.put(`${this.baseUrl}/avatar`, {
-      data: formData,
+  editAvatar(file: FormData): Promise<TApiResponse<TUser>> {
+    return this.http.put(`${this.baseUrl}/profile/avatar`, {
+      data: file,
     });
   }
 

@@ -4,7 +4,12 @@
     </div>
     <div class="profileInfo__user">
         <div class="profileInfo__user__avatar">
-            <img src="{{avatar}}" alt="{{name}}" class="profileInfo__user__avatar-img">
+            {{#if avatar}}
+                <img src="{{avatar}}" alt="{{name}}" class="profileInfo__user__avatar-img">
+            {{/if}}
+            {{#if (eq profileState 'edit')}}
+                {{{avatarChangeButton}}}
+            {{/if}}
         </div>
         <div class="profileInfo__user__input-group">
             {{#if (eq profileState 'view')}}

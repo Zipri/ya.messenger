@@ -91,11 +91,15 @@ export class AppStore {
       try {
         const userData =
           await window.APP.services?.profileService.editProfile(props);
+
+        if (!userData) {
+          return false;
+        }
+
         this.user.currentUser = userData || null;
         return true;
       } catch (error) {
         console.error('Error editing profile', error);
-        return false;
       }
     },
 
@@ -110,11 +114,27 @@ export class AppStore {
           newPassword: password,
           oldPassword: old_password,
         });
-
-        return true;
       } catch (error) {
         console.error('Error editing password', error);
-        return false;
+      }
+    },
+
+    editAvatar: async (file: File) => {
+      try {
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        const userData =
+          await window.APP.services?.profileService.editAvatar(formData);
+
+        if (!userData) {
+          return false;
+        }
+
+        this.user.currentUser = userData || null;
+        return true;
+      } catch (error) {
+        console.error('Error editing avatar', error);
       }
     },
   };

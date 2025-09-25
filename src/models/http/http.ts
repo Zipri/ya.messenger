@@ -61,7 +61,11 @@ class HTTPTransport implements IHttpTransport {
       });
 
       // Для POST/PUT/DELETE устанавливаем Content-Type по умолчанию
-      if (method !== ApiMethodEnum.GET && !headers['Content-Type']) {
+      if (
+        method !== ApiMethodEnum.GET &&
+        !headers['Content-Type'] &&
+        !(data instanceof FormData)
+      ) {
         xhr.setRequestHeader('Content-Type', 'application/json');
       }
 
@@ -105,6 +109,8 @@ class HTTPTransport implements IHttpTransport {
       // Отправка запроса
       if (method === ApiMethodEnum.GET) {
         xhr.send();
+      } else if (data instanceof FormData) {
+        xhr.send(data);
       } else {
         xhr.send(JSON.stringify(data));
       }

@@ -91,8 +91,8 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
         secondNameInput,
         phoneInput,
       ],
-      onSubmit: (values) => {
-        const isSuccess = window.APP.store?.user.editProfile(
+      onSubmit: async (values) => {
+        const isSuccess = await window.APP.store?.user.editProfile(
           values as TEditProfileProps
         );
         if (isSuccess) {
@@ -105,7 +105,7 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
       // можно задать триггер кнопки, если он уже в DOM: '#password-save'
       submitTrigger: '#password-save',
       fields: [oldPasswordInput, passwordInput, repeatPasswordInput],
-      onSubmit: (_values) => {
+      onSubmit: async (_values) => {
         const values = _values as {
           old_password: string;
           password: string;
@@ -119,7 +119,7 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
           return;
         }
 
-        const isSuccess = window.APP.store?.user.editPassword(values);
+        const isSuccess = await window.APP.store?.user.editPassword(values);
         if (isSuccess) {
           this._resetPasswordInputs();
           this._setProfileState('view');
@@ -129,8 +129,6 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
 
     super({
       profileState: 'view',
-      avatar:
-        'https://pic.rutubelist.ru/user/74/93/7493abf139502d19ca81b0457a2ef0cd.jpg',
       ...props,
       // компоненты
       backButton: new Button({
@@ -159,6 +157,20 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
           window.APP.store?.user.logout(() => {
             router.go('/login');
           });
+        },
+      }),
+      avatarChangeButton: new Button({
+        id: 'avatat-change-button',
+        text: 'Изменить аватар',
+        styleClasses: 'button_main',
+        onClick: async () => {
+          const file = await this._handleFileUpload();
+          if (file) {
+            const isSuccess = await window.APP.store?.user.editAvatar(file);
+            if (isSuccess) {
+              this._setProfileState('view');
+            }
+          }
         },
       }),
       // инпуты
@@ -283,5 +295,40 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
     if (passwordForm && passwordBtn) {
       passwordForm.setSubmitTrigger(passwordBtn);
     }
+  }
+
+  private _handleFileUpload(): Promise<File | null> {
+    return new Promise((resolve) => {
+      // Создаем скрытый input для выбора файла
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.style.display = 'none';
+
+      // Обработчик выбора файла
+      fileInput.addEventListener('change', (event) => {
+        const target = event.target as HTMLInputElement;
+        const file = target.files?.[0];
+
+        // Удаляем временный input
+        document.body.removeChild(fileInput);
+
+        if (file) {
+          resolve(file);
+        } else {
+          resolve(null);
+        }
+      });
+
+      // Обработчик отмены выбора
+      fileInput.addEventListener('cancel', () => {
+        document.body.removeChild(fileInput);
+        resolve(null);
+      });
+
+      // Добавляем input в DOM и программно кликаем по нему
+      document.body.appendChild(fileInput);
+      fileInput.click();
+    });
   }
 }

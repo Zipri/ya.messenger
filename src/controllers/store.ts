@@ -1,3 +1,4 @@
+import { ProfileService, type TServices } from '@controllers';
 import type {
   TEditPasswordProps,
   TEditProfileProps,
@@ -6,12 +7,19 @@ import type {
 } from '@models/types';
 
 export class AppStore {
+  private profileService!: ProfileService;
+
+  constructor(services: TServices) {
+    this.profileService = services.profileService;
+  }
+
   user = {
     currentUser: null as TUser | null,
 
+    //#region Auth
     authorize: async (logoutCallback: () => void) => {
       const userData: TUser | undefined =
-        await window.APP.services?.profileService.getCurrentUser();
+        await this.profileService.getCurrentUser();
 
       if (userData) {
         this.user.currentUser = userData;
@@ -19,10 +27,9 @@ export class AppStore {
         const userCredentials = window.localStorage.getItem('userCredentials');
         if (userCredentials) {
           const { login, password } = JSON.parse(userCredentials);
-          await window.APP.services?.profileService.login(login, password);
+          await this.profileService.login(login, password);
           this.user.currentUser =
-            (await window.APP.services?.profileService.getCurrentUser()) ||
-            null;
+            (await this.profileService.getCurrentUser()) || null;
         } else {
           logoutCallback();
           console.error('Авторизация не прошла, пожалуйста, авторизуйтесь');
@@ -42,9 +49,9 @@ export class AppStore {
     ) => {
       const { login, password } = credentials;
 
-      await window.APP.services?.profileService.login(login, password);
+      await this.profileService.login(login, password);
       const userData: TUser | undefined =
-        await window.APP.services?.profileService.getCurrentUser();
+        await this.profileService.getCurrentUser();
 
       if (userData) {
         this.user.currentUser = userData;
@@ -60,10 +67,10 @@ export class AppStore {
       credentials: TRegistrationProps,
       registerCallback: () => void
     ) => {
-      await window.APP.services?.profileService.registration(credentials);
+      await this.profileService.registration(credentials);
 
       const userData: TUser | undefined =
-        await window.APP.services?.profileService.getCurrentUser();
+        await this.profileService.getCurrentUser();
 
       if (userData) {
         const { login, password } = credentials;
@@ -78,7 +85,7 @@ export class AppStore {
 
     logout: async (logoutCallback: () => void) => {
       try {
-        await window.APP.services?.profileService.logout();
+        await this.profileService.logout();
         this.user.currentUser = null;
         window.localStorage.removeItem('userCredentials');
         logoutCallback();
@@ -86,11 +93,12 @@ export class AppStore {
         console.error('Error logging out', error);
       }
     },
+    //#endregion Auth
 
+    //#region User
     editProfile: async (props: TEditProfileProps) => {
       try {
-        const userData =
-          await window.APP.services?.profileService.editProfile(props);
+        const userData = await this.profileService.editProfile(props);
 
         if (!userData) {
           return false;
@@ -110,7 +118,7 @@ export class AppStore {
     }) => {
       const { old_password, password } = props;
       try {
-        await window.APP.services?.profileService.editPassword({
+        await this.profileService.editPassword({
           newPassword: password,
           oldPassword: old_password,
         });
@@ -124,8 +132,7 @@ export class AppStore {
         const formData = new FormData();
         formData.append('avatar', file);
 
-        const userData =
-          await window.APP.services?.profileService.editAvatar(formData);
+        const userData = await this.profileService.editAvatar(formData);
 
         if (!userData) {
           return false;
@@ -137,11 +144,13 @@ export class AppStore {
         console.error('Error editing avatar', error);
       }
     },
+    //#endregion User
   };
 }
 
-export function appStoreInit() {
-  const store = new AppStore();
+//#region Init
+export function appStoreInit(services: TServices) {
+  const store = new AppStore(services);
 
   if (!window.APP) {
     window.APP = {};
@@ -151,3 +160,4 @@ export function appStoreInit() {
 
   console.info('Локальное хранилище инициализировано.');
 }
+//#endregion Init

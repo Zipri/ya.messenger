@@ -12,8 +12,8 @@ import { appStoreInit, iocServicesInit } from '@controllers';
 
 class App {
   constructor() {
-    iocServicesInit();
-    appStoreInit();
+    const services = iocServicesInit();
+    appStoreInit(services);
     this._bindLinkNavigation();
   }
 

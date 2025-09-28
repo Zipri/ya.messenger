@@ -15,6 +15,10 @@ function iocServicesInit() {
   window.APP.services = services;
 
   console.info('Общие сервисы инициализированы.');
+
+  return services;
 }
+
+export type TServices = ReturnType<typeof iocServicesInit>;
 
 export default iocServicesInit;

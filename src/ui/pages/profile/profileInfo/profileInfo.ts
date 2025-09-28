@@ -5,8 +5,8 @@ import { Button, FormBlock, InputBlock } from '@ui-components';
 import { Block, type TBlockProps } from '@controllers';
 import router from '@controllers/router/router';
 import type { TEditProfileProps } from '@models/types';
+import { BASE_RESOURCES_URL } from '@models/consts';
 
-export const BASE_RESOURCES_URL = 'https://ya-praktikum.tech/api/v2/resources';
 type ProfileState = 'view' | 'edit' | 'edit-password';
 
 interface ProfileInfoProps {

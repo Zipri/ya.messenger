@@ -3,4 +3,5 @@ import UserApi from './api/user/user';
 import AuthApi from './api/auth/auth';
 import ResourcesApi from './api/resources/resources';
 
+export * from './consts';
 export { ApiClient, UserApi, AuthApi, ResourcesApi };

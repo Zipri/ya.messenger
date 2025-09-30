@@ -26,7 +26,7 @@ class App {
     });
 
     router
-      .use('/', LoginPage)
+      .use(BASE_URLS.root, LoginPage)
       .use(BASE_URLS.login, LoginPage)
       .use(BASE_URLS.register, RegisterPage)
       .use(BASE_URLS.chat, ChatPage, { chatList: chatList }) // Для страницы со списком чатов

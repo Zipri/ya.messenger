@@ -9,6 +9,7 @@ import {
   RegisterPage,
 } from '@ui-pages';
 import { appStoreInit, iocServicesInit } from '@controllers';
+import { BASE_URLS } from '@models';
 
 class App {
   constructor() {
@@ -25,25 +26,22 @@ class App {
     });
 
     router
-      .use('/login', LoginPage)
-      .use('/register', RegisterPage)
-      .use('/chat', ChatPage, { chatList: chatList }) // Для страницы со списком чатов
-      .use('/chat/:id', ChatPage, { chatList: chatList }) // Для страницы с конкретным диалогом
-      .use('/profile', ProfilePage, { chatList: chatList })
-      .use('/error', ErrorPage, {
+      .use('/', LoginPage)
+      .use(BASE_URLS.login, LoginPage)
+      .use(BASE_URLS.register, RegisterPage)
+      .use(BASE_URLS.chat, ChatPage, { chatList: chatList }) // Для страницы со списком чатов
+      .use(`${BASE_URLS.chat}/:id`, ChatPage, { chatList: chatList }) // Для страницы с конкретным диалогом
+      .use(BASE_URLS.profile, ProfilePage, { chatList: chatList })
+      .use(BASE_URLS.error, ErrorPage, {
         errorCode: 'Error 404',
         errorMessage: 'Oops! Страничка не найдена',
       });
 
     await window.APP.store?.user.authorize(() => {
-      router.go('/login');
+      router.go(BASE_URLS.login);
     });
 
     router.start();
-
-    if (window.location.pathname === '/') {
-      router.go('/login');
-    }
   }
 
   private _bindLinkNavigation() {
@@ -54,7 +52,7 @@ class App {
       if (!target) return;
       event.preventDefault();
       const href = target.getAttribute('data-page');
-      if (href) router.go(`/${href}`);
+      if (href) router.go(href);
     });
   }
 }

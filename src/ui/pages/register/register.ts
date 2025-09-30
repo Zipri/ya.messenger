@@ -4,8 +4,8 @@ import { FormBlock, InputBlock } from '../../components';
 
 import registerTemplate from './register.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
-import { fakeNavigate } from '@utils';
 import router from '@controllers/router/router';
+import { BASE_URLS } from '@models';
 
 type RegisterPageProps = TBlockProps;
 
@@ -13,6 +13,7 @@ export class RegisterPage extends Block<RegisterPageProps> {
   constructor(props: RegisterPageProps) {
     super({
       ...props,
+      BASE_URLS,
       // Компоненты
       registerForm: new FormBlock({
         submitTrigger: '#register-submit',
@@ -81,7 +82,7 @@ export class RegisterPage extends Block<RegisterPageProps> {
                 second_name: values.second_name,
               },
               () => {
-                router.go('/chat');
+                router.go(BASE_URLS.chat);
               }
             );
           }

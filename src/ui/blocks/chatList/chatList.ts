@@ -6,6 +6,7 @@ import { Block, type TBlockProps } from '@controllers';
 import { getMockChatItems } from 'ui/pages/chat/mock';
 import type { TChatData } from './chatItem/types';
 import router from '@controllers/router/router';
+import { BASE_URLS } from '@models';
 
 interface ChatListProps {
   onChatClick?: (chatId: string) => void;
@@ -18,7 +19,7 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
       isSearchShown: true,
       searchChat: new SearchChat({
         onClickProfile: () => {
-          router.go('/profile');
+          router.go(BASE_URLS.profile);
           this.props.isSearchShown = false;
         },
       }),
@@ -34,7 +35,7 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
             click: () => {
               if (this.props.onChatClick) {
                 this.props.onChatClick(chatData.id);
-                router.go(`/chat/${chatData.id}`);
+                router.go(`${BASE_URLS.chat}/${chatData.id}`);
                 this.props.isSearchShown = true;
               }
             },
@@ -46,7 +47,7 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
   }
 
   protected componentDidMount(): void {
-    if (router.getCurrentRoute() === '/chat') {
+    if (router.getCurrentRoute() === BASE_URLS.chat) {
       this.props.isSearchShown = true;
     }
   }

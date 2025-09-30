@@ -4,6 +4,7 @@ import loginTemplate from './login.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
 import { FormBlock, InputBlock } from '@ui-components';
 import router from '@controllers/router/router';
+import { BASE_URLS } from '@models';
 
 type LoginPageProps = TBlockProps;
 
@@ -11,6 +12,7 @@ export class LoginPage extends Block<LoginPageProps> {
   constructor(props: LoginPageProps) {
     super({
       ...props,
+      BASE_URLS,
       // Компоненты
       loginForm: new FormBlock({
         submitTrigger: '#login-submit',
@@ -34,7 +36,7 @@ export class LoginPage extends Block<LoginPageProps> {
           window.APP.store?.user.login(
             { login: values.login, password: values.password },
             () => {
-              router.go('/chat');
+              router.go(BASE_URLS.chat);
             }
           );
         },
@@ -49,7 +51,7 @@ export class LoginPage extends Block<LoginPageProps> {
   protected componentDidMount(): void {
     const isUserLoggedIn = !!window.APP.store?.user.currentUser;
     if (isUserLoggedIn) {
-      router.go('/chat');
+      router.go(BASE_URLS.chat);
     }
   }
 }

@@ -5,7 +5,7 @@ import { Button, FormBlock, InputBlock } from '@ui-components';
 import { Block, type TBlockProps } from '@controllers';
 import router from '@controllers/router/router';
 import type { TEditProfileProps } from '@models/types';
-import { BASE_RESOURCES_URL } from '@models/consts';
+import { BASE_RESOURCES_URL, BASE_URLS } from '@models/consts';
 
 type ProfileState = 'view' | 'edit' | 'edit-password';
 
@@ -137,7 +137,7 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
         text: 'Назад',
         styleClasses: 'profileInfo__header__button',
         onClick: () => {
-          router.go('/chat');
+          router.go(BASE_URLS.chat);
         },
       }),
       cancelButton: new Button({
@@ -156,7 +156,7 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
         styleClasses: 'button_dark',
         onClick: () => {
           window.APP.store?.user.logout(() => {
-            router.go('/login');
+            router.go(BASE_URLS.login);
           });
         },
       }),

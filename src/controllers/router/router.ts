@@ -1,5 +1,6 @@
 import type { Block } from '@controllers/block';
 import Route from './route';
+import { BASE_URLS } from '@models';
 
 class Router {
   private routes!: Route[];
@@ -60,7 +61,7 @@ class Router {
     const route = this._getRoute(pathname);
 
     if (!route) {
-      this.go('/error');
+      this.go(BASE_URLS.error);
       return;
     }
 

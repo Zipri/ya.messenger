@@ -1,4 +1,7 @@
 import type { AppStore, ProfileService } from '@controllers';
+import type ChatService from '@controllers/services/chat/chat';
+import type WebSocketService from '@controllers/services/websocket';
+import type { TMessage } from '@controllers/services/websocket';
 
 //#region BaseTypes
 export type TID = string;
@@ -19,6 +22,8 @@ declare global {
     APP: {
       services?: {
         profileService: ProfileService;
+        chatService: ChatService;
+        webSocketService: WebSocketService;
       };
       store?: AppStore;
     };
@@ -72,6 +77,6 @@ export type TChat = {
 };
 
 export type TGetChatsProps = TPaginationProps & {
-  title: string;
+  title?: string;
 };
 //#endregion Chats

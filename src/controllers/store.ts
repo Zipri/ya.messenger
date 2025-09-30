@@ -1,16 +1,26 @@
 import { ProfileService, type TServices } from '@controllers';
+import type ChatService from './services/chat/chat';
+import type WebSocketService from './services/websocket';
 import type {
+  TChat,
   TEditPasswordProps,
   TEditProfileProps,
+  TGetChatsProps,
+  TID,
   TRegistrationProps,
   TUser,
 } from '@models/types';
+import type { TMessage } from './services/websocket';
 
 export class AppStore {
   private profileService!: ProfileService;
+  private chatService!: ChatService;
+  private webSocketService!: WebSocketService;
 
   constructor(services: TServices) {
     this.profileService = services.profileService;
+    this.chatService = services.chatService;
+    this.webSocketService = services.webSocketService;
   }
 
   user = {
@@ -145,6 +155,191 @@ export class AppStore {
       }
     },
     //#endregion User
+  };
+
+  chats = {
+    chatList: [] as TChat[],
+    activeChat: null as TChat | null,
+    activeChatMessages: [] as TMessage[],
+    isWebSocketConnected: false,
+
+    //#region Chats
+    /** Загрузка списка чатов */
+    loadChats: async (props?: TGetChatsProps) => {
+      try {
+        const chats = await this.chatService.getChats(props);
+        if (chats) {
+          this.chats.chatList = chats;
+          console.info('Чаты загружены:', chats.length);
+          return chats;
+        }
+        return [];
+      } catch (error) {
+        console.error('Ошибка загрузки чатов:', error);
+        return [];
+      }
+    },
+
+    /** Создание нового чата */
+    createChat: async (title: string): Promise<boolean> => {
+      try {
+        const chatId = await this.chatService.createChat(title);
+        if (chatId) {
+          // Перезагружаем список чатов
+          await this.chats.loadChats();
+          console.info('Чат создан с ID:', chatId);
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error('Ошибка создания чата:', error);
+        return false;
+      }
+    },
+
+    /** Удаление чата */
+    deleteChat: async (chatId: TID): Promise<boolean> => {
+      try {
+        const success = await this.chatService.deleteChat(chatId);
+        if (success) {
+          // Удаляем из локального списка
+          this.chats.chatList = this.chats.chatList.filter(
+            (chat) => chat.id !== chatId
+          );
+
+          // Если удаляется активный чат, сбрасываем состояние
+          if (this.chats.activeChat?.id === chatId) {
+            await this.chats.disconnectFromChat();
+          }
+
+          console.info('Чат удален:', chatId);
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error('Ошибка удаления чата:', error);
+        return false;
+      }
+    },
+
+    /** Выбор активного чата */
+    selectChat: (chat: TChat) => {
+      // Отключаемся от текущего чата если подключены
+      if (this.chats.isWebSocketConnected && this.chats.activeChat) {
+        this.chats.disconnectFromChat();
+      }
+
+      this.chats.activeChat = chat;
+      this.chats.activeChatMessages = [];
+
+      console.info('Выбран чат:', chat.title);
+    },
+    //#endregion Chats
+
+    //#region WebSocket
+    /** Подключение к чату через WebSocket */
+    connectToChat: async (chatId: TID): Promise<boolean> => {
+      if (!this.user.currentUser) {
+        console.error('Пользователь не авторизован');
+        return false;
+      }
+
+      try {
+        // Получаем токен для подключения
+        const token = await this.chatService.getChatToken(chatId);
+        if (!token) {
+          console.error('Не удалось получить токен для чата');
+          return false;
+        }
+
+        // Подключаемся через WebSocket
+        this.webSocketService.connect(this.user.currentUser.id, chatId, token, {
+          onOpen: () => {
+            this.chats.isWebSocketConnected = true;
+            console.info('Подключен к чату через WebSocket');
+
+            // Загружаем последние сообщения
+            this.chats.loadMessageHistory();
+          },
+          onMessage: (messages) => {
+            this.chats._handleIncomingMessage(messages);
+          },
+          onClose: () => {
+            this.chats.isWebSocketConnected = false;
+            console.info('Отключен от чата');
+          },
+          onError: (error) => {
+            console.error('WebSocket ошибка:', error);
+          },
+          onUserConnected: (userId) => {
+            console.info('Пользователь подключился к чату:', userId);
+          },
+        });
+
+        return true;
+      } catch (error) {
+        console.error('Ошибка подключения к чату:', error);
+        return false;
+      }
+    },
+
+    /** Отключение от чата */
+    disconnectFromChat: () => {
+      this.webSocketService.disconnect();
+      this.chats.isWebSocketConnected = false;
+      this.chats.activeChat = null;
+      this.chats.activeChatMessages = [];
+    },
+    //#endregion WebSocket Connection
+
+    //#region Messages
+    /** Отправка сообщения */
+    sendMessage: (content: string): boolean => {
+      if (!this.chats.isWebSocketConnected) {
+        console.error('WebSocket не подключен');
+        return false;
+      }
+
+      if (!content.trim()) {
+        console.error('Сообщение не может быть пустым');
+        return false;
+      }
+
+      return this.webSocketService.sendMessage(content.trim());
+    },
+
+    /** Загрузка истории сообщений */
+    loadMessageHistory: (offset: number = 0) => {
+      if (!this.chats.isWebSocketConnected) {
+        console.error('WebSocket не подключен');
+        return false;
+      }
+
+      return this.webSocketService.getOldMessages(offset);
+    },
+
+    /** Обработка входящих сообщений */
+    _handleIncomingMessage: (data: TMessage | TMessage[]) => {
+      const messages = Array.isArray(data) ? data : [data];
+
+      // Добавляем новые сообщения, избегая дубликатов
+      messages.forEach((message) => {
+        const exists = this.chats.activeChatMessages.find(
+          (msg) => msg.id === message.id
+        );
+        if (!exists) {
+          this.chats.activeChatMessages.push(message);
+        }
+      });
+
+      // Сортируем сообщения по времени
+      this.chats.activeChatMessages.sort(
+        (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()
+      );
+
+      console.info('Получены сообщения:', messages.length);
+    },
+    //#endregion Messages
   };
 }
 

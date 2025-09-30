@@ -26,6 +26,10 @@ class ChatsApi extends BaseApi {
       },
     });
   }
+
+  getChatToken(chatId: TID): Promise<TApiResponse<{ token: TID }>> {
+    return this.http.post(`${this.baseUrl}/token/${chatId}`);
+  }
 }
 
 export default ChatsApi;

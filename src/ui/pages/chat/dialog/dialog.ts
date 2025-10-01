@@ -7,6 +7,7 @@ import { FormBlock, InputBlock } from '@ui-components';
 import type { TMessage as TWebSocketMessage } from '@controllers/services/websocket';
 import type { TMessage as TMessageUI } from './message/types';
 import type { TChat } from '@models/types';
+import { formatTime } from '@utils';
 
 interface DialogProps {
   chatId?: string;
@@ -22,7 +23,6 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
       userAvatar: props.chat?.avatar || '',
       userName: props.chat?.title || 'Неизвестный чат',
       userEmail: '',
-      isLoading: false,
       // Компоненты
       messageForm: new FormBlock({
         fields: [
@@ -41,17 +41,10 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
       messages: [],
     });
 
-    console.log(
-      'Dialog component received chatId:',
-      props.chatId,
-      'chat:',
-      props.chat
-    );
-
-    // Инициализируем чат только если он не создан без chatId
-    if (props.chatId) {
-      // this._initializeChat();
-    }
+    console.log('Dialog-constructor:', {
+      chatId: props.chatId,
+      chat: props.chat,
+    });
   }
 
   componentDidMount(): void {
@@ -62,6 +55,11 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
 
     if (messageForm && submitButton) {
       messageForm.setSubmitTrigger(submitButton);
+    }
+
+    // Инициализируем чат только если он не создан без chatId
+    if (this.props.chatId) {
+      this._initializeChat();
     }
   }
 
@@ -100,8 +98,6 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
       return;
     }
 
-    this.setProps({ isLoading: true });
-
     try {
       // Подключаемся к чату через WebSocket
       const connected = await window.APP.store.chats.connectToChat(
@@ -120,18 +116,14 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
       }
     } catch (error) {
       console.error('Ошибка инициализации чата:', error);
-    } finally {
-      this.setProps({ isLoading: false });
     }
   }
 
-  /**
-   * Подписка на изменения сообщений в Store
-   */
+  /** Подписка на изменения сообщений в Store */
   private _subscribeToMessages() {
     if (!window.APP.store) return;
 
-    // FIXME SKV (!) Нужен ли тут этот колбек если есть globalEventBus.subscribe('chats-loaded', () => {
+    // FIXME SKV (!) Нужен ли тут этот колбек если есть globalEventBus.subscribe
     // Устанавливаем callback для обновления UI при получении новых сообщений
     window.APP.store.chats.onMessagesUpdate = () => {
       this._updateMessages();
@@ -141,9 +133,7 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
     this._updateMessages();
   }
 
-  /**
-   * Обновление списка сообщений из Store
-   */
+  /** Обновление списка сообщений из Store */
   private _updateMessages() {
     if (!window.APP.store) return;
 
@@ -155,7 +145,7 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
         isOwn:
           String(message.user_id || '') ===
           String(window.APP.store?.user.currentUser?.id || ''),
-        time: message.time || '',
+        time: formatTime(message.time || ''),
       };
 
       return new Message({ message: uiMessage });
@@ -165,9 +155,7 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
     this.lists.messages = messageItems;
   }
 
-  /**
-   * Обработка отправки сообщения
-   */
+  /** Обработка отправки сообщения */
   private _handleMessageSubmit(messageContent: string) {
     if (!this.isConnected || !window.APP.store) {
       console.error('Чат не подключен или Store недоступен');

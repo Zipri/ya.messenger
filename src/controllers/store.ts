@@ -237,7 +237,7 @@ export class AppStore {
     },
     //#endregion Chats
 
-    //#region WebSocket
+    //#region WS:Connection
     /** Подключение к чату через WebSocket */
     connectToChat: async (chatId: TID): Promise<boolean> => {
       if (!this.user.currentUser) {
@@ -312,9 +312,9 @@ export class AppStore {
       this.chats.activeChatMessages = [];
       this.chats.onMessagesUpdate = null;
     },
-    //#endregion WebSocket Connection
+    //#endregion WS:Connection
 
-    //#region Messages
+    //#region WS:Messages
     /** Отправка сообщения */
     sendMessage: (content: string): boolean => {
       if (!this.chats.isWebSocketConnected) {
@@ -349,6 +349,7 @@ export class AppStore {
       // Добавляем новые сообщения, избегая дубликатов
       messages.forEach((message) => {
         console.log('Store: обрабатываем сообщение:', message);
+        if (message.type !== 'message') return;
 
         const exists = this.chats.activeChatMessages.find(
           (msg) => msg.id === message.id
@@ -370,7 +371,7 @@ export class AppStore {
         this.chats.onMessagesUpdate();
       }
     },
-    //#endregion Messages
+    //#endregion WS:Messages
   };
 }
 

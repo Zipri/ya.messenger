@@ -24,7 +24,7 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
       dialog: null, // Создадим в componentDidMount чтобы избежать дублирования
     });
 
-    console.log('ChatPage initialized with:', {
+    console.log('ChatPage-constructor:', {
       id: props.id,
       chatState,
     });
@@ -41,12 +41,6 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
     if (this.props.id && !this.children.dialog) {
       let selectedChat: TChat | undefined | null = null;
 
-      console.log(
-        'componentDidMount',
-        this.props.id,
-        window.APP?.store?.chats.chatList
-      );
-
       if (!selectedChat && window.APP.store) {
         const chatStore = window.APP.store.chats;
         // FIXME SKV (!) все ID сделать СТРОКОЙ !!!
@@ -59,33 +53,25 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
       }
 
       console.log(
-        'ChatPage componentDidMount: создаем Dialog для чата',
+        'ChatPage-createDialog: создаем Dialog для чата',
         this.props.id,
         'selectedChat:',
         selectedChat
       );
 
+      // 1. Создаем экземпляр Dialog и помещаем его в children
       this.children.dialog = new Dialog({
         chatId: this.props.id,
         chat: selectedChat ?? undefined,
       });
 
+      // 2. Запускаем перерисовку ChatPage, чтобы Dialog появился в DOM
       this.eventBus.emit('render');
 
-      // this.setProps({
-      //   dialog: new Dialog({
-      //     chatId: this.props.id,
-      //     chat: selectedChat ?? undefined,
-      //   }),
-      // });
-
-      // this.children.dialog = new Dialog({
-      //   chatId: this.props.id,
-      //   chat: selectedChat ?? undefined,
-      // });
-
-      // Принудительно перерендериваем чтобы отобразить новый Dialog
-      // this.children.dialog.dispatchComponentDidMount();
+      // 3. СРАЗУ ПОСЛЕ ПЕРЕРИСОВКИ:
+      // Вручную запускаем жизненный цикл монтирования для нового дочернего компонента.
+      // Важно привести тип к Block, чтобы TypeScript знал о методе.
+      (this.children.dialog as Block).dispatchComponentDidMount();
     }
   }
 

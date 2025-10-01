@@ -8,6 +8,7 @@ import type { TChat } from '@models/types';
 import router from '@controllers/router/router';
 import { BASE_URLS } from '@models';
 import { globalEventBus } from 'app';
+import { formatTime } from '@utils';
 
 interface ChatListProps {
   onChatClick?: (chatId: string, chat: TChat) => void;
@@ -96,7 +97,7 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
         id: chat.id,
         name: chat.title,
         lastMessage: chat.last_message?.content || 'Нет сообщений',
-        time: this._formatTime(chat.last_message?.time),
+        time: formatTime(chat.last_message?.time),
         unreadCount: chat.unread_count > 0 ? chat.unread_count : undefined,
         avatar: chat.avatar || '',
       };
@@ -117,36 +118,6 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
 
     this.lists.chats = chatItems;
     this.setProps({ chats: chatItems });
-  }
-
-  /** Форматирование времени последнего сообщения */
-  private _formatTime(time?: string): string {
-    if (!time) return '';
-
-    try {
-      const date = new Date(time);
-      const now = new Date();
-      const diff = now.getTime() - date.getTime();
-      const daysDiff = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-      if (daysDiff === 0) {
-        // Сегодня - показываем время
-        return date.toLocaleTimeString('ru-RU', {
-          hour: '2-digit',
-          minute: '2-digit',
-        });
-      } else if (daysDiff === 1) {
-        return 'Вчера';
-      } else {
-        // Дата
-        return date.toLocaleDateString('ru-RU', {
-          day: '2-digit',
-          month: '2-digit',
-        });
-      }
-    } catch (error) {
-      return '';
-    }
   }
 
   // /** Публичный метод для обновления списка чатов */

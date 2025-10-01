@@ -11,6 +11,7 @@
             "@ui-components": ["ui/components"],
             "@ui-pages": ["ui/pages"],
             "@utils": ["utils"],
+            "@utils/*": ["utils/*"],
         }
     }
 }

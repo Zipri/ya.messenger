@@ -53,6 +53,17 @@ class WebSocketService {
     token: string,
     handlers?: WebSocketEventHandlers
   ) {
+    // Проверяем, не подключены ли мы уже
+    if (
+      this.socket &&
+      (this.socket.readyState === WebSocket.OPEN ||
+        this.socket.readyState === WebSocket.CONNECTING)
+    ) {
+      console.warn('WebSocket уже подключен или подключается, пропускаем');
+      return;
+    }
+
+    // Отключаемся от предыдущего соединения если есть
     if (this.socket) {
       this.disconnect();
     }
@@ -80,7 +91,13 @@ class WebSocketService {
     }
 
     if (this.socket) {
-      this.socket.close(1000, 'Закрытие по инициативе клиента');
+      // Проверяем состояние сокета перед закрытием
+      if (
+        this.socket.readyState === WebSocket.OPEN ||
+        this.socket.readyState === WebSocket.CONNECTING
+      ) {
+        this.socket.close(1000, 'Закрытие по инициативе клиента');
+      }
       this.socket = null;
     }
 

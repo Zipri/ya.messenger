@@ -11,7 +11,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   private _element: HTMLElement | null = null;
 
   protected props: TBlockProps;
-  protected eventBus: EventBus;
+  public eventBus: EventBus;
 
   /** Массивы элементов */
   protected lists: Record<string, any[]>;

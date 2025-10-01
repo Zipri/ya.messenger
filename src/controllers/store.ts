@@ -162,6 +162,7 @@ export class AppStore {
     activeChat: null as TChat | null,
     activeChatMessages: [] as TMessage[],
     isWebSocketConnected: false,
+    onMessagesUpdate: null as (() => void) | null,
 
     //#region Chats
     /** Загрузка списка чатов */
@@ -244,6 +245,26 @@ export class AppStore {
         return false;
       }
 
+      // Проверяем, не подключены ли мы уже к этому чату
+      if (
+        this.chats.isWebSocketConnected &&
+        this.chats.activeChat?.id === chatId
+      ) {
+        console.info('Уже подключены к чату', chatId);
+        return true;
+      }
+
+      // Отключаемся от предыдущего чата если подключены к другому
+      if (
+        this.chats.isWebSocketConnected &&
+        this.chats.activeChat?.id !== chatId
+      ) {
+        console.info(
+          'Отключаемся от предыдущего чата для подключения к новому'
+        );
+        this.chats.disconnectFromChat();
+      }
+
       try {
         // Получаем токен для подключения
         const token = await this.chatService.getChatToken(chatId);
@@ -289,6 +310,7 @@ export class AppStore {
       this.chats.isWebSocketConnected = false;
       this.chats.activeChat = null;
       this.chats.activeChatMessages = [];
+      this.chats.onMessagesUpdate = null;
     },
     //#endregion WebSocket Connection
 
@@ -322,8 +344,12 @@ export class AppStore {
     _handleIncomingMessage: (data: TMessage | TMessage[]) => {
       const messages = Array.isArray(data) ? data : [data];
 
+      console.log('Store: получены сообщения для обработки:', messages);
+
       // Добавляем новые сообщения, избегая дубликатов
       messages.forEach((message) => {
+        console.log('Store: обрабатываем сообщение:', message);
+
         const exists = this.chats.activeChatMessages.find(
           (msg) => msg.id === message.id
         );
@@ -338,6 +364,11 @@ export class AppStore {
       );
 
       console.info('Получены сообщения:', messages.length);
+
+      // Уведомляем UI об обновлении сообщений
+      if (this.chats.onMessagesUpdate) {
+        this.chats.onMessagesUpdate();
+      }
     },
     //#endregion Messages
   };

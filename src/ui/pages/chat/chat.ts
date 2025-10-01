@@ -4,6 +4,8 @@ import chatTemplate from './chat.hbs?raw';
 import { Dialog } from './dialog/dialog';
 import { ChatList } from '@ui-blocks';
 import { Block, type TBlockProps } from '@controllers';
+import type { TChat } from '@models/types';
+import { globalEventBus } from 'app';
 
 interface ChatPageProps {
   chatList: ChatList;
@@ -19,11 +21,80 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
       chatState, // Передаем состояние в шаблон
       // Компоненты
       chatList: props.chatList,
-      dialog: new Dialog({
-        chatId: props.id,
-      }),
+      dialog: null, // Создадим в componentDidMount чтобы избежать дублирования
+    });
+
+    console.log('ChatPage initialized with:', {
+      id: props.id,
+      chatState,
     });
   }
+
+  componentDidMount(): void {
+    globalEventBus.subscribe('chats-loaded', () => {
+      this._createDialog();
+    });
+  }
+
+  private _createDialog() {
+    // Создаем Dialog только если есть chatId и его еще нет
+    if (this.props.id && !this.children.dialog) {
+      let selectedChat: TChat | undefined | null = null;
+
+      console.log(
+        'componentDidMount',
+        this.props.id,
+        window.APP?.store?.chats.chatList
+      );
+
+      if (!selectedChat && window.APP.store) {
+        const chatStore = window.APP.store.chats;
+        // FIXME SKV (!) все ID сделать СТРОКОЙ !!!
+        selectedChat =
+          String(chatStore.activeChat?.id) === this.props.id
+            ? chatStore.activeChat
+            : chatStore.chatList.find(
+                (chat) => String(chat.id) === this.props.id
+              );
+      }
+
+      console.log(
+        'ChatPage componentDidMount: создаем Dialog для чата',
+        this.props.id,
+        'selectedChat:',
+        selectedChat
+      );
+
+      this.children.dialog = new Dialog({
+        chatId: this.props.id,
+        chat: selectedChat ?? undefined,
+      });
+
+      this.eventBus.emit('render');
+
+      // this.setProps({
+      //   dialog: new Dialog({
+      //     chatId: this.props.id,
+      //     chat: selectedChat ?? undefined,
+      //   }),
+      // });
+
+      // this.children.dialog = new Dialog({
+      //   chatId: this.props.id,
+      //   chat: selectedChat ?? undefined,
+      // });
+
+      // Принудительно перерендериваем чтобы отобразить новый Dialog
+      // this.children.dialog.dispatchComponentDidMount();
+    }
+  }
+
+  // componentWillUnmount(): void {
+  //   // Очищаем Dialog при размонтировании страницы
+  //   if (this.children.dialog) {
+  //     (this.children.dialog as Dialog).componentWillUnmount?.();
+  //   }
+  // }
 
   render(): string {
     return chatTemplate;

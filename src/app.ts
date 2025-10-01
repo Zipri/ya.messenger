@@ -8,8 +8,12 @@ import {
   ProfilePage,
   RegisterPage,
 } from '@ui-pages';
-import { appStoreInit, iocServicesInit } from '@controllers';
+import { appStoreInit, Block, EventBus, iocServicesInit } from '@controllers';
 import { BASE_URLS } from '@models';
+import type { TChat } from '@models/types';
+
+// FIXME SKV (!) глобальный eventBus вынести куда-то
+export const globalEventBus = new EventBus();
 
 class App {
   constructor() {
@@ -19,12 +23,23 @@ class App {
   }
 
   async start() {
+    //#region Blocks
     const chatList = new ChatList({
-      onChatClick: (chatId: string) => {
-        console.log(`Из App.ts: нажат чат с ID: ${chatId}`);
+      onChatClick: (chatId: string, chat: TChat) => {
+        console.log(`Из App.ts: нажат чат с ID: ${chatId}`, chat);
+
+        // Выбираем чат в Store
+        if (window.APP.store) {
+          window.APP.store.chats.selectChat(chat);
+        }
+
+        // Переходим на страницу чата - роутер создаст новую ChatPage
+        router.go(`${BASE_URLS.chat}/${chatId}`);
       },
     });
+    //#endregion Blocks
 
+    //#region Routes
     router
       .use(BASE_URLS.root, LoginPage)
       .use(BASE_URLS.login, LoginPage)
@@ -42,6 +57,7 @@ class App {
     });
 
     router.start();
+    //#endregion Routes
   }
 
   private _bindLinkNavigation() {

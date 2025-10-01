@@ -30,7 +30,8 @@ class EventBus implements IEventBus {
 
   emit(eventName: TEventName, ...args: any[]): void {
     if (!this.listeners[eventName]) {
-      throw new Error(`Событие "${eventName}" не имеет слушателей`);
+      console.error(`Событие "${eventName}" не имеет слушателей`);
+      return;
     }
 
     // Проходим по всем слушателям и вызываем их

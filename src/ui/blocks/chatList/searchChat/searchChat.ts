@@ -7,6 +7,7 @@ import { BASE_RESOURCES_URL } from '@models';
 
 interface SearchChatProps {
   onClickProfile?: () => void;
+  onCreateChat?: (chatTitle: string) => Promise<void>;
 }
 
 export class SearchChat extends Block<SearchChatProps & TBlockProps> {
@@ -27,6 +28,12 @@ export class SearchChat extends Block<SearchChatProps & TBlockProps> {
         styleClasses: 'search-chat__header__button',
         onClick: props.onClickProfile,
       }),
+      createChatButton: new Button({
+        id: 'create-chat-button',
+        text: '+ Создать чат',
+        styleClasses: 'search-chat__create-button',
+        onClick: () => this._handleCreateChat(),
+      }),
     });
   }
 
@@ -40,7 +47,38 @@ export class SearchChat extends Block<SearchChatProps & TBlockProps> {
     }
   }
 
-  protected render(): string {
+  /** Обработчик создания нового чата */
+  private async _handleCreateChat() {
+    const chatTitle = prompt('Введите название нового чата:');
+
+    if (!chatTitle || !chatTitle.trim()) {
+      return;
+    }
+
+    const trimmedTitle = chatTitle.trim();
+
+    try {
+      if (this.props.onCreateChat) {
+        await this.props.onCreateChat(trimmedTitle);
+        console.info('Чат успешно создан:', trimmedTitle);
+      } else {
+        // Fallback - прямое обращение к Store
+        if (window.APP.store) {
+          const success = await window.APP.store.chats.createChat(trimmedTitle);
+          if (success) {
+            console.info('Чат успешно создан:', trimmedTitle);
+          } else {
+            alert('Ошибка создания чата');
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Ошибка создания чата:', error);
+      alert('Ошибка создания чата');
+    }
+  }
+
+  render(): string {
     return searchChatTemplate;
   }
 }

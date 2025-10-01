@@ -1,7 +1,9 @@
 <div class="chat-item">
-    <div class="chat-item__avatar">
-        <img src="{{avatar}}" alt="{{name}}" class="chat-item__avatar-img">
-    </div>
+    {{#if avatar}}
+        <div class="chat-item__avatar">
+                <img src="{{avatar}}" alt="{{name}}" class="chat-item__avatar-img">
+        </div>
+    {{/if}}
     <div class="chat-item__content">
         <span class="chat-item__content__name">{{name}}</span>
         <div class="chat-item__content__message">

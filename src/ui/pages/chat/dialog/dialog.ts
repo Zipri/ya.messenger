@@ -41,9 +41,7 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
           this._handleMessageSubmit(values.message);
         },
       }),
-      userList: new UserList({
-        chatId: props.chatId,
-      }),
+      userList: new UserList(),
       messages: [],
     });
 

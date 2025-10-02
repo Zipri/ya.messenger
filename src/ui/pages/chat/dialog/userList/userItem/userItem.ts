@@ -1,29 +1,38 @@
 import './userItem.scss';
 import userItemTemplate from './userItem.hbs?raw';
-import type { TUserItem } from './types';
 import { Block, type TBlockProps } from '@controllers';
-import type { TID } from '@models/types';
+import type { TID, TUser } from '@models/types';
+import { Button } from '@ui-components';
+import { BASE_RESOURCES_URL, BASE_URLS } from '@models';
 
 interface UserItemProps {
-  user: TUserItem;
+  user: TUser;
   onDelete?: (userId: TID) => void;
 }
 
 export class UserItem extends Block<TBlockProps> {
   constructor(props: UserItemProps) {
-    super({
+    const currentUser = window.APP.store?.user.currentUser;
+    const adaptedProps = {
       ...props.user,
-      events: {
-        click: (event: Event) => {
-          if (
-            (event.target as HTMLElement).classList.contains(
-              'user-item__delete-btn'
-            )
-          ) {
-            props.onDelete?.(props.user.id);
-          }
+      avatar: props.user.avatar
+        ? `${BASE_RESOURCES_URL}${props.user.avatar}`
+        : '',
+      // FIXME SKV (!) сделать через админа
+      isOwn: currentUser?.id === props.user.id,
+    };
+
+    super({
+      ...adaptedProps,
+      // Компоненты
+      deleteBtn: new Button({
+        id: 'delete-btn',
+        styleClasses: 'user-item__delete-btn',
+        text: 'X',
+        onClick: () => {
+          props.onDelete?.(props.user.id);
         },
-      },
+      }),
     });
   }
 
@@ -31,4 +40,3 @@ export class UserItem extends Block<TBlockProps> {
     return userItemTemplate;
   }
 }
-

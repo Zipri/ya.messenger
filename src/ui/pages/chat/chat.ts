@@ -59,6 +59,10 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
         selectedChat
       );
 
+      if (selectedChat && window.APP.store) {
+        window.APP.store.chats.selectChat(selectedChat);
+      }
+
       // 1. Создаем экземпляр Dialog и помещаем его в children
       this.children.dialog = new Dialog({
         chatId: this.props.id,

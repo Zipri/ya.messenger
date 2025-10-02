@@ -2,17 +2,40 @@ import './userList.scss';
 import userListTemplate from './userList.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
 import { UserItem } from './userItem';
-import { mockUsers } from './mock';
+import { Button } from '@ui-components';
 
-interface UserListProps {
-  chatId?: string;
-}
+interface UserListProps {}
 
 export class UserList extends Block<UserListProps & TBlockProps> {
-  constructor(props: UserListProps) {
+  constructor() {
     super({
-      ...props,
       users: [],
+      addUserBtn: new Button({
+        text: 'Добавить пользователя',
+        id: 'add-user-btn',
+        styleClasses: 'user-list__add-btn',
+        onClick: async () => {
+          const users = await window.APP.store?.chats.getUsers();
+          if (users) {
+            const exampleUsers = users
+              .map((user) => `(${user.id}) ${user.login}`)
+              .join(', ');
+            const userId = prompt(
+              `Введите ID пользователя, например: ${exampleUsers}`
+            );
+            if (userId) {
+              await window.APP.store?.chats.addChatUser(userId);
+              this._loadUsers();
+            }
+          } else {
+            const userId = prompt('Введите ID пользователя');
+            if (userId) {
+              await window.APP.store?.chats.addChatUser(userId);
+              this._loadUsers();
+            }
+          }
+        },
+      }),
     });
   }
 
@@ -24,18 +47,21 @@ export class UserList extends Block<UserListProps & TBlockProps> {
     this._loadUsers();
   }
 
-  private _loadUsers() {
-    // TODO: Replace with API call
-    const users = mockUsers;
+  private async _loadUsers() {
+    if (!window.APP.store) return;
+
+    const users = await window.APP.store.chats.getActiveChatUsers();
+    if (!users) return;
+
     this.setProps({ userCount: users.length });
 
     this.lists.users = users.map(
       (user) =>
         new UserItem({
           user,
-          onDelete: (userId) => {
-            console.log(`Delete user ${userId} from chat ${this.props.chatId}`);
-            // TODO: Call store method to delete user
+          onDelete: async (userId) => {
+            await window.APP.store?.chats.deleteChatUser(userId);
+            this._loadUsers();
           },
         })
     );

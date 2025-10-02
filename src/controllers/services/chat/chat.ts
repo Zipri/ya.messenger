@@ -1,5 +1,5 @@
 import type ChatsApi from '@models/api/chats/chats';
-import type { TChat, TGetChatsProps, TID } from '@models/types';
+import type { TChat, TGetChatsProps, TID, TUser } from '@models/types';
 
 class ChatService {
   private chatsApi: ChatsApi;
@@ -66,6 +66,39 @@ class ChatService {
     } catch (error) {
       console.error('Ошибка получения токена чата:', error);
       return undefined;
+    }
+  }
+
+  /** Получение списка пользователей чата */
+  async getChatUsers(chatId: TID): Promise<TUser[] | undefined> {
+    try {
+      const response = await this.chatsApi.getChatUsers(chatId);
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка получения списка пользователей чата:', error);
+      return undefined;
+    }
+  }
+
+  /** Добавление пользователей в чат */
+  async addChatUsers(chatId: TID, users: TID[]): Promise<boolean> {
+    try {
+      await this.chatsApi.addChatUsers(chatId, users);
+      return true;
+    } catch (error) {
+      console.error('Ошибка добавления пользователей в чат:', error);
+      return false;
+    }
+  }
+
+  /** Удаление пользователей из чата */
+  async deleteChatUsers(chatId: TID, users: TID[]): Promise<boolean> {
+    try {
+      await this.chatsApi.deleteChatUsers(chatId, users);
+      return true;
+    } catch (error) {
+      console.error('Ошибка удаления пользователей из чата:', error);
+      return false;
     }
   }
 }

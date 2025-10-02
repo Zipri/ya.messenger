@@ -11,15 +11,18 @@ import type {
   TUser,
 } from '@models/types';
 import type { TMessage } from './services/websocket';
+import type UsersService from './services/users/users';
 
 export class AppStore {
   private profileService!: ProfileService;
   private chatService!: ChatService;
+  private usersService!: UsersService;
   private webSocketService!: WebSocketService;
 
   constructor(services: TServices) {
     this.profileService = services.profileService;
     this.chatService = services.chatService;
+    this.usersService = services.usersService;
     this.webSocketService = services.webSocketService;
   }
 
@@ -163,6 +166,7 @@ export class AppStore {
     activeChatMessages: [] as TMessage[],
     isWebSocketConnected: false,
     onMessagesUpdate: null as (() => void) | null,
+    activeChatUsers: [] as TUser[],
 
     //#region Chats
     /** Загрузка списка чатов */
@@ -226,6 +230,9 @@ export class AppStore {
     /** Выбор активного чата */
     selectChat: (chat: TChat) => {
       // Отключаемся от текущего чата если подключены
+      if (this.chats.activeChat?.id === chat.id) {
+        return;
+      }
       if (this.chats.isWebSocketConnected && this.chats.activeChat) {
         this.chats.disconnectFromChat();
       }
@@ -236,6 +243,57 @@ export class AppStore {
       console.info('Выбран чат:', chat.title);
     },
     //#endregion Chats
+
+    //#region Dialog
+    getUsers: async (): Promise<TUser[]> => {
+      const users = await this.usersService.getUsers();
+      if (users) {
+        return users;
+      }
+      return [];
+    },
+
+    getActiveChatUsers: async (): Promise<TUser[]> => {
+      if (!this.chats.activeChat?.id) {
+        console.error('Чат не выбран');
+        return [];
+      }
+
+      const users = await this.chatService.getChatUsers(
+        this.chats.activeChat.id
+      );
+
+      if (users) {
+        this.chats.activeChatUsers = users;
+        return users;
+      }
+
+      return [];
+    },
+
+    addChatUser: async (userId: TID): Promise<boolean> => {
+      if (!this.chats.activeChat?.id) {
+        console.error('Чат не выбран');
+        return false;
+      }
+
+      return this.chatService.addChatUsers(this.chats.activeChat.id, [
+        ...this.chats.activeChatUsers.map((user) => user.id),
+        userId,
+      ]);
+    },
+
+    deleteChatUser: async (userId: TID): Promise<boolean> => {
+      if (!this.chats.activeChat?.id) {
+        console.error('Чат не выбран');
+        return false;
+      }
+
+      return this.chatService.deleteChatUsers(this.chats.activeChat.id, [
+        userId,
+      ]);
+    },
+    //#endregion Dialog
 
     //#region WS:Connection
     /** Подключение к чату через WebSocket */

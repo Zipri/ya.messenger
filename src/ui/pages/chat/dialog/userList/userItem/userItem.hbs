@@ -1,14 +1,14 @@
 <li class="user-item">
     <div class="user-item__info">
         {{#if avatar}}
-            <img src="{{avatar}}" alt="{{name}}" class="user-item__avatar"/>
+            <img src="{{avatar}}" alt="{{first_name}}" class="user-item__avatar"/>
         {{else}}
             <div class="user-item__avatar-placeholder"></div>
         {{/if}}
-        <span class="user-item__name">{{name}}</span>
+        <span class="user-item__name">{{first_name}}</span>
     </div>
     {{#unless isOwn}}
-        <button class="user-item__delete-btn">X</button>
+        {{{deleteBtn}}}
     {{/unless}}
 </li>
 

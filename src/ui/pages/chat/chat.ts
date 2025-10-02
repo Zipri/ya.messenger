@@ -70,17 +70,15 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
 
       // 3. СРАЗУ ПОСЛЕ ПЕРЕРИСОВКИ:
       // Вручную запускаем жизненный цикл монтирования для нового дочернего компонента.
-      // Важно привести тип к Block, чтобы TypeScript знал о методе.
-      (this.children.dialog as Block).dispatchComponentDidMount();
+      this.children.dialog.dispatchComponentDidMount();
     }
   }
 
-  // componentWillUnmount(): void {
-  //   // Очищаем Dialog при размонтировании страницы
-  //   if (this.children.dialog) {
-  //     (this.children.dialog as Dialog).componentWillUnmount?.();
-  //   }
-  // }
+  componentWillUnmount(): void {
+    if (this.children.dialog) {
+      this.children.dialog.remove();
+    }
+  }
 
   render(): string {
     return chatTemplate;

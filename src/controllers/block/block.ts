@@ -40,6 +40,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
     eventBus.emit(Block.EVENTS.INIT);
   }
 
+  //#region public
   get element(): HTMLElement | null {
     return this._element;
   }
@@ -89,6 +90,8 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
   /** Удалить компонент из DOM */
   remove(): void {
+    this.componentWillUnmount();
+
     if (this._element) {
       this._removeEvents();
       this._element.remove();
@@ -103,8 +106,9 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   dispatchComponentDidMount(): void {
     this.eventBus.emit(Block.EVENTS.FLOW_CDM);
   }
+  //#endregion
 
-  //#region protected methods
+  //#region protected
   protected init(): void {
     this.eventBus.emit(Block.EVENTS.FLOW_RENDER);
   }
@@ -117,6 +121,9 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   protected componentDidUpdate(oldProps: Partial<T>, newProps: T): boolean {
     return true;
   }
+
+  /** Переопределяемый метод - вызывается перед удалением компонента из DOM */
+  protected componentWillUnmount(): void {}
 
   /** Переопределяемый метод - возвращает HTML строку для рендера */
   protected render(): string {
@@ -142,7 +149,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   }
   //#endregion
 
-  //#region private methods
+  //#region private
   private _addEvents(): void {
     const { events = {} } = this.props;
     Object.keys(events).forEach((eventName) => {

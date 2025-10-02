@@ -55,10 +55,23 @@
       }
     }
 
-    &__button {
-      width: 1.5rem;
-      height: 1.5rem;
-      cursor: pointer;
+    &__settings {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+
+      &__buttonExit {
+        @extend .button_dark;
+        width: 2rem;
+        height: 2rem;
+        cursor: pointer;
+      }
+
+      &__button {
+        width: 1.5rem;
+        height: 1.5rem;
+        cursor: pointer;
+      }
     }
   }
 

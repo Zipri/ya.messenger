@@ -8,6 +8,7 @@ import type { TMessage as TWebSocketMessage } from '@controllers/services/websoc
 import type { TMessage as TMessageUI } from './message/types';
 import type { TChat } from '@models/types';
 import { formatTime } from '@utils';
+import { BASE_URLS } from '@models';
 
 interface DialogProps {
   chatId?: string;
@@ -23,6 +24,7 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
       userAvatar: props.chat?.avatar || '',
       userName: props.chat?.title || 'Неизвестный чат',
       userEmail: '',
+      BASE_URLS,
       // Компоненты
       messageForm: new FormBlock({
         fields: [
@@ -63,16 +65,14 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
     }
   }
 
-  // componentWillUnmount(): void {
-  //   // Отключаемся от чата при размонтировании компонента
-  //   if (this.isConnected && window.APP.store) {
-  //     window.APP.store.chats.disconnectFromChat();
-  //     // Очищаем callback чтобы избежать утечек памяти
-  //     window.APP.store.chats.onMessagesUpdate = null;
-  //     this.isConnected = false;
-  //     console.info('Отключились от чата при размонтировании Dialog');
-  //   }
-  // }
+  componentWillUnmount(): void {
+    if (this.isConnected && window.APP.store) {
+      window.APP.store.chats.disconnectFromChat();
+      window.APP.store.chats.onMessagesUpdate = null;
+      this.isConnected = false;
+      console.info('Dialog-componentWillUnmount: Отключились от чата');
+    }
+  }
 
   /** Инициализация чата - подключение к WebSocket и загрузка сообщений */
   private async _initializeChat() {

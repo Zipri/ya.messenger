@@ -9,6 +9,7 @@ import type { TMessage as TMessageUI } from './message/types';
 import type { TChat } from '@models/types';
 import { formatTime } from '@utils';
 import { BASE_URLS } from '@models';
+import { UserList } from './userList';
 
 interface DialogProps {
   chatId?: string;
@@ -39,6 +40,9 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
         onSubmit: (values) => {
           this._handleMessageSubmit(values.message);
         },
+      }),
+      userList: new UserList({
+        chatId: props.chatId,
       }),
       messages: [],
     });

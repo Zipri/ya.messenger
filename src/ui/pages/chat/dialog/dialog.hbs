@@ -1,40 +1,43 @@
-<main class="dialog">
-    <div class="dialog__header">
-        <div class="dialog__header__user">
-            {{#if userAvatar}}
-                <div class="dialog__header__user__avatar">
-                    <img src="{{userAvatar}}" alt="avatar" class="dialog__header__user__avatar-img"/>
+<div class="dialog-wrapper">
+    <main class="dialog">
+        <div class="dialog__header">
+            <div class="dialog__header__user">
+                {{#if userAvatar}}
+                    <div class="dialog__header__user__avatar">
+                        <img src="{{userAvatar}}" alt="avatar" class="dialog__header__user__avatar-img"/>
+                    </div>
+                {{/if}}
+                <div class="dialog__header__user__info">
+                    <span class="dialog__header__user__info__name" title="{{userName}}">
+                        {{userName}}
+                    </span>
+                    <span class="dialog__header__user__info__email" title="{{userEmail}}">
+                        {{userEmail}}
+                    </span>
                 </div>
-            {{/if}}
-            <div class="dialog__header__user__info">
-                <span class="dialog__header__user__info__name" title="{{userName}}">
-                    {{userName}}
-                </span>
-                <span class="dialog__header__user__info__email" title="{{userEmail}}">
-                    {{userEmail}}
-                </span>
+            </div>
+            <div class="dialog__header__settings">
+                <div class="dialog__header__settings__button">
+                    <img src="../../../../static/more.png" alt="close" />
+                </div>
+                <button class="dialog__header__settings__buttonExit" data-page="{{BASE_URLS.chat}}">
+                   X
+                </button>
             </div>
         </div>
-        <div class="dialog__header__settings">
-            <div class="dialog__header__settings__button">
-                <img src="../../../../static/more.png" alt="close" />
+        <div class="dialog__messages">
+            {{{messages}}}
+        <div class="dialog__messages__empty"></div>
+        </div>
+        <div class="dialog__input">
+            <div class="dialog__input__icon">
+                <img src="../../../../static/attachment.png" alt="attachment" />
             </div>
-            <button class="dialog__header__settings__buttonExit" data-page="{{BASE_URLS.chat}}">
-               X
+            {{{messageForm}}}
+            <button id="message-submit" class="dialog__input__button">
+                <img src="../../../../static/paper-plane.png" alt="send" />
             </button>
         </div>
-    </div>
-    <div class="dialog__messages">
-        {{{messages}}}
-    <div class="dialog__messages__empty"></div>
-    </div>
-    <div class="dialog__input">
-        <div class="dialog__input__icon">
-            <img src="../../../../static/attachment.png" alt="attachment" />
-        </div>
-        {{{messageForm}}}
-        <button id="message-submit" class="dialog__input__button">
-            <img src="../../../../static/paper-plane.png" alt="send" />
-        </button>
-    </div>
-</main>
+    </main>
+    {{{userList}}}
+</div>

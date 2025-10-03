@@ -75,7 +75,7 @@ class HTTPTransport implements IHttpTransport {
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           // Парсим JSON response если он есть
-          let data: any;
+          let data: Record<string, string> | null | string;
 
           try {
             data = xhr.responseText ? JSON.parse(xhr.responseText) : null;

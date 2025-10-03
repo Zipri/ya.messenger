@@ -4,7 +4,7 @@ interface RouteProps {
   pathname: string;
   view: typeof Block;
   rootQuery: string;
-  props?: Record<string, any>;
+  props?: Record<string, string>;
 }
 
 class Route {
@@ -12,7 +12,7 @@ class Route {
   private _blockClass: typeof Block;
   private _block: Block | null;
   private _rootQuery: string;
-  private _props?: Record<string, any>;
+  private _props?: Record<string, string>;
   private _params: Record<string, string> = {};
 
   constructor(props: RouteProps) {

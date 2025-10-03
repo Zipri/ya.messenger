@@ -29,7 +29,10 @@ const cloneDeep = <T extends object = object>(obj: T): T => {
 
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
-      (cloned as any)[key] = cloneDeep((obj as any)[key]);
+      cloned[key] = cloneDeep(obj[key] as object) as T[Extract<
+        keyof T,
+        string
+      >];
     }
   }
 

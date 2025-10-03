@@ -8,12 +8,13 @@ export enum ApiMethodEnum {
 
 export type TRequestOptions = {
   method?: ApiMethodEnum;
-  /** Данные для запроса (пока не понятно какие) */
+  // Могут передаваться различные атрибуты, в данном случае нет смысла конкретизировать
   data?: Record<string, any>;
   headers?: Record<string, string>;
   timeout?: number;
 };
 
+// Могут передаваться различные атрибуты, в данном случае нет смысла конкретизировать
 export type TApiResponse<T = any> = {
   data: T;
   status: number;

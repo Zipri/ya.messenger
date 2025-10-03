@@ -1,4 +1,4 @@
-type StringIndexed = Record<string, any>;
+type StringIndexed = Record<string, string>;
 
 const queryStringify = (data: StringIndexed): string | never => {
   // Проверяем, что входной параметр - объект
@@ -8,7 +8,7 @@ const queryStringify = (data: StringIndexed): string | never => {
 
   const params: string[] = [];
 
-  function buildQuery(obj: any, prefix: string = ''): void {
+  function buildQuery(obj: Record<string, string>, prefix: string = ''): void {
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         const value = obj[key];

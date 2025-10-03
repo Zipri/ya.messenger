@@ -18,7 +18,8 @@ class Router {
 
   use(
     pathname: string,
-    block: new (props?: any) => Block,
+    block: object,
+    // Могут передаваться различные атрибуты, в данном случае нет смысла конкретизировать
     props?: Record<string, any>
   ) {
     const route = new Route({

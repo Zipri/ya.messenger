@@ -12,7 +12,7 @@ interface FormProps {
   title?: string;
   submitText?: string;
   submitButton?: Button;
-  fields?: any[];
+  fields?: Block[];
   /** Селектор или сам элемент */
   submitTrigger?: string | HTMLElement;
   onSubmit?: FormSubmitHandler;

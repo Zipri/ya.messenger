@@ -2,7 +2,7 @@ import Handlebars from 'handlebars';
 
 import App from './app';
 
-Handlebars.registerHelper('eq', (a: any, b: any) => {
+Handlebars.registerHelper('eq', (a: object, b: object) => {
   return a === b;
 });
 

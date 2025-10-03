@@ -16,7 +16,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   public eventBus: EventBus;
 
   /** Массивы элементов */
-  protected lists: Record<string, any[]>;
+  protected lists: Record<string, Block[]>;
   /** Дочерние компоненты */
   protected children: Record<string, Block>;
 
@@ -68,7 +68,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
     Object.assign(this.props, nextProps);
   };
 
-  setLists = (nextList: Record<string, any[]>): void => {
+  setLists = (nextList: Record<string, Block[]>): void => {
     if (!nextList) {
       return;
     }
@@ -142,6 +142,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
     });
   }
 
+  // Могут передаваться различные атрибуты, в данном случае нет смысла конкретизировать
   protected setAttributes(attr: any): void {
     Object.entries(attr).forEach(([key, value]) => {
       if (this._element) {
@@ -183,6 +184,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   /** Создание прокси для отслеживания изменений пропсов */
   private _makePropsProxy(props: TBlockProps): TBlockProps {
     return new Proxy(props, {
+      // Тип взят из Proxy
       get(target: any, prop: string) {
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
@@ -293,19 +295,21 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   private _getChildrenPropsAndProps(propsAndChildren: TBlockProps): {
     children: Record<string, Block>;
     props: TBlockProps;
-    lists: Record<string, any[]>;
+    lists: Record<string, Block[]>;
   } {
     const children: Record<string, Block> = {};
     const props: TBlockProps = {};
-    const lists: Record<string, any[]> = {};
+    const lists: Record<string, Block[]> = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
         children[key] = value;
       } else if (Array.isArray(value)) {
-        const isBlocksArray = (value as any[]).every((v) => v instanceof Block);
+        const isBlocksArray = (value as Block[]).every(
+          (v) => v instanceof Block
+        );
         if (isBlocksArray) {
-          lists[key] = value as any[];
+          lists[key] = value as Block[];
         } else {
           props[key] = value;
         }

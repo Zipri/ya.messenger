@@ -25,8 +25,8 @@ const isEqual = (a: object, b: object): boolean => {
       return false;
     }
 
-    const valueA = (a as any)[key];
-    const valueB = (b as any)[key];
+    const valueA = (a as Record<string, string>)[key];
+    const valueB = (b as Record<string, string>)[key];
 
     // Если значения - объекты, рекурсивно сравниваем
     if (

@@ -1,5 +1,7 @@
+import type { TID } from '@models/types';
+
 export type TChatData = {
-  id: string;
+  id: TID;
   name: string;
   avatar: string;
   lastMessage: string;

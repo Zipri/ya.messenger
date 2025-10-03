@@ -1,2 +1,3 @@
 export { InputBlock } from './input/inputBlock';
 export { FormBlock } from './form/form';
+export { Button } from './button/button';

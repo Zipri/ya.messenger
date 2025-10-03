@@ -1,7 +1,8 @@
-// src/components/form/form.ts
 import './form.scss';
+import { Block } from '@controllers';
+
 import template from './form.hbs?raw';
-import { Block } from '../../../controllers';
+import type { Button } from '@ui-components';
 
 type FormValues = Record<string, string>;
 
@@ -10,7 +11,8 @@ type FormSubmitHandler = (values: FormValues, event: SubmitEvent) => void;
 interface FormProps {
   title?: string;
   submitText?: string;
-  fields?: any[];
+  submitButton?: Button;
+  fields?: Block[];
   /** Селектор или сам элемент */
   submitTrigger?: string | HTMLElement;
   onSubmit?: FormSubmitHandler;
@@ -115,7 +117,6 @@ export class FormBlock extends Block<FormProps> {
   }
 
   public remove(): void {
-    console.log('remove', 'FormBlock');
     // снять внешний клик-триггер
     if (this._externalEl && this._externalHandler) {
       this._externalEl.removeEventListener('click', this._externalHandler);

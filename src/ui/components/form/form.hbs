@@ -7,7 +7,9 @@
     {{{fields}}}
   </div>
 
-  {{#if submitText}}
+  {{#if submitButton}}
+    {{{submitButton}}}
+  {{else if submitText}}
     <button type="submit" class="form__submit">{{submitText}}</button>
   {{/if}}
 </form>

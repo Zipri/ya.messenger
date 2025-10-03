@@ -22,7 +22,7 @@
     width: fit-content;
     max-width: 70%;
 
-    margin-left: auto; // Прижимает к правому краю
+    margin-left: auto; 
   }
 
   &__other {
@@ -37,13 +37,13 @@
     width: fit-content;
     max-width: 70%;
 
-    margin-right: auto; // Прижимает к левому краю
+    margin-right: auto; 
   }
 
   &__text {
     font-size: 1rem;
-    font-weight: $text-bold;
     padding: 0.5rem;
+    padding-bottom: 0;
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
@@ -56,9 +56,9 @@
 
     &-img {
       width: 100%;
-      height: auto; // Сохраняет пропорции
+      height: auto; 
       object-fit: cover;
-      aspect-ratio: 1; // Квадратные изображения (можно убрать для оригинальных пропорций)
+      aspect-ratio: 1; 
     }
   }
 

@@ -1,9 +1,14 @@
-import App from './app';
 import Handlebars from 'handlebars';
 
-Handlebars.registerHelper('eq', (a: any, b: any) => {
+import App from './app';
+
+Handlebars.registerHelper('eq', (a: object, b: object) => {
   return a === b;
 });
 
-const app = new App();
-app.render();
+const runApp = async () => {
+  const app = new App();
+  await app.start();
+};
+
+runApp();

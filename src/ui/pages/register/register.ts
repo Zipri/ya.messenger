@@ -1,11 +1,12 @@
 import './register.scss';
 
-import { FormBlock, InputBlock } from '../../components';
+import { Block, type TBlockProps } from '@controllers';
+import router from '@controllers/router/router';
+import { BASE_URLS } from '@models';
+
+import { Button, FormBlock, InputBlock } from '../../components';
 
 import registerTemplate from './register.hbs?raw';
-import { Block } from '../../../controllers';
-import { fakeNavigate } from '../../../utils';
-import type { TBlockProps } from '../../../controllers/block/types';
 
 type RegisterPageProps = TBlockProps;
 
@@ -13,9 +14,15 @@ export class RegisterPage extends Block<RegisterPageProps> {
   constructor(props: RegisterPageProps) {
     super({
       ...props,
+      BASE_URLS,
       // Компоненты
       registerForm: new FormBlock({
-        submitTrigger: '#register-submit',
+        submitButton: new Button({
+          id: 'register-submit',
+          type: 'submit',
+          text: 'Зарегистрироваться',
+          styleClasses: 'button_main',
+        }),
         fields: [
           new InputBlock({
             id: 'email',
@@ -68,11 +75,22 @@ export class RegisterPage extends Block<RegisterPageProps> {
           }),
         ],
         onSubmit: (values) => {
-          console.log('Register form data:', values);
           if (values.password !== values.repeat_password) {
             alert('Пароли не совпадают');
           } else {
-            fakeNavigate('chat');
+            window.APP.store?.user.register(
+              {
+                login: values.login,
+                password: values.password,
+                email: values.email,
+                phone: values.phone,
+                first_name: values.first_name,
+                second_name: values.second_name,
+              },
+              () => {
+                router.go(BASE_URLS.chat);
+              }
+            );
           }
         },
       }),

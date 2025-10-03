@@ -1,33 +1,73 @@
 import './chat.scss';
 
+import { Block, globalEventBus, type TBlockProps } from '@controllers';
+import type { TChat } from '@models/types';
+import { ChatList } from '@ui-blocks';
+
 import chatTemplate from './chat.hbs?raw';
 import { Dialog } from './dialog/dialog';
-import { Block } from '../../../controllers';
-import type { ChatList } from '../../blocks';
-import type { TBlockProps } from '../../../controllers/block/types';
-
-type ChatState = 'dialog' | 'empty';
 
 interface ChatPageProps {
   chatList: ChatList;
-  chatState?: ChatState;
+  id?: string; // id приходит от роутера
 }
 
 export class ChatPage extends Block<ChatPageProps & TBlockProps> {
   constructor(props: ChatPageProps) {
+    const chatState = props.id ? 'dialog' : 'empty';
+
     super({
-      chatState: 'empty',
+      ...props,
+      chatState,
       // Компоненты
       chatList: props.chatList,
-      dialog: new Dialog({}),
+      dialog: null,
     });
+  }
 
-    props.chatList.setProps({
-      onChatClick: (chatId: string) => {
-        console.log(`Нажат чат с ID: ${chatId}`);
-        this.setProps({ chatState: 'dialog' });
-      },
+  componentDidMount(): void {
+    globalEventBus.subscribe('chats-loaded', () => {
+      this._createDialog();
     });
+  }
+
+  private _createDialog() {
+    // Создаем Dialog только если есть chatId и его еще нет
+    if (this.props.id && !this.children.dialog) {
+      let selectedChat: TChat | undefined | null = null;
+
+      if (!selectedChat && window.APP.store) {
+        const chatStore = window.APP.store.chats;
+        selectedChat =
+          String(chatStore.activeChat?.id) === this.props.id
+            ? chatStore.activeChat
+            : chatStore.chatList.find(
+                (chat) => String(chat.id) === this.props.id
+              );
+      }
+
+      if (selectedChat && window.APP.store) {
+        window.APP.store.chats.selectChat(selectedChat);
+      }
+
+      // 1. Создаем экземпляр Dialog и помещаем его в children
+      this.children.dialog = new Dialog({
+        chatId: this.props.id,
+        chat: selectedChat ?? undefined,
+      });
+
+      // 2. Запускаем перерисовку ChatPage, чтобы Dialog появился в DOM
+      this.eventBus.emit('render');
+
+      // 3. Запускаем жизненный цикл монтирования для нового дочернего компонента
+      this.children.dialog.dispatchComponentDidMount();
+    }
+  }
+
+  componentWillUnmount(): void {
+    if (this.children.dialog) {
+      this.children.dialog.remove();
+    }
   }
 
   render(): string {

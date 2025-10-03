@@ -8,10 +8,17 @@ export enum ApiMethodEnum {
 
 export type TRequestOptions = {
   method?: ApiMethodEnum;
-  /** Данные для запроса (пока не понятно какие) */
+  // Могут передаваться различные атрибуты, в данном случае нет смысла конкретизировать
   data?: Record<string, any>;
   headers?: Record<string, string>;
   timeout?: number;
+};
+
+// Могут передаваться различные атрибуты, в данном случае нет смысла конкретизировать
+export type TApiResponse<T = any> = {
+  data: T;
+  status: number;
+  statusText: string;
 };
 
 export type TQueryParams = Record<string, string | number | boolean>;
@@ -22,21 +29,21 @@ export interface IHttpTransport {
   get(
     url: string,
     options?: THttpTransportRequestOptions
-  ): Promise<XMLHttpRequest>;
+  ): Promise<TApiResponse>;
   post(
     url: string,
     options?: THttpTransportRequestOptions
-  ): Promise<XMLHttpRequest>;
+  ): Promise<TApiResponse>;
   put(
     url: string,
     options?: THttpTransportRequestOptions
-  ): Promise<XMLHttpRequest>;
+  ): Promise<TApiResponse>;
   patch(
     url: string,
     options?: THttpTransportRequestOptions
-  ): Promise<XMLHttpRequest>;
+  ): Promise<TApiResponse>;
   delete(
     url: string,
     options?: THttpTransportRequestOptions
-  ): Promise<XMLHttpRequest>;
+  ): Promise<TApiResponse>;
 }

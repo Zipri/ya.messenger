@@ -1,24 +1,41 @@
 import './dialog.scss';
 
-import { Message } from './message/message';
-import dialogTemplate from './dialog.hbs?raw';
-import { messages } from './mock';
-import { Block } from '../../../../controllers';
-import { FormBlock, InputBlock } from '../../../components';
-import type { TBlockProps } from '../../../../controllers/block/types';
+import { Block, type TBlockProps } from '@controllers';
+import type { TMessage as TWebSocketMessage } from '@controllers/services/websocket';
+import { BASE_URLS } from '@models';
+import type { TChat } from '@models/types';
+import { Button, FormBlock, InputBlock } from '@ui-components';
+import { formatTime } from '@utils';
 
-interface DialogProps {}
+import dialogTemplate from './dialog.hbs?raw';
+import { Message } from './message/message';
+import type { TMessage as TMessageUI } from './message/types';
+import { UserList } from './userList';
+
+interface DialogProps {
+  chatId?: string;
+  chat?: TChat;
+}
 
 export class Dialog extends Block<DialogProps & TBlockProps> {
+  private isConnected = false;
+
   constructor(props: DialogProps) {
     super({
       ...props,
-      userAvatar:
-        'https://images.steamusercontent.com/ugc/2052004474097085207/12B44815F2A65699D34584DA2071A26BE23692F9/?imw=512&amp;imh=395&amp;ima=fit&amp;impolicy=Letterbox&amp;imcolor=%23000000&amp;letterbox=true',
-      userName: 'John Doe',
-      userEmail: 'john.doe@example.com',
+      userAvatar: props.chat?.avatar || '',
+      userName: props.chat?.title || 'Неизвестный чат',
+      userEmail: '',
+      BASE_URLS,
       // Компоненты
       messageForm: new FormBlock({
+        submitButton: new Button({
+          id: 'message-submit',
+          type: 'submit',
+          text: 'Отправить',
+          styleClasses: 'dialog__input__button',
+          content: `<img src="../../../../static/paper-plane.png" alt="send" />`,
+        }),
         fields: [
           new InputBlock({
             id: 'message',
@@ -29,24 +46,12 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
           }),
         ],
         onSubmit: (values) => {
-          console.log('Message form data:', values);
+          this._handleMessageSubmit(values.message);
         },
       }),
+      userList: new UserList(),
       messages: [],
     });
-
-    const messageItems = messages.map(
-      (message) =>
-        new Message({
-          message: message,
-        })
-    );
-
-    this.lists.messages = messageItems;
-  }
-
-  render(): string {
-    return dialogTemplate;
   }
 
   componentDidMount(): void {
@@ -58,5 +63,126 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
     if (messageForm && submitButton) {
       messageForm.setSubmitTrigger(submitButton);
     }
+
+    if (this.props.chatId) {
+      this._initializeChat();
+    }
+  }
+
+  componentWillUnmount(): void {
+    if (this.isConnected && window.APP.store) {
+      window.APP.store.chats.disconnectFromChat();
+      window.APP.store.chats.onMessagesUpdate = null;
+      this.isConnected = false;
+      console.info('Dialog-componentWillUnmount: Отключились от чата');
+    }
+  }
+
+  /** Инициализация чата - подключение к WebSocket и загрузка сообщений */
+  private async _initializeChat() {
+    if (!this.props.chatId || !window.APP.store) {
+      console.error('Не хватает данных для инициализации чата');
+      return;
+    }
+
+    if (
+      window.APP.store.chats.isWebSocketConnected &&
+      window.APP.store.chats.activeChat?.id === this.props.chatId
+    ) {
+      console.info('Уже подключены к чату', this.props.chatId);
+      this.isConnected = true;
+      this._subscribeToMessages();
+      return;
+    }
+
+    if (this.isConnected) {
+      console.info('Dialog уже инициализирован для чата', this.props.chatId);
+      return;
+    }
+
+    try {
+      const connected = await window.APP.store.chats.connectToChat(
+        this.props.chatId
+      );
+
+      if (connected) {
+        this.isConnected = true;
+        this._subscribeToMessages();
+        console.info('Чат успешно инициализирован');
+      } else {
+        console.error('Не удалось подключиться к чату');
+      }
+    } catch (error) {
+      console.error('Ошибка инициализации чата:', error);
+    }
+  }
+
+  /** Подписка на изменения сообщений в Store */
+  private _subscribeToMessages() {
+    if (!window.APP.store) return;
+
+    window.APP.store.chats.onMessagesUpdate = () => {
+      this._updateMessages();
+    };
+
+    this._updateMessages();
+  }
+
+  /** Обновление списка сообщений из Store */
+  private _updateMessages() {
+    if (!window.APP.store) return;
+
+    const messages = window.APP.store.chats.activeChatMessages;
+    const messageItems = messages.map((message: TWebSocketMessage) => {
+      const uiMessage: TMessageUI = {
+        id: String(message.id || ''),
+        text: message.content || '',
+        isOwn:
+          String(message.user_id || '') ===
+          String(window.APP.store?.user.currentUser?.id || ''),
+        time: formatTime(message.time || ''),
+      };
+
+      return new Message({ message: uiMessage });
+    });
+
+    // Обновляем только списки, без setProps чтобы избежать цикла
+    this.lists.messages = messageItems;
+  }
+
+  /** Обработка отправки сообщения */
+  private _handleMessageSubmit(messageContent: string) {
+    if (!this.isConnected || !window.APP.store) {
+      console.error('Чат не подключен или Store недоступен');
+      return;
+    }
+
+    const success = window.APP.store.chats.sendMessage(messageContent);
+
+    if (success) {
+      // Очищаем форму
+      const messageForm = this.children.messageForm;
+      if (
+        messageForm &&
+        'reset' in messageForm &&
+        typeof messageForm.reset === 'function'
+      ) {
+        messageForm.reset();
+      } else {
+        const messageInput = this.element?.querySelector(
+          '#message'
+        ) as HTMLInputElement;
+        if (messageInput) {
+          messageInput.value = '';
+        }
+      }
+      console.info('Сообщение отправлено:', messageContent);
+    } else {
+      console.error('Ошибка отправки сообщения');
+    }
+  }
+
+  render(): string {
+    return dialogTemplate;
   }
 }

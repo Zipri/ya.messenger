@@ -1,12 +1,15 @@
 <main class="profileInfo">
     <div class="profileInfo__header">
-        <button class="profileInfo__header__button" data-page="chat">
-            < Назад
-        </button>
+        {{{backButton}}}
     </div>
     <div class="profileInfo__user">
         <div class="profileInfo__user__avatar">
-            <img src="{{avatar}}" alt="{{name}}" class="profileInfo__user__avatar-img">
+            {{#if avatar}}
+                <img src="{{avatar}}" alt="{{name}}" class="profileInfo__user__avatar-img">
+            {{/if}}
+            {{#if (eq profileState 'edit')}}
+                {{{avatarChangeButton}}}
+            {{/if}}
         </div>
         <div class="profileInfo__user__input-group">
             {{#if (eq profileState 'view')}}
@@ -22,9 +25,7 @@
     </div>
     {{#if (eq profileState 'view')}}
         <div class="profileInfo__button-group">
-            <button class="button_dark" data-page="error">
-                Выйти
-            </button>
+            {{{logoutButton}}}
             <button class="button_main" data-profile-info="edit">
                 Изменить данные
             </button>
@@ -35,22 +36,12 @@
     {{/if}}
     {{#if (eq profileState 'edit')}}
         <div class="profileInfo__button-group">
-            <button class="button_dark" data-profile-info="view">
-                Отмена
-            </button>
-            <button id="profile-save" class="button_main" type="button">
-                Сохранить
-            </button>
+            {{{cancelButton}}}
         </div>
     {{/if}}
     {{#if (eq profileState 'edit-password')}}
         <div class="profileInfo__button-group">
-            <button class="button_dark" data-profile-info="view">
-                Отмена
-            </button>
-            <button id="password-save" class="button_main" type="button">
-                Сохранить
-            </button>
+            {{{cancelButton}}}
         </div>
     {{/if}}
 </main>

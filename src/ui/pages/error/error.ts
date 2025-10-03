@@ -1,8 +1,9 @@
 import './error.scss';
 
+import { Block, type TBlockProps } from '@controllers';
+import { BASE_URLS } from '@models';
+
 import errorTemplate from './error.hbs?raw';
-import { Block } from '../../../controllers';
-import type { TBlockProps } from '../../../controllers/block/types';
 
 interface ErrorPageProps {
   errorCode: string;
@@ -13,6 +14,7 @@ export class ErrorPage extends Block<ErrorPageProps & TBlockProps> {
   constructor(props: ErrorPageProps) {
     super({
       ...props,
+      BASE_URLS,
     });
   }
 

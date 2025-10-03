@@ -27,7 +27,7 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
           await this._handleCreateChat(chatTitle);
         },
       }),
-      chats: [], // Будем загружать из Store
+      chats: [],
     });
   }
 
@@ -52,7 +52,6 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
 
       if (chats && chats.length > 0) {
         this._updateChatList(chats);
-        // Уведомляем другие компоненты о загрузке
         globalEventBus.emit('chats-loaded', chats);
       } else {
         console.info('Чатов не найдено');
@@ -73,11 +72,9 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
     console.info('Создание чата:', chatTitle);
 
     try {
-      // Создаем чат через Store
       const success = await window.APP.store.chats.createChat(chatTitle);
 
       if (success) {
-        // Обновляем список чатов
         await this._initializeChatList();
         console.info('Чат успешно создан и список обновлен');
       } else {
@@ -105,7 +102,6 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
         ...chatData,
         events: {
           click: () => {
-            // Вызываем callback с данными чата - он сам выберет чат и перейдет
             if (this.props.onChatClick) {
               this.props.onChatClick(chat.id, chat);
               this.props.isSearchShown = true;
@@ -118,16 +114,6 @@ export class ChatList extends Block<ChatListProps & TBlockProps> {
     this.lists.chats = chatItems;
     this.setProps({ chats: chatItems });
   }
-
-  // /** Публичный метод для обновления списка чатов */
-  // public async refreshChats() {
-  //   await this._initializeChatList();
-  // }
-
-  // /** Получение текущих чатов из Store */
-  // public getCurrentChats(): TChat[] {
-  //   return window.APP.store?.chats.chatList || [];
-  // }
 
   render(): string {
     return chatListTemplate;

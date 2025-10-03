@@ -83,7 +83,6 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
     });
 
     const profileForm = new FormBlock({
-      // можно задать триггер кнопки, если он уже в DOM: '#profile-save'
       submitTrigger: '#profile-save',
       fields: [
         emailInput,
@@ -103,7 +102,6 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
     });
 
     const passwordForm = new FormBlock({
-      // можно задать триггер кнопки, если он уже в DOM: '#password-save'
       submitTrigger: '#password-save',
       fields: [oldPasswordInput, passwordInput, repeatPasswordInput],
       onSubmit: async (_values) => {
@@ -237,14 +235,12 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
           avatar: `${BASE_RESOURCES_URL}${user.avatar}`,
         });
       }
-      // Сначала очищаем значения, чтобы гарантировать срабатывание componentDidUpdate
       this.children.emailInput.setProps({ value: '' });
       this.children.loginInput.setProps({ value: '' });
       this.children.firstNameInput.setProps({ value: '' });
       this.children.secondNameInput.setProps({ value: '' });
       this.children.phoneInput.setProps({ value: '' });
 
-      // Затем устанавливаем правильные значения
       queueMicrotask(() => {
         this.children.emailInput.setProps({ value: user.email });
         this.children.loginInput.setProps({ value: user.login });
@@ -272,7 +268,6 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
     this.children.secondNameInput.setProps({ disabled });
     this.children.phoneInput.setProps({ disabled });
 
-    // пароли активны только в режиме смены пароля
     const pwdDisabled = state !== 'edit-password';
     this.children.passwordInput.setProps({
       disabled: pwdDisabled,

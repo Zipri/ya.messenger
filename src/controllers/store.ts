@@ -190,7 +190,6 @@ export class AppStore {
       try {
         const chatId = await this.chatService.createChat(title);
         if (chatId) {
-          // Перезагружаем список чатов
           await this.chats.loadChats();
           console.info('Чат создан с ID:', chatId);
           return true;
@@ -207,12 +206,10 @@ export class AppStore {
       try {
         const success = await this.chatService.deleteChat(chatId);
         if (success) {
-          // Удаляем из локального списка
           this.chats.chatList = this.chats.chatList.filter(
             (chat) => chat.id !== chatId
           );
 
-          // Если удаляется активный чат, сбрасываем состояние
           if (this.chats.activeChat?.id === chatId) {
             await this.chats.disconnectFromChat();
           }
@@ -233,6 +230,7 @@ export class AppStore {
       if (this.chats.activeChat?.id === chat.id) {
         return;
       }
+
       if (this.chats.isWebSocketConnected && this.chats.activeChat) {
         this.chats.disconnectFromChat();
       }
@@ -303,7 +301,6 @@ export class AppStore {
         return false;
       }
 
-      // Проверяем, не подключены ли мы уже к этому чату
       if (
         this.chats.isWebSocketConnected &&
         this.chats.activeChat?.id === chatId
@@ -312,7 +309,6 @@ export class AppStore {
         return true;
       }
 
-      // Отключаемся от предыдущего чата если подключены к другому
       if (
         this.chats.isWebSocketConnected &&
         this.chats.activeChat?.id !== chatId
@@ -324,7 +320,6 @@ export class AppStore {
       }
 
       try {
-        // Получаем токен для подключения
         const token = await this.chatService.getChatToken(chatId);
         if (!token) {
           console.error('Не удалось получить токен для чата');
@@ -336,8 +331,6 @@ export class AppStore {
           onOpen: () => {
             this.chats.isWebSocketConnected = true;
             console.info('Подключен к чату через WebSocket');
-
-            // Загружаем последние сообщения
             this.chats.loadMessageHistory();
           },
           onMessage: (messages) => {
@@ -422,7 +415,6 @@ export class AppStore {
 
       console.info('Получены сообщения:', messages.length);
 
-      // Уведомляем UI об обновлении сообщений
       if (this.chats.onMessagesUpdate) {
         this.chats.onMessagesUpdate();
       }

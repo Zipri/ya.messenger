@@ -98,7 +98,6 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
       this._element = null;
     }
 
-    // Очищаем все события
     this.eventBus.removeAllListeners();
   }
 
@@ -117,7 +116,6 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   protected componentDidMount(): void {}
 
   /** Переопределяемый метод - проверяет нужно ли обновлять компонент */
-  // @ts-ignore
   protected componentDidUpdate(oldProps: Partial<T>, newProps: T): boolean {
     return true;
   }

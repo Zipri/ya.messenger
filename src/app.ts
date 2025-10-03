@@ -37,8 +37,8 @@ class App {
       .use(BASE_URLS.root, LoginPage)
       .use(BASE_URLS.login, LoginPage)
       .use(BASE_URLS.register, RegisterPage)
-      .use(BASE_URLS.chat, ChatPage, { chatList: chatList }) // Для страницы со списком чатов
-      .use(`${BASE_URLS.chat}/:id`, ChatPage, { chatList: chatList }) // Для страницы с конкретным диалогом
+      .use(BASE_URLS.chat, ChatPage, { chatList: chatList })
+      .use(`${BASE_URLS.chat}/:id`, ChatPage, { chatList: chatList })
       .use(BASE_URLS.profile, ProfilePage, { chatList: chatList })
       .use(BASE_URLS.error, ErrorPage, {
         errorCode: 'Error 404',

@@ -17,10 +17,10 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
 
     super({
       ...props,
-      chatState, // Передаем состояние в шаблон
+      chatState,
       // Компоненты
       chatList: props.chatList,
-      dialog: null, // Создадим в componentDidMount чтобы избежать дублирования
+      dialog: null,
     });
   }
 
@@ -58,8 +58,7 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
       // 2. Запускаем перерисовку ChatPage, чтобы Dialog появился в DOM
       this.eventBus.emit('render');
 
-      // 3. СРАЗУ ПОСЛЕ ПЕРЕРИСОВКИ:
-      // Вручную запускаем жизненный цикл монтирования для нового дочернего компонента.
+      // 3. Запускаем жизненный цикл монтирования для нового дочернего компонента
       this.children.dialog.dispatchComponentDidMount();
     }
   }

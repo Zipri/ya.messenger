@@ -62,7 +62,6 @@ export class SearchChat extends Block<SearchChatProps & TBlockProps> {
         await this.props.onCreateChat(trimmedTitle);
         console.info('Чат успешно создан:', trimmedTitle);
       } else {
-        // Fallback - прямое обращение к Store
         if (window.APP.store) {
           const success = await window.APP.store.chats.createChat(trimmedTitle);
           if (success) {

@@ -38,7 +38,7 @@ class WebSocketService {
   private socket: WebSocket | null = null;
   private pingInterval: number | null = null;
   private readonly WS_BASE_URL = 'wss://ya-praktikum.tech/ws/chats';
-  private readonly PING_INTERVAL = 30000; // 30 секунд
+  private readonly PING_INTERVAL = 30000;
 
   private handlers: WebSocketEventHandlers = {};
 
@@ -53,7 +53,6 @@ class WebSocketService {
     token: string,
     handlers?: WebSocketEventHandlers
   ) {
-    // Проверяем, не подключены ли мы уже
     if (
       this.socket &&
       (this.socket.readyState === WebSocket.OPEN ||
@@ -63,7 +62,6 @@ class WebSocketService {
       return;
     }
 
-    // Отключаемся от предыдущего соединения если есть
     if (this.socket) {
       this.disconnect();
     }
@@ -89,7 +87,6 @@ class WebSocketService {
     }
 
     if (this.socket) {
-      // Проверяем состояние сокета перед закрытием
       if (
         this.socket.readyState === WebSocket.OPEN ||
         this.socket.readyState === WebSocket.CONNECTING
@@ -157,13 +154,11 @@ class WebSocketService {
       try {
         const data = JSON.parse(event.data);
 
-        // Обработка уведомлений о подключении пользователей
         if (data.type === 'user connected') {
           this.handlers.onUserConnected?.(data.content);
           return;
         }
 
-        // Обработка сообщений (одно сообщение или массив)
         this.handlers.onMessage?.(data);
       } catch (error) {
         console.error('Ошибка парсинга WebSocket сообщения:', error);

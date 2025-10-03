@@ -22,8 +22,7 @@ class Router {
   ) {
     const route = new Route({
       pathname,
-      // @ts-ignore
-      view: block,
+      view: block as typeof Block,
       rootQuery: this._rootQuery,
       props,
     });

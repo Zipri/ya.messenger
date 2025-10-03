@@ -62,7 +62,6 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
       messageForm.setSubmitTrigger(submitButton);
     }
 
-    // Инициализируем чат только если он не создан без chatId
     if (this.props.chatId) {
       this._initializeChat();
     }
@@ -84,7 +83,6 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
       return;
     }
 
-    // Проверяем, не подключены ли мы уже к этому чату
     if (
       window.APP.store.chats.isWebSocketConnected &&
       window.APP.store.chats.activeChat?.id === this.props.chatId
@@ -95,24 +93,19 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
       return;
     }
 
-    // Проверяем, не инициализируется ли уже этот чат другим экземпляром Dialog
     if (this.isConnected) {
       console.info('Dialog уже инициализирован для чата', this.props.chatId);
       return;
     }
 
     try {
-      // Подключаемся к чату через WebSocket
       const connected = await window.APP.store.chats.connectToChat(
         this.props.chatId
       );
 
       if (connected) {
         this.isConnected = true;
-
-        // Подписываемся на изменения сообщений
         this._subscribeToMessages();
-
         console.info('Чат успешно инициализирован');
       } else {
         console.error('Не удалось подключиться к чату');
@@ -126,12 +119,10 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
   private _subscribeToMessages() {
     if (!window.APP.store) return;
 
-    // Устанавливаем callback для обновления UI при получении новых сообщений
     window.APP.store.chats.onMessagesUpdate = () => {
       this._updateMessages();
     };
 
-    // Загружаем текущие сообщения
     this._updateMessages();
   }
 
@@ -168,15 +159,14 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
 
     if (success) {
       // Очищаем форму
-      const messageForm = this.children.messageForm as FormBlock;
+      const messageForm = this.children.messageForm;
       if (
         messageForm &&
         'reset' in messageForm &&
         typeof messageForm.reset === 'function'
       ) {
-        (messageForm as any).reset();
+        messageForm.reset();
       } else {
-        // Альтернативный способ очистки - найти input и очистить его
         const messageInput = this.element?.querySelector(
           '#message'
         ) as HTMLInputElement;

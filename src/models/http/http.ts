@@ -69,10 +69,8 @@ class HTTPTransport implements IHttpTransport {
         xhr.setRequestHeader('Content-Type', 'application/json');
       }
 
-      // Таймаут
       xhr.timeout = timeout;
 
-      // Обработчики событий
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           // Парсим JSON response если он есть
@@ -81,7 +79,7 @@ class HTTPTransport implements IHttpTransport {
           try {
             data = xhr.responseText ? JSON.parse(xhr.responseText) : null;
           } catch (error) {
-            data = xhr.responseText; // Если не JSON, возвращаем как строку
+            data = xhr.responseText;
           }
 
           resolve({

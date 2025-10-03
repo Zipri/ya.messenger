@@ -1,4 +1,3 @@
-// src/components/form/form.ts
 import './form.scss';
 import template from './form.hbs?raw';
 import { Block } from '@controllers';

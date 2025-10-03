@@ -2,9 +2,10 @@ import './input.scss';
 import inputTemplate from './input.hbs?raw';
 import { Block } from '@controllers';
 import { validateValue, type RuleName } from '@utils';
+import type { TID } from '@models/types';
 
 interface InputProps {
-  id: string;
+  id: TID;
   name: string;
   label?: string;
   type?: string;

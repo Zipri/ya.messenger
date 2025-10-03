@@ -126,7 +126,6 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
   private _subscribeToMessages() {
     if (!window.APP.store) return;
 
-    // FIXME SKV (!) Нужен ли тут этот колбек если есть globalEventBus.subscribe
     // Устанавливаем callback для обновления UI при получении новых сообщений
     window.APP.store.chats.onMessagesUpdate = () => {
       this._updateMessages();

@@ -25,15 +25,6 @@ class Route {
     this._props = routeProps;
   }
 
-  // FIXME SKV (!)
-  // navigate(pathname: string) {
-  //   // урл соответствует урлу блока
-  //   if (this.match(pathname)) {
-  //     this._pathname = pathname;
-  //     this.render();
-  //   }
-  // }
-
   getPathname() {
     return this._pathname;
   }

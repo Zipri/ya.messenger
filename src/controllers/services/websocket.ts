@@ -4,15 +4,15 @@ import type { TID } from '@models/types';
 type TMessageType = 'message' | 'get old' | 'user connected' | 'ping';
 
 interface TMessage {
-  id: number;
-  user_id: number;
-  chat_id: number;
+  id: TID;
+  user_id: TID;
+  chat_id: TID;
   type: string;
   time: string;
   content: string;
   file?: {
-    id: number;
-    user_id: number;
+    id: TID;
+    user_id: TID;
     path: string;
     filename: string;
     content_type: string;

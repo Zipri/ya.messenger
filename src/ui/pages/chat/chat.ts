@@ -37,7 +37,6 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
 
       if (!selectedChat && window.APP.store) {
         const chatStore = window.APP.store.chats;
-        // FIXME SKV (!) все ID сделать СТРОКОЙ !!!
         selectedChat =
           String(chatStore.activeChat?.id) === this.props.id
             ? chatStore.activeChat

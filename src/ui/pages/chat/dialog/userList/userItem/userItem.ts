@@ -18,7 +18,6 @@ export class UserItem extends Block<TBlockProps> {
       avatar: props.user.avatar
         ? `${BASE_RESOURCES_URL}${props.user.avatar}`
         : '',
-      // FIXME SKV (!) сделать через админа
       isOwn: currentUser?.id === props.user.id,
     };
 

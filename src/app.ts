@@ -10,7 +10,7 @@ import {
 } from '@ui-pages';
 import { appStoreInit, Block, EventBus, iocServicesInit } from '@controllers';
 import { BASE_URLS } from '@models';
-import type { TChat } from '@models/types';
+import type { TChat, TID } from '@models/types';
 
 class App {
   constructor() {
@@ -22,7 +22,7 @@ class App {
   async start() {
     //#region Blocks
     const chatList = new ChatList({
-      onChatClick: (chatId: string, chat: TChat) => {
+      onChatClick: (chatId: TID, chat: TChat) => {
         if (window.APP.store) {
           window.APP.store.chats.selectChat(chat);
         }

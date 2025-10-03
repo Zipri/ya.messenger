@@ -1,8 +1,9 @@
 import { Block } from '@controllers';
 import buttonTemplate from './button.hbs?raw';
+import type { TID } from '@models/types';
 
 interface ButtonProps {
-  id: string;
+  id: TID;
   text: string;
   content?: string | HTMLElement;
   disabled?: boolean;

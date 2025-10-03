@@ -119,6 +119,8 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
   /** Переопределяемый метод - проверяет нужно ли обновлять компонент */
   protected componentDidUpdate(oldProps: Partial<T>, newProps: T): boolean {
+    oldProps;
+    newProps;
     return true;
   }
 

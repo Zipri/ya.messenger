@@ -78,9 +78,7 @@ class WebSocketService {
     this._bindEventHandlers();
     this._startPing();
 
-    console.log(
-      `WebSocket подключение к чату ${chatId} для пользователя ${userId}`
-    );
+    console.info(`WS-connect: ${chatId} for user ${userId}`);
   }
 
   /** Отключение от WebSocket */
@@ -101,7 +99,7 @@ class WebSocketService {
       this.socket = null;
     }
 
-    console.log('WebSocket соединение закрыто');
+    console.info('WS-disconnect');
   }
 
   /** Отправка сообщения в чат */
@@ -151,7 +149,7 @@ class WebSocketService {
     if (!this.socket) return;
 
     this.socket.addEventListener('open', () => {
-      console.log('WebSocket соединение установлено');
+      console.info('WS-open');
       this.handlers.onOpen?.();
     });
 
@@ -174,12 +172,12 @@ class WebSocketService {
 
     this.socket.addEventListener('close', (event) => {
       if (event.wasClean) {
-        console.log('WebSocket соединение закрыто чисто');
+        console.info('WS-close: clean');
       } else {
-        console.log('WebSocket соединение прервано');
+        console.info('WS-close: not clean');
       }
 
-      console.log(`Код: ${event.code} | Причина: ${event.reason}`);
+      console.info(`WS-close: code ${event.code} | reason ${event.reason}`);
 
       this._stopPing();
       this.handlers.onClose?.(event);

@@ -50,11 +50,6 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
       userList: new UserList(),
       messages: [],
     });
-
-    console.log('Dialog-constructor:', {
-      chatId: props.chatId,
-      chat: props.chat,
-    });
   }
 
   componentDidMount(): void {

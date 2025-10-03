@@ -2,12 +2,11 @@ import './chatList.scss';
 import { ChatItem } from './chatItem/chatItem';
 import chatListTemplate from './chatList.hbs?raw';
 import { SearchChat } from './searchChat/searchChat';
-import { Block, type TBlockProps } from '@controllers';
+import { Block, globalEventBus, type TBlockProps } from '@controllers';
 import type { TChatData } from './chatItem/types';
 import type { TChat } from '@models/types';
 import router from '@controllers/router/router';
 import { BASE_URLS } from '@models';
-import { globalEventBus } from 'app';
 import { formatTime } from '@utils';
 
 interface ChatListProps {

@@ -12,9 +12,6 @@ import { appStoreInit, Block, EventBus, iocServicesInit } from '@controllers';
 import { BASE_URLS } from '@models';
 import type { TChat } from '@models/types';
 
-// FIXME SKV (!) глобальный eventBus вынести куда-то
-export const globalEventBus = new EventBus();
-
 class App {
   constructor() {
     const services = iocServicesInit();
@@ -26,14 +23,10 @@ class App {
     //#region Blocks
     const chatList = new ChatList({
       onChatClick: (chatId: string, chat: TChat) => {
-        console.log(`Из App.ts: нажат чат с ID: ${chatId}`, chat);
-
-        // Выбираем чат в Store
         if (window.APP.store) {
           window.APP.store.chats.selectChat(chat);
         }
 
-        // Переходим на страницу чата - роутер создаст новую ChatPage
         router.go(`${BASE_URLS.chat}/${chatId}`);
       },
     });

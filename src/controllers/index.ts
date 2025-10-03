@@ -9,6 +9,8 @@ import WebSocketService from './services/websocket';
 import iocServicesInit, { type TServices } from './services/ioc';
 import { AppStore, appStoreInit } from './store';
 
+export const globalEventBus = new EventBus();
+
 export type { TBlockProps, TServices };
 
 export { EventBus, Block, Router, Route };

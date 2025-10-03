@@ -402,11 +402,9 @@ export class AppStore {
     _handleIncomingMessage: (data: TMessage | TMessage[]) => {
       const messages = Array.isArray(data) ? data : [data];
 
-      console.log('Store: получены сообщения для обработки:', messages);
-
       // Добавляем новые сообщения, избегая дубликатов
       messages.forEach((message) => {
-        console.log('Store: обрабатываем сообщение:', message);
+        console.info('WS-message: ', message);
         if (message.type !== 'message') return;
 
         const exists = this.chats.activeChatMessages.find(

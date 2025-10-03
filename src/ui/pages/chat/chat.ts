@@ -3,9 +3,8 @@ import './chat.scss';
 import chatTemplate from './chat.hbs?raw';
 import { Dialog } from './dialog/dialog';
 import { ChatList } from '@ui-blocks';
-import { Block, type TBlockProps } from '@controllers';
+import { Block, globalEventBus, type TBlockProps } from '@controllers';
 import type { TChat } from '@models/types';
-import { globalEventBus } from 'app';
 
 interface ChatPageProps {
   chatList: ChatList;
@@ -22,11 +21,6 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
       // Компоненты
       chatList: props.chatList,
       dialog: null, // Создадим в componentDidMount чтобы избежать дублирования
-    });
-
-    console.log('ChatPage-constructor:', {
-      id: props.id,
-      chatState,
     });
   }
 
@@ -51,13 +45,6 @@ export class ChatPage extends Block<ChatPageProps & TBlockProps> {
                 (chat) => String(chat.id) === this.props.id
               );
       }
-
-      console.log(
-        'ChatPage-createDialog: создаем Dialog для чата',
-        this.props.id,
-        'selectedChat:',
-        selectedChat
-      );
 
       if (selectedChat && window.APP.store) {
         window.APP.store.chats.selectChat(selectedChat);

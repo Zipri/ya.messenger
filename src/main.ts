@@ -1,5 +1,6 @@
-import App from './app';
 import Handlebars from 'handlebars';
+
+import App from './app';
 
 Handlebars.registerHelper('eq', (a: any, b: any) => {
   return a === b;

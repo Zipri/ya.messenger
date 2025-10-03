@@ -1,12 +1,11 @@
-import { EventBus } from './eventBus';
 import { Block } from './block';
-
 import type { TBlockProps } from './block/types';
+import { EventBus } from './eventBus';
 import { Route, Router } from './router';
-import ProfileService from './services/profile/profile';
 import ChatService from './services/chat/chat';
-import WebSocketService from './services/websocket';
 import iocServicesInit, { type TServices } from './services/ioc';
+import ProfileService from './services/profile/profile';
+import WebSocketService from './services/websocket';
 import { AppStore, appStoreInit } from './store';
 
 export const globalEventBus = new EventBus();

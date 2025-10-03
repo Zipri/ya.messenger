@@ -1,6 +1,7 @@
-import type { TRegistrationProps, TUrl, TUser } from 'models/types';
-import BaseApi from '../baseApi';
 import type { TApiResponse } from '@models/http/types';
+import type { TRegistrationProps, TUrl, TUser } from 'models/types';
+
+import BaseApi from '../baseApi';
 
 class AuthApi extends BaseApi {
   baseUrl: TUrl = '/auth';

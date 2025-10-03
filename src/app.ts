@@ -1,5 +1,7 @@
 import router from '@controllers/router/router';
 import './ui/styles/style.scss';
+import { BASE_URLS } from '@models';
+import type { TChat, TID } from '@models/types';
 import { ChatList } from '@ui-blocks';
 import {
   ChatPage,
@@ -8,9 +10,7 @@ import {
   ProfilePage,
   RegisterPage,
 } from '@ui-pages';
-import { appStoreInit, Block, EventBus, iocServicesInit } from '@controllers';
-import { BASE_URLS } from '@models';
-import type { TChat, TID } from '@models/types';
+import { appStoreInit, iocServicesInit } from '@controllers';
 
 class App {
   constructor() {

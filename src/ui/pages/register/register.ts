@@ -1,11 +1,13 @@
 import './register.scss';
 
-import { FormBlock, InputBlock } from '../../components';
 
-import registerTemplate from './register.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
 import router from '@controllers/router/router';
 import { BASE_URLS } from '@models';
+
+import { FormBlock, InputBlock } from '../../components';
+
+import registerTemplate from './register.hbs?raw';
 
 type RegisterPageProps = TBlockProps;
 

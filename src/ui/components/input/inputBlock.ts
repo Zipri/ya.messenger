@@ -1,8 +1,9 @@
 import './input.scss';
-import inputTemplate from './input.hbs?raw';
 import { Block } from '@controllers';
-import { validateValue, type RuleName } from '@utils';
 import type { TID } from '@models/types';
+import { validateValue, type RuleName } from '@utils';
+
+import inputTemplate from './input.hbs?raw';
 
 interface InputProps {
   id: TID;

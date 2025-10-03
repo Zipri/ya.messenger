@@ -1,6 +1,7 @@
 import type { Block } from '@controllers/block';
-import Route from './route';
 import { BASE_URLS } from '@models';
+
+import Route from './route';
 
 class Router {
   private routes!: Route[];

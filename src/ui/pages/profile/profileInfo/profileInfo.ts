@@ -1,11 +1,12 @@
 import './profileInfo.scss';
 
-import profileInfoTemplate from './profileInfo.hbs?raw';
-import { Button, FormBlock, InputBlock } from '@ui-components';
 import { Block, type TBlockProps } from '@controllers';
 import router from '@controllers/router/router';
-import type { TEditProfileProps } from '@models/types';
 import { BASE_RESOURCES_URL, BASE_URLS } from '@models/consts';
+import type { TEditProfileProps } from '@models/types';
+import { Button, FormBlock, InputBlock } from '@ui-components';
+
+import profileInfoTemplate from './profileInfo.hbs?raw';
 
 type ProfileState = 'view' | 'edit' | 'edit-password';
 

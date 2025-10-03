@@ -1,6 +1,7 @@
-import type { TUrl } from 'models/types';
-import BaseApi from '../baseApi';
 import type { TApiResponse } from '@models/http/types';
+import type { TUrl } from 'models/types';
+
+import BaseApi from '../baseApi';
 
 class ResourcesApi extends BaseApi {
   baseUrl: TUrl = '/resources';

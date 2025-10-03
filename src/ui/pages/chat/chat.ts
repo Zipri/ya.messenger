@@ -1,10 +1,11 @@
 import './chat.scss';
 
-import chatTemplate from './chat.hbs?raw';
-import { Dialog } from './dialog/dialog';
-import { ChatList } from '@ui-blocks';
 import { Block, globalEventBus, type TBlockProps } from '@controllers';
 import type { TChat } from '@models/types';
+import { ChatList } from '@ui-blocks';
+
+import chatTemplate from './chat.hbs?raw';
+import { Dialog } from './dialog/dialog';
 
 interface ChatPageProps {
   chatList: ChatList;

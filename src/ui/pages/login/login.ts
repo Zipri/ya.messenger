@@ -1,10 +1,11 @@
 import './login.scss';
 
-import loginTemplate from './login.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
-import { FormBlock, InputBlock } from '@ui-components';
 import router from '@controllers/router/router';
 import { BASE_URLS } from '@models';
+import { FormBlock, InputBlock } from '@ui-components';
+
+import loginTemplate from './login.hbs?raw';
 
 type LoginPageProps = TBlockProps;
 

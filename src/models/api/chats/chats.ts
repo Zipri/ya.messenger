@@ -1,6 +1,7 @@
-import type { TChat, TGetChatsProps, TID, TUrl, TUser } from 'models/types';
-import BaseApi from '../baseApi';
 import type { TApiResponse } from '@models/http/types';
+import type { TChat, TGetChatsProps, TID, TUrl, TUser } from 'models/types';
+
+import BaseApi from '../baseApi';
 
 class ChatsApi extends BaseApi {
   baseUrl: TUrl = '/chats';

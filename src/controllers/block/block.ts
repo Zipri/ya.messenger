@@ -1,8 +1,10 @@
-import { v4 } from 'uuid';
-import { EventBus } from '../eventBus';
-import type { IBlock, TBlockEvents, TBlockProps } from './types';
-import type { TID } from '../../models/types';
 import Handlebars from 'handlebars';
+import { v4 } from 'uuid';
+
+import type { TID } from '../../models/types';
+import { EventBus } from '../eventBus';
+
+import type { IBlock, TBlockEvents, TBlockProps } from './types';
 
 /** Block - базовый класс для всех компонентов
  * Предоставляет жизненный цикл, управление состоянием и интеграцию с DOM */

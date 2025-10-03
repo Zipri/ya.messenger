@@ -1,17 +1,17 @@
 import { ProfileService, type TServices } from '@controllers';
-import type ChatService from './services/chat/chat';
-import type WebSocketService from './services/websocket';
 import type {
   TChat,
-  TEditPasswordProps,
   TEditProfileProps,
   TGetChatsProps,
   TID,
   TRegistrationProps,
   TUser,
 } from '@models/types';
-import type { TMessage } from './services/websocket';
+
+import type ChatService from './services/chat/chat';
 import type UsersService from './services/users/users';
+import type WebSocketService from './services/websocket';
+import type { TMessage } from './services/websocket';
 
 export class AppStore {
   private profileService!: ProfileService;

@@ -1,8 +1,5 @@
-import { AuthApi, ResourcesApi, UserApi } from '@models';
+import { UserApi } from '@models';
 import type {
-  TEditPasswordProps,
-  TEditProfileProps,
-  TRegistrationProps,
   TUser,
 } from '@models/types';
 

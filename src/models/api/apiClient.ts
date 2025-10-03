@@ -1,5 +1,6 @@
-import HTTPTransport from 'models/http/http';
 import UserApi from 'models/api/user/user';
+import HTTPTransport from 'models/http/http';
+
 import AuthApi from './auth/auth';
 import ChatsApi from './chats/chats';
 import ResourcesApi from './resources/resources';

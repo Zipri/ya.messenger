@@ -1,7 +1,8 @@
 import './profile.scss';
+import { Block, type TBlockProps } from '@controllers';
+
 import profileTemplate from './profile.hbs?raw';
 import { ProfileInfoBlock } from './profileInfo/profileInfo';
-import { Block, type TBlockProps } from '@controllers';
 
 type ProfilePageProps = TBlockProps;
 

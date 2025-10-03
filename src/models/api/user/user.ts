@@ -1,11 +1,12 @@
+import type { TApiResponse } from '@models/http/types';
 import type {
   TEditPasswordProps,
   TEditProfileProps,
   TUrl,
   TUser,
 } from 'models/types';
+
 import BaseApi from '../baseApi';
-import type { TApiResponse } from '@models/http/types';
 
 class UserApi extends BaseApi {
   baseUrl: TUrl = '/user';

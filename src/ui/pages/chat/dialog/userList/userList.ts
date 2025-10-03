@@ -1,8 +1,9 @@
 import './userList.scss';
-import userListTemplate from './userList.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
-import { UserItem } from './userItem';
 import { Button } from '@ui-components';
+
+import { UserItem } from './userItem';
+import userListTemplate from './userList.hbs?raw';
 
 interface UserListProps {}
 

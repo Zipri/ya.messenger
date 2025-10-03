@@ -1,14 +1,15 @@
 import './dialog.scss';
 
-import { Message } from './message/message';
-import dialogTemplate from './dialog.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
-import { Button, FormBlock, InputBlock } from '@ui-components';
 import type { TMessage as TWebSocketMessage } from '@controllers/services/websocket';
-import type { TMessage as TMessageUI } from './message/types';
-import type { TChat } from '@models/types';
-import { formatTime } from '@utils';
 import { BASE_URLS } from '@models';
+import type { TChat } from '@models/types';
+import { Button, FormBlock, InputBlock } from '@ui-components';
+import { formatTime } from '@utils';
+
+import dialogTemplate from './dialog.hbs?raw';
+import { Message } from './message/message';
+import type { TMessage as TMessageUI } from './message/types';
 import { UserList } from './userList';
 
 interface DialogProps {

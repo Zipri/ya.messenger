@@ -1,8 +1,9 @@
 import { ApiClient } from '@models';
-import ProfileService from './profile/profile';
+
 import ChatService from './chat/chat';
-import WebSocketService from './websocket';
+import ProfileService from './profile/profile';
 import UsersService from './users/users';
+import WebSocketService from './websocket';
 
 function iocServicesInit() {
   const apiClient = new ApiClient();

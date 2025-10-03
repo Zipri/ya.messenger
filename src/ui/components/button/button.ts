@@ -1,6 +1,7 @@
 import { Block } from '@controllers';
-import buttonTemplate from './button.hbs?raw';
 import type { TID } from '@models/types';
+
+import buttonTemplate from './button.hbs?raw';
 
 interface ButtonProps {
   id: TID;

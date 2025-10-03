@@ -1,13 +1,14 @@
 import './chatList.scss';
-import { ChatItem } from './chatItem/chatItem';
-import chatListTemplate from './chatList.hbs?raw';
-import { SearchChat } from './searchChat/searchChat';
 import { Block, globalEventBus, type TBlockProps } from '@controllers';
-import type { TChatData } from './chatItem/types';
-import type { TChat } from '@models/types';
 import router from '@controllers/router/router';
 import { BASE_URLS } from '@models';
+import type { TChat } from '@models/types';
 import { formatTime } from '@utils';
+
+import { ChatItem } from './chatItem/chatItem';
+import type { TChatData } from './chatItem/types';
+import chatListTemplate from './chatList.hbs?raw';
+import { SearchChat } from './searchChat/searchChat';
 
 interface ChatListProps {
   onChatClick?: (chatId: string, chat: TChat) => void;

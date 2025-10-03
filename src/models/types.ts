@@ -1,7 +1,6 @@
 import type { AppStore, ProfileService } from '@controllers';
 import type ChatService from '@controllers/services/chat/chat';
 import type WebSocketService from '@controllers/services/websocket';
-import type { TMessage } from '@controllers/services/websocket';
 
 //#region BaseTypes
 export type TID = string;

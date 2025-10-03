@@ -1,9 +1,10 @@
 import './searchChat.scss';
 
-import searchChatTemplate from './searchChat.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
-import { Button, InputBlock } from '@ui-components';
 import { BASE_RESOURCES_URL } from '@models';
+import { Button, InputBlock } from '@ui-components';
+
+import searchChatTemplate from './searchChat.hbs?raw';
 
 interface SearchChatProps {
   onClickProfile?: () => void;

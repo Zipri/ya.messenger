@@ -1,9 +1,10 @@
 import './userItem.scss';
-import userItemTemplate from './userItem.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
+import { BASE_RESOURCES_URL } from '@models';
 import type { TID, TUser } from '@models/types';
 import { Button } from '@ui-components';
-import { BASE_RESOURCES_URL, BASE_URLS } from '@models';
+
+import userItemTemplate from './userItem.hbs?raw';
 
 interface UserItemProps {
   user: TUser;

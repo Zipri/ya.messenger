@@ -1,6 +1,7 @@
 import './form.scss';
-import template from './form.hbs?raw';
 import { Block } from '@controllers';
+
+import template from './form.hbs?raw';
 
 type FormValues = Record<string, string>;
 

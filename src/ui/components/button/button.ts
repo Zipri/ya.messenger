@@ -4,6 +4,7 @@ import buttonTemplate from './button.hbs?raw';
 interface ButtonProps {
   id: string;
   text: string;
+  content?: string | HTMLElement;
   disabled?: boolean;
   onClick?: () => void;
   styleClasses?: string;
@@ -12,8 +13,13 @@ interface ButtonProps {
 
 export class Button extends Block {
   constructor(props: ButtonProps) {
-    super({
+    const adaptedProps = {
       ...props,
+      content: props.content ? props.content : undefined,
+      text: props.content ? undefined : props.text,
+    };
+    super({
+      ...adaptedProps,
       events: {
         click: props.onClick,
       },

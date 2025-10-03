@@ -3,7 +3,7 @@ import './dialog.scss';
 import { Message } from './message/message';
 import dialogTemplate from './dialog.hbs?raw';
 import { Block, type TBlockProps } from '@controllers';
-import { FormBlock, InputBlock } from '@ui-components';
+import { Button, FormBlock, InputBlock } from '@ui-components';
 import type { TMessage as TWebSocketMessage } from '@controllers/services/websocket';
 import type { TMessage as TMessageUI } from './message/types';
 import type { TChat } from '@models/types';
@@ -40,6 +40,12 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
         onSubmit: (values) => {
           this._handleMessageSubmit(values.message);
         },
+      }),
+      submitButton: new Button({
+        id: 'message-submit',
+        text: 'Отправить',
+        styleClasses: 'dialog__input__button',
+        content: `<img src="../../../../static/paper-plane.png" alt="send" />`,
       }),
       userList: new UserList(),
       messages: [],

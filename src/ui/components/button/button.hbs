@@ -3,5 +3,10 @@
   class="{{styleClasses}}"
   {{#if disabled}}disabled{{/if}}
 >
-  {{text}}
+  {{#if text}}
+    {{text}}
+  {{/if}}
+  {{#if content}}
+    {{{content}}}
+  {{/if}}
 </button>

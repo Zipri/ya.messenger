@@ -3,7 +3,7 @@ import './login.scss';
 import { Block, type TBlockProps } from '@controllers';
 import router from '@controllers/router/router';
 import { BASE_URLS } from '@models';
-import { FormBlock, InputBlock } from '@ui-components';
+import { Button, FormBlock, InputBlock } from '@ui-components';
 
 import loginTemplate from './login.hbs?raw';
 
@@ -16,7 +16,12 @@ export class LoginPage extends Block<LoginPageProps> {
       BASE_URLS,
       // Компоненты
       loginForm: new FormBlock({
-        submitTrigger: '#login-submit',
+        submitButton: new Button({
+          id: 'login-submit',
+          type: 'submit',
+          text: 'Войти',
+          styleClasses: 'button_main',
+        }),
         fields: [
           new InputBlock({
             id: 'login',

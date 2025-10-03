@@ -29,6 +29,13 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
       BASE_URLS,
       // Компоненты
       messageForm: new FormBlock({
+        submitButton: new Button({
+          id: 'message-submit',
+          type: 'submit',
+          text: 'Отправить',
+          styleClasses: 'dialog__input__button',
+          content: `<img src="../../../../static/paper-plane.png" alt="send" />`,
+        }),
         fields: [
           new InputBlock({
             id: 'message',
@@ -41,12 +48,6 @@ export class Dialog extends Block<DialogProps & TBlockProps> {
         onSubmit: (values) => {
           this._handleMessageSubmit(values.message);
         },
-      }),
-      submitButton: new Button({
-        id: 'message-submit',
-        text: 'Отправить',
-        styleClasses: 'dialog__input__button',
-        content: `<img src="../../../../static/paper-plane.png" alt="send" />`,
       }),
       userList: new UserList(),
       messages: [],

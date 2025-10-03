@@ -1,11 +1,10 @@
 import './register.scss';
 
-
 import { Block, type TBlockProps } from '@controllers';
 import router from '@controllers/router/router';
 import { BASE_URLS } from '@models';
 
-import { FormBlock, InputBlock } from '../../components';
+import { Button, FormBlock, InputBlock } from '../../components';
 
 import registerTemplate from './register.hbs?raw';
 
@@ -18,7 +17,12 @@ export class RegisterPage extends Block<RegisterPageProps> {
       BASE_URLS,
       // Компоненты
       registerForm: new FormBlock({
-        submitTrigger: '#register-submit',
+        submitButton: new Button({
+          id: 'register-submit',
+          type: 'submit',
+          text: 'Зарегистрироваться',
+          styleClasses: 'button_main',
+        }),
         fields: [
           new InputBlock({
             id: 'email',

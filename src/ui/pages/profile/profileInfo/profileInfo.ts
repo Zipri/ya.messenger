@@ -84,7 +84,12 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
     });
 
     const profileForm = new FormBlock({
-      submitTrigger: '#profile-save',
+      submitButton: new Button({
+        id: 'profile-save',
+        type: 'submit',
+        text: 'Сохранить',
+        styleClasses: 'button_main',
+      }),
       fields: [
         emailInput,
         loginInput,
@@ -103,7 +108,12 @@ export class ProfileInfoBlock extends Block<ProfileInfoProps & TBlockProps> {
     });
 
     const passwordForm = new FormBlock({
-      submitTrigger: '#password-save',
+      submitButton: new Button({
+        id: 'password-save',
+        type: 'submit',
+        text: 'Сохранить',
+        styleClasses: 'button_main',
+      }),
       fields: [oldPasswordInput, passwordInput, repeatPasswordInput],
       onSubmit: async (_values) => {
         const values = _values as {

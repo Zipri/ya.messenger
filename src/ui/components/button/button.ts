@@ -11,6 +11,7 @@ interface ButtonProps {
   onClick?: () => void;
   styleClasses?: string;
   attr?: Record<string, string>;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export class Button extends Block {
@@ -19,6 +20,7 @@ export class Button extends Block {
       ...props,
       content: props.content ? props.content : undefined,
       text: props.content ? undefined : props.text,
+      type: props.type ?? 'button',
     };
     super({
       ...adaptedProps,

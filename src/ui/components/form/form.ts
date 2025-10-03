@@ -2,6 +2,7 @@ import './form.scss';
 import { Block } from '@controllers';
 
 import template from './form.hbs?raw';
+import type { Button } from '@ui-components';
 
 type FormValues = Record<string, string>;
 
@@ -10,6 +11,7 @@ type FormSubmitHandler = (values: FormValues, event: SubmitEvent) => void;
 interface FormProps {
   title?: string;
   submitText?: string;
+  submitButton?: Button;
   fields?: any[];
   /** Селектор или сам элемент */
   submitTrigger?: string | HTMLElement;

@@ -1,8 +1,10 @@
-import { v4 } from 'uuid';
-import { EventBus } from '../eventBus';
-import type { IBlock, TBlockEvents, TBlockProps } from './types';
-import type { TID } from '../../models/types';
 import Handlebars from 'handlebars';
+import { v4 } from 'uuid';
+
+import type { TID } from '../../models/types';
+import { EventBus } from '../eventBus';
+
+import type { IBlock, TBlockEvents, TBlockProps } from './types';
 
 /** Block - базовый класс для всех компонентов
  * Предоставляет жизненный цикл, управление состоянием и интеграцию с DOM */
@@ -11,10 +13,10 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   private _element: HTMLElement | null = null;
 
   protected props: TBlockProps;
-  protected eventBus: EventBus;
+  public eventBus: EventBus;
 
   /** Массивы элементов */
-  protected lists: Record<string, any[]>;
+  protected lists: Record<string, Block[]>;
   /** Дочерние компоненты */
   protected children: Record<string, Block>;
 
@@ -40,6 +42,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
     eventBus.emit(Block.EVENTS.INIT);
   }
 
+  //#region public
   get element(): HTMLElement | null {
     return this._element;
   }
@@ -65,7 +68,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
     Object.assign(this.props, nextProps);
   };
 
-  setLists = (nextList: Record<string, any[]>): void => {
+  setLists = (nextList: Record<string, Block[]>): void => {
     if (!nextList) {
       return;
     }
@@ -89,14 +92,14 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
   /** Удалить компонент из DOM */
   remove(): void {
-    console.log('remove', this._element);
+    this.componentWillUnmount();
+
     if (this._element) {
       this._removeEvents();
       this._element.remove();
       this._element = null;
     }
 
-    // Очищаем все события
     this.eventBus.removeAllListeners();
   }
 
@@ -104,8 +107,9 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   dispatchComponentDidMount(): void {
     this.eventBus.emit(Block.EVENTS.FLOW_CDM);
   }
+  //#endregion
 
-  //#region protected methods
+  //#region protected
   protected init(): void {
     this.eventBus.emit(Block.EVENTS.FLOW_RENDER);
   }
@@ -115,9 +119,13 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
   /** Переопределяемый метод - проверяет нужно ли обновлять компонент */
   protected componentDidUpdate(oldProps: Partial<T>, newProps: T): boolean {
-    console.log('componentDidUpdate', oldProps, newProps);
+    oldProps;
+    newProps;
     return true;
   }
+
+  /** Переопределяемый метод - вызывается перед удалением компонента из DOM */
+  protected componentWillUnmount(): void {}
 
   /** Переопределяемый метод - возвращает HTML строку для рендера */
   protected render(): string {
@@ -134,6 +142,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
     });
   }
 
+  // Могут передаваться различные атрибуты, в данном случае нет смысла конкретизировать
   protected setAttributes(attr: any): void {
     Object.entries(attr).forEach(([key, value]) => {
       if (this._element) {
@@ -143,7 +152,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   }
   //#endregion
 
-  //#region private methods
+  //#region private
   private _addEvents(): void {
     const { events = {} } = this.props;
     Object.keys(events).forEach((eventName) => {
@@ -175,6 +184,7 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   /** Создание прокси для отслеживания изменений пропсов */
   private _makePropsProxy(props: TBlockProps): TBlockProps {
     return new Proxy(props, {
+      // Тип взят из Proxy
       get(target: any, prop: string) {
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
@@ -219,7 +229,6 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
 
   /** Удаление событий */
   private _removeEvents(): void {
-    console.log('_removeEvents', this._element);
     const { events = {} } = this.props;
     Object.keys(events).forEach((eventName) => {
       const handler = events[eventName];
@@ -286,19 +295,21 @@ class Block<T extends TBlockProps = TBlockProps> implements IBlock<T> {
   private _getChildrenPropsAndProps(propsAndChildren: TBlockProps): {
     children: Record<string, Block>;
     props: TBlockProps;
-    lists: Record<string, any[]>;
+    lists: Record<string, Block[]>;
   } {
     const children: Record<string, Block> = {};
     const props: TBlockProps = {};
-    const lists: Record<string, any[]> = {};
+    const lists: Record<string, Block[]> = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
         children[key] = value;
       } else if (Array.isArray(value)) {
-        const isBlocksArray = (value as any[]).every((v) => v instanceof Block);
+        const isBlocksArray = (value as Block[]).every(
+          (v) => v instanceof Block
+        );
         if (isBlocksArray) {
-          lists[key] = value as any[];
+          lists[key] = value as Block[];
         } else {
           props[key] = value;
         }

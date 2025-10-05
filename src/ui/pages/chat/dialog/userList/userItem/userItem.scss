@@ -1,0 +1,46 @@
+@use '@styles/variables' as *;
+@use '@styles/components' as *;
+
+.user-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0.5rem;
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__avatar,
+  &__avatar-placeholder {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: $border-radius;
+    object-fit: cover;
+  }
+
+  &__avatar-placeholder {
+    background-color: $color-info-text;
+  }
+
+  &__name {
+    @extend .text-ellipsis;
+  }
+
+  &__delete-btn {
+    @extend .button_dark;
+
+    width: 1.5rem;
+    height: 1.5rem;
+
+    padding: 0;
+    font-size: 0.8rem;
+    
+    border-radius: $border-radius;
+    cursor: pointer;
+  }
+}
+

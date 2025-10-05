@@ -2,16 +2,18 @@
     <div class="search-chat__header">
         <div class="search-chat__header__user">
             <div class="search-chat__header__user__avatar">
-                <img src="{{avatar}}" alt="{{name}}" class="search-chat__header__user__avatar-img">
+                {{#if avatar}}
+                    <img src="{{avatar}}" alt="{{name}}" class="search-chat__header__user__avatar-img">
+                {{/if}}
             </div>
             <div class="search-chat__header__user__info">
                 <span class="search-chat__header__user__info__name" title="{{name}}">{{name}}</span>
                 <span class="search-chat__header__user__info__email" title="{{email}}">{{email}}</span>
             </div>
         </div>
-        <button class="search-chat__header__button" data-page="profile">
-            Профиль >
-        </button>
+        {{{profileButton}}}
     </div>
-    {{{searchInput}}}
+    {{{createChatButton}}}
+    {{!-- Будет реализовано в будущих версиях --}}
+    {{!-- {{{searchInput}}} --}}
 </div>

@@ -1,37 +1,41 @@
 import type { TBlockProps } from '../../controllers/block/types';
+
 import {
   ApiMethodEnum,
   type IHttpTransport,
   type TRequestOptions,
+  type TApiResponse,
 } from './types';
+
+const BASE_API_URL = 'https://ya-praktikum.tech/api/v2';
 
 class HTTPTransport implements IHttpTransport {
   private static readonly TIMEOUT = 5000;
 
-  get(url: string, options: TRequestOptions = {}): Promise<XMLHttpRequest> {
+  get(url: string, options: TRequestOptions = {}): Promise<TApiResponse> {
     return this.request(url, { ...options, method: ApiMethodEnum.GET });
   }
 
-  post(url: string, options: TRequestOptions = {}): Promise<XMLHttpRequest> {
+  post(url: string, options: TRequestOptions = {}): Promise<TApiResponse> {
     return this.request(url, { ...options, method: ApiMethodEnum.POST });
   }
 
-  put(url: string, options: TRequestOptions = {}): Promise<XMLHttpRequest> {
+  put(url: string, options: TRequestOptions = {}): Promise<TApiResponse> {
     return this.request(url, { ...options, method: ApiMethodEnum.PUT });
   }
 
-  patch(url: string, options: TRequestOptions = {}): Promise<XMLHttpRequest> {
+  patch(url: string, options: TRequestOptions = {}): Promise<TApiResponse> {
     return this.request(url, { ...options, method: ApiMethodEnum.PATCH });
   }
 
-  delete(url: string, options: TRequestOptions = {}): Promise<XMLHttpRequest> {
+  delete(url: string, options: TRequestOptions = {}): Promise<TApiResponse> {
     return this.request(url, { ...options, method: ApiMethodEnum.DELETE });
   }
 
   private request(
     url: string,
     options: TRequestOptions = {}
-  ): Promise<XMLHttpRequest> {
+  ): Promise<TApiResponse> {
     const {
       method = ApiMethodEnum.GET,
       data = {},
@@ -43,13 +47,14 @@ class HTTPTransport implements IHttpTransport {
       // Для GET запросов добавляем query параметры к URL
       const requestUrl =
         method === ApiMethodEnum.GET
-          ? this._buildUrlWithParams(url, data)
-          : url;
+          ? this._buildUrlWithParams(`${BASE_API_URL}${url}`, data)
+          : `${BASE_API_URL}${url}`;
 
       const xhr = new XMLHttpRequest();
 
       // Настройка запроса
       xhr.open(method, requestUrl);
+      xhr.withCredentials = true;
 
       // Установка заголовков
       Object.keys(headers).forEach((key) => {
@@ -57,19 +62,34 @@ class HTTPTransport implements IHttpTransport {
       });
 
       // Для POST/PUT/DELETE устанавливаем Content-Type по умолчанию
-      if (method !== ApiMethodEnum.GET && !headers['Content-Type']) {
+      if (
+        method !== ApiMethodEnum.GET &&
+        !headers['Content-Type'] &&
+        !(data instanceof FormData)
+      ) {
         xhr.setRequestHeader('Content-Type', 'application/json');
       }
 
-      // Таймаут
       xhr.timeout = timeout;
 
-      // Обработчики событий
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-          resolve(xhr);
+          // Парсим JSON response если он есть
+          let data: Record<string, string> | null | string;
+
+          try {
+            data = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+          } catch (error) {
+            data = xhr.responseText;
+          }
+
+          resolve({
+            data,
+            status: xhr.status,
+            statusText: xhr.statusText,
+          });
         } else {
-          reject(new Error(`HTTP Error: ${xhr.status} ${xhr.statusText}`));
+          reject(new Error(`HTTP Ошибочка: ${xhr.status} ${xhr.statusText}`));
         }
       };
 
@@ -88,6 +108,8 @@ class HTTPTransport implements IHttpTransport {
       // Отправка запроса
       if (method === ApiMethodEnum.GET) {
         xhr.send();
+      } else if (data instanceof FormData) {
+        xhr.send(data);
       } else {
         xhr.send(JSON.stringify(data));
       }

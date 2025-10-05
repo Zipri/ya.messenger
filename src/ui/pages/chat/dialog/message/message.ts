@@ -1,9 +1,9 @@
 import './message.scss';
 
+import { Block, type TBlockProps } from '@controllers';
+
 import messageTemplate from './message.hbs?raw';
 import type { TMessage } from './types';
-import { Block } from '../../../../../controllers';
-import type { TBlockProps } from '../../../../../controllers/block/types';
 
 interface MessageProps {
   message: TMessage;

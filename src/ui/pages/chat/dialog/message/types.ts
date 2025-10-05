@@ -1,5 +1,7 @@
+import type { TID } from '@models/types';
+
 export type TMessage = {
-  id: string;
+  id: TID;
   text?: string;
   image?: string;
   isOwn: boolean;

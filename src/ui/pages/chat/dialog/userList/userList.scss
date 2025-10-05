@@ -1,0 +1,40 @@
+@use '@styles/variables' as *;
+@use '@styles/components' as *;
+
+.user-list {
+  @extend .wrapper;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 300px;
+  height: 100%;
+
+  padding: 0.5rem;
+
+  &__title {
+    margin-bottom: 1rem;
+    text-align: center;
+    color: $color-info-text;
+  }
+
+  &__items {
+    list-style: none;
+
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+
+    overflow-y: auto;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__add-btn {
+    @extend .button_main;
+    margin: 0.5rem 0;
+  }
+}
+

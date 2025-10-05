@@ -1,104 +1,68 @@
-import type { Block } from './controllers';
+import router from '@controllers/router/router';
+import './ui/styles/style.scss';
+import { BASE_URLS } from '@models';
+import type { TChat, TID } from '@models/types';
+import { ChatList } from '@ui-blocks';
 import {
   ChatPage,
   ErrorPage,
   LoginPage,
   ProfilePage,
   RegisterPage,
-} from './ui/pages';
-import './ui/styles/style.scss';
-import { ChatList } from './ui/blocks';
-
-type PageType = 'login' | 'register' | 'chat' | 'profile' | 'error';
+} from '@ui-pages';
+import { appStoreInit, iocServicesInit } from '@controllers';
 
 class App {
-  private rootElement: HTMLElement;
-  private currentPage: PageType = 'login';
-  private chatListBlock: ChatList;
-
   constructor() {
-    this.rootElement = document.querySelector('#app')!;
-    this.chatListBlock = new ChatList({});
-    this._initEventListeners();
+    const services = iocServicesInit();
+    appStoreInit(services);
+    this._bindLinkNavigation();
   }
 
-  render() {
-    switch (this.currentPage) {
-      case 'login':
-        const loginPage = new LoginPage({});
-        this._renderBlock(loginPage);
-        return;
+  async start() {
+    //#region Blocks
+    const chatList = new ChatList({
+      onChatClick: (chatId: TID, chat: TChat) => {
+        if (window.APP.store) {
+          window.APP.store.chats.selectChat(chat);
+        }
 
-      case 'register':
-        const registerPage = new RegisterPage({});
-        this._renderBlock(registerPage);
-        return;
-
-      case 'chat': {
-        this.chatListBlock.setProps({
-          isSearchHidden: false,
-          onChatClick: (chatId: string) => {
-            console.log(`Из App.ts: нажат чат с ID: ${chatId}`);
-          },
-        });
-
-        const chatPage = new ChatPage({ chatList: this.chatListBlock });
-
-        this._renderBlock(chatPage);
-        return;
-      }
-
-      case 'profile':
-        this.chatListBlock.setProps({
-          isSearchHidden: true,
-          onChatClick: (chatId: string) => {
-            console.log(`Из App.ts: нажат чат с ID: ${chatId}`);
-          },
-        });
-
-        const profilePage = new ProfilePage({ chatList: this.chatListBlock });
-
-        this._renderBlock(profilePage);
-        return;
-
-      case 'error':
-        const errorPage = new ErrorPage({
-          errorCode: 'Error 404',
-          errorMessage: 'Oops! Страничка не найдена',
-        });
-
-        this._renderBlock(errorPage);
-        return;
-    }
-  }
-
-  private _renderBlock(block: Block) {
-    this.rootElement.replaceChildren();
-    this.rootElement.appendChild(block.getContent());
-    block.dispatchComponentDidMount();
-  }
-
-  /** Простая реализация переключения страниц */
-  private _initEventListeners() {
-    // Слушаем клики по всему документу
-    document.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
-
-      // Проверяем, что кликнули по ссылке с нужным атрибутом
-      if (
-        (target.tagName === 'A' || target.tagName === 'BUTTON') &&
-        target.hasAttribute('data-page')
-      ) {
-        event.preventDefault();
-        const page = target.getAttribute('data-page') as PageType;
-        this._navigateTo(page);
-      }
+        router.go(`${BASE_URLS.chat}/${chatId}`);
+      },
     });
+    //#endregion Blocks
+
+    //#region Routes
+    router
+      .use(BASE_URLS.root, LoginPage)
+      .use(BASE_URLS.login, LoginPage)
+      .use(BASE_URLS.register, RegisterPage)
+      .use(BASE_URLS.chat, ChatPage, { chatList: chatList })
+      .use(`${BASE_URLS.chat}/:id`, ChatPage, { chatList: chatList })
+      .use(BASE_URLS.profile, ProfilePage, { chatList: chatList })
+      .use(BASE_URLS.error, ErrorPage, {
+        errorCode: 'Error 404',
+        errorMessage: 'Oops! Страничка не найдена',
+      });
+
+    await window.APP.store?.user.authorize(() => {
+      router.go(BASE_URLS.login);
+    });
+
+    router.start();
+    //#endregion Routes
   }
 
-  private _navigateTo(page: PageType) {
-    this.currentPage = page;
-    this.render();
+  private _bindLinkNavigation() {
+    document.addEventListener('click', (event) => {
+      const target = (event.target as HTMLElement).closest(
+        '[data-page]'
+      ) as HTMLAnchorElement | null;
+      if (!target) return;
+      event.preventDefault();
+      const href = target.getAttribute('data-page');
+      if (href) router.go(href);
+    });
   }
 }
 

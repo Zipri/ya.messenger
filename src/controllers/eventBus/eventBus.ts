@@ -28,9 +28,11 @@ class EventBus implements IEventBus {
     }
   }
 
+  // Могут передаваться различные атрибуты, в данном случае нет смысла конкретизировать
   emit(eventName: TEventName, ...args: any[]): void {
     if (!this.listeners[eventName]) {
-      throw new Error(`Событие "${eventName}" не имеет слушателей`);
+      console.error(`Событие "${eventName}" не имеет слушателей`);
+      return;
     }
 
     // Проходим по всем слушателям и вызываем их
@@ -64,6 +66,7 @@ class EventBus implements IEventBus {
 
   /** Одноразовая подписка на событие (автоматически отписывается после первого вызова) */
   once(eventName: TEventName, callback: Function): void {
+    // Могут передаваться различные атрибуты, в данном случае нет смысла конкретизировать
     const onceCallback = (...args: any[]) => {
       callback(...args);
       this.unsubscribe(eventName, onceCallback);

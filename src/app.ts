@@ -1,9 +1,8 @@
-import type { TChat, TID } from '@models/types';
+import { appStoreInit, iocServicesInit } from '@controllers';
 import router from '@controllers/router/router';
 import { BASE_URLS } from '@models';
-
+import type { TChat, TID } from '@models/types';
 import { ChatList } from '@ui-blocks';
-import { appStoreInit, iocServicesInit } from '@controllers';
 import {
   ChatPage,
   ErrorPage,
@@ -15,8 +14,6 @@ import {
 import './ui/styles/style.scss';
 
 class App {
-  private router: any;
-
   constructor() {
     const services = iocServicesInit();
     appStoreInit(services);

@@ -17,8 +17,10 @@
     "noUncheckedSideEffectImports": true,
     "noImplicitAny": true,
     "sourceMap": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "types": ["jest", "node"]
   },
   "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/utils/"],
   "extends": "./tsconfig.paths.json"
 }

@@ -7,8 +7,8 @@ import unusedImports from 'eslint-plugin-unused-imports';
 export default [
   js.configs.recommended,
   {
-    ignores: ['node_modules/**', 'dist/**', 'build/**'],
     files: ['src/**/*.{ts,js}'],
+    ignores: ['node_modules/**', 'dist/**', 'build/**'],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
@@ -26,6 +26,7 @@ export default [
       'eol-last': ['error', 'always'],
       // Отключаем все правила typescript
       '@typescript-eslint/*': 'off',  
+      'no-prototype-builtins': 'off',
       'no-extra-boolean-cast': 'off',  // Отключаем правило для !!
       'no-undef': 'off',  // Отключаем проверку неопределенных переменных
       'no-empty': 'off',  // Отключаем проверку пустых блоков

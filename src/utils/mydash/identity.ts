@@ -4,7 +4,7 @@
  * @returns значение, которое было передано
  */
 function identity<T>(value: T): T {
-    return value;
+  return value;
 }
 
 export default identity;

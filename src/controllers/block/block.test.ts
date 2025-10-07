@@ -1,13 +1,11 @@
 import Block from './block';
 import type { TBlockProps } from './types';
 
-// Простой тестовый компонент, наследуемый от Block
 class TestBlock extends Block {
   constructor(props: TBlockProps) {
     super(props);
   }
 
-  // Переопределяем render, чтобы он возвращал простой HTML
   render() {
     return `<div>{{text}}</div>`;
   }
@@ -23,7 +21,6 @@ describe('Block component', () => {
 
   //#region Создание
   it('should create a block with initial props', () => {
-    // Проверяем, что props были установлены
     expect((block as any).props.text).toBe(initialProps.text);
   });
   //#endregion Создание
@@ -32,8 +29,10 @@ describe('Block component', () => {
   it('should render the component after initialization', () => {
     // Шпионим за методом render
     const renderSpy = jest.spyOn(block as any, 'render');
+
     // Имитируем событие init, которое вызывает render
     block.eventBus.emit(Block['EVENTS'].INIT);
+
     // Проверяем, что render был вызван
     expect(renderSpy).toHaveBeenCalled();
     renderSpy.mockRestore();
@@ -45,7 +44,6 @@ describe('Block component', () => {
     const newText = 'World';
     const renderSpy = jest.spyOn(block as any, '_render');
 
-    // Устанавливаем новые props
     block.setProps({ text: newText });
 
     // Проверяем, что props обновились

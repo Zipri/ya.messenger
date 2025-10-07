@@ -54,6 +54,7 @@ export default {
   transform: {
     '^.+\\.ts$': ['ts-jest', {
       tsconfig: {
+        verbatimModuleSyntax: false,
         esModuleInterop: true,
         allowSyntheticDefaultImports: true,
       },

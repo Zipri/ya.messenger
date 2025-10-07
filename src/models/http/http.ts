@@ -1,3 +1,4 @@
+import { BASE_API_URL } from '@models/consts';
 import type { TBlockProps } from '../../controllers/block/types';
 
 import {
@@ -6,8 +7,6 @@ import {
   type TRequestOptions,
   type TApiResponse,
 } from './types';
-
-const BASE_API_URL = 'https://ya-praktikum.tech/api/v2';
 
 class HTTPTransport implements IHttpTransport {
   private static readonly TIMEOUT = 5000;

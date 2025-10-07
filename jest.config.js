@@ -49,15 +49,22 @@ export default {
   
   // Игнорировать node_modules и dist
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
-  
+
+  // Трансформировать ES-модули из node_modules
+  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
+
   // Трансформация файлов
   transform: {
-    '^.+\\.ts$': ['ts-jest', {
-      tsconfig: {
-        verbatimModuleSyntax: false,
-        esModuleInterop: true,
-        allowSyntheticDefaultImports: true,
+    '^.+\\.[tj]s$': [
+      'ts-jest',
+      {
+        tsconfig: {
+          verbatimModuleSyntax: false,
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true,
+          allowJs: true,
+        },
       },
-    }],
+    ],
   },
 };

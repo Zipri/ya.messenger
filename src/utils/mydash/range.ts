@@ -7,46 +7,46 @@
  * @returns массив чисел заданной последовательности
  */
 function range(
-    start: number,
-    end?: number,
-    step?: number,
-    isRight = false
+  start: number,
+  end?: number,
+  step?: number,
+  isRight = false
 ): number[] {
-    if (end === undefined) {
-        end = start;
-        start = 0;
+  if (end === undefined) {
+    end = start;
+    start = 0;
+  }
+
+  if (step === undefined) {
+    step = start < end ? 1 : -1;
+  }
+
+  const result: number[] = [];
+
+  if (step === 0) {
+    if (start < end) {
+      for (let i = start; i < end; i++) {
+        result.push(start);
+      }
     }
+    return result;
+  }
 
-    if (step === undefined) {
-        step = start < end ? 1 : -1;
+  if (step > 0) {
+    for (let i = start; i < end; i += step) {
+      result.push(i);
     }
-
-    const result: number[] = [];
-
-    if (step === 0) {
-        if (start < end) {
-            for (let i = start; i < end; i++) {
-                result.push(start);
-            }
-        }
-        return result;
+  } else {
+    for (let i = start; i > end; i += step) {
+      result.push(i);
     }
+  }
 
-    if (step > 0) {
-        for (let i = start; i < end; i += step) {
-            result.push(i);
-        }
-    } else {
-        for (let i = start; i > end; i += step) {
-            result.push(i);
-        }
-    }
-
-    return isRight ? result.reverse() : result;
+  return isRight ? result.reverse() : result;
 }
 
 function rangeRight(start: number, end?: number, step?: number): number[] {
-    return range(start, end, step, true);
+  return range(start, end, step, true);
 }
 
 export { range, rangeRight };

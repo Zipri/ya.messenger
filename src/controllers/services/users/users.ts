@@ -1,7 +1,5 @@
 import { UserApi } from '@models';
-import type {
-  TUser,
-} from '@models/types';
+import type { TUser } from '@models/types';
 
 class UsersService {
   private baseApi!: UserApi;

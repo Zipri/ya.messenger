@@ -1,8 +1,8 @@
 import './form.scss';
 import { Block } from '@controllers';
+import type { Button } from '@ui-components';
 
 import template from './form.hbs?raw';
-import type { Button } from '@ui-components';
 
 type FormValues = Record<string, string>;
 

@@ -36,7 +36,7 @@ interface WebSocketEventHandlers {
 
 class WebSocketService {
   private socket: WebSocket | null = null;
-  private pingInterval: number | null = null;
+  private pingInterval: ReturnType<typeof setInterval> | null = null;
   private readonly WS_BASE_URL = 'wss://ya-praktikum.tech/ws/chats';
   private readonly PING_INTERVAL = 30000;
 

@@ -1,4 +1,5 @@
 import { BASE_API_URL } from '@models/consts';
+
 import HTTPTransport from './http';
 
 // Глобальный мок для XMLHttpRequest

@@ -22,7 +22,7 @@
     width: fit-content;
     max-width: 70%;
 
-    margin-left: auto; 
+    margin-left: auto;
   }
 
   &__other {
@@ -37,7 +37,7 @@
     width: fit-content;
     max-width: 70%;
 
-    margin-right: auto; 
+    margin-right: auto;
   }
 
   &__text {
@@ -56,9 +56,9 @@
 
     &-img {
       width: 100%;
-      height: auto; 
+      height: auto;
       object-fit: cover;
-      aspect-ratio: 1; 
+      aspect-ratio: 1;
     }
   }
 
